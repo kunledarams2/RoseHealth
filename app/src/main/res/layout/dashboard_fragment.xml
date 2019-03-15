@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:elevation="10dp"
+        android:background="@drawable/background_header"
+        android:layout_height="170dp">
+        <ImageView android:id="@+id/bg"
+            android:src="@drawable/dash_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView android:id="@+id/doctor_name"
+            android:text="Dr Jay Tokunbo"
+            android:textSize="23sp"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView android:id="@+id/doctor_spec"
+            android:text="General Doctor"
+            android:textSize="20sp"
+            android:layout_marginStart="25dp"
+            android:textColor="@color/colorWhite"
+            android:layout_below="@+id/doctor_name"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include layout="@layout/ratings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/doctor_spec"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar"
+            android:src="@drawable/doctor"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="15dp"
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout android:id="@+id/earnings"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout android:id="@+id/earnings_placeholder"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    >
+                    <TextView android:id="@+id/earnings_placeholder_text"
+                        android:text="Sample message"
+                        android:layout_alignParentBottom="true"
+                        android:layout_below="@+id/earnings_placeholder_retry_btn"
+                        android:padding="10dp"
+                        android:gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <ProgressBar android:id="@+id/earnings_placeholder_progress_bar"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="15dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" />
+                    <ImageButton android:id="@+id/earnings_placeholder_retry_btn"
+                        android:src="@drawable/ic_refresh"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="15dp"
+                        android:padding="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <View android:id="@+id/divider"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp" />
+
+                <RelativeLayout android:id="@+id/card_amount"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/divider"
+                    android:layout_alignBottom="@+id/filler"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:elevation="10dp"
+                    android:layout_width="0dp"
+                    android:background="@drawable/background_black"
+                    android:layout_height="match_parent">
+                    <ImageButton android:id="@+id/amount_menu_btn"
+                        android:src="@drawable/ic_more_horiz_black"
+                        android:background="@drawable/circle_white"
+                        android:padding="4dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/amount_label"
+                        android:text="Amount Earned Today"
+                        android:textSize="16sp"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/amount_menu_btn"
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/amount_figure"
+                        android:text="N5,000"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:textSize="22sp"
+                        android:padding="10dp"
+                        android:layout_above="@+id/amount_label2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/amount_label2"
+                        android:text="Total Earned:"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/amount_figure2"
+                        android:text="N40,000"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <RelativeLayout android:id="@+id/card_consultation"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@+id/divider"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:elevation="10dp"
+                    android:layout_width="0dp"
+                    android:background="@drawable/background_black"
+                    android:layout_height="match_parent">
+                    <ImageButton android:id="@+id/consultation_menu_btn"
+                        android:src="@drawable/ic_more_horiz_black"
+                        android:background="@drawable/circle_white"
+                        android:padding="4dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/consultation_label"
+                        android:text="Number of Consultations Today"
+                        android:textSize="16sp"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/consultation_menu_btn"
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/consultation_figure"
+                        android:text="2"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:textSize="22sp"
+                        android:padding="10dp"
+                        android:layout_below="@+id/consultation_label"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/consultation_label2"
+                        android:text="Total Consultations:"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_below="@+id/consultation_figure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/consultation_figure2"
+                        android:text="210"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorWhite"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@+id/consultation_figure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <View android:id="@+id/filler"
+                    android:layout_below="@+id/card_consultation"
+                    android:layout_height="1dp"
+                    android:layout_width="1dp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout android:id="@+id/appments"
+                app:layout_constraintTop_toBottomOf="@+id/earnings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout android:id="@+id/appointments_placeholder"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/background_white"
+                    android:padding="10dp"
+                    android:elevation="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView android:id="@+id/appointments_placeholder_text"
+                        android:text="Sample message"
+                        android:layout_alignParentBottom="true"
+                        android:layout_below="@+id/appointments_placeholder_retry_btn"
+                        android:padding="10dp"
+                        android:gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <ProgressBar android:id="@+id/appointments_placeholder_progress_bar"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="15dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" />
+                    <ImageButton android:id="@+id/appointments_placeholder_retry_btn"
+                        android:src="@drawable/ic_refresh"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="15dp"
+                        android:padding="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <RelativeLayout android:id="@+id/appointments"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/background_white"
+                    android:padding="10dp"
+                    android:elevation="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView android:id="@+id/appointments_label"
+                        android:text="Appointment Days"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:layout_margin="10dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/appointment_menu_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <ImageButton android:id="@+id/appointment_menu_btn"
+                        android:src="@drawable/ic_more_horiz_black"
+                        android:background="@drawable/circle_white"
+                        android:padding="4dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_below="@+id/appointments_label"
+                        android:id="@+id/appointments_recycler_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView android:id="@+id/last_appointment_label"
+                        android:layout_below="@+id/appointments_recycler_view"
+                        android:layout_margin="10dp"
+                        android:text="Last appointment: "
+                        android:textSize="16sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView android:id="@+id/last_appointment"
+                        android:layout_below="@+id/appointments_recycler_view"
+                        android:layout_margin="10dp"
+                        android:text="Ozioma 15/01/2019"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout android:id="@+id/health_tips"
+                app:layout_constraintTop_toBottomOf="@+id/appments"
+                android:elevation="10dp"
+                android:background="@drawable/background_white"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView android:id="@+id/health_tips_label"
+                    android:text="Health Tip Of The Day"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_margin="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/health_tip_image"
+                    android:src="@drawable/water"
+                    android:layout_below="@+id/health_tips_label"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp" />
+
+                <TextView android:id="@+id/health_tip_title"
+                    android:text="Drink Water"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingStart="10dp"
+                    android:layout_below="@+id/health_tips_label"
+                    android:layout_toEndOf="@+id/health_tip_image"
+                    android:layout_toStartOf="@+id/health_tip_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/health_tip_time"
+                    android:text="11:02 am"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/health_tips_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/health_tip_content"
+                    android:layout_below="@+id/health_tip_title"
+                    android:layout_toEndOf="@+id/health_tip_image"
+                    android:padding="10dp"
+                    android:maxLines="3"
+                    android:text="Drinking enough water can help boost your concentration as well as keep you from overeating.."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/like_btn"
+                    android:text="Like"
+                    android:textColor="#f88"
+                    android:drawableStart="@drawable/ic_like"
+                    android:drawablePadding="10dp"
+                    android:layout_margin="5dp"
+                    android:paddingStart="5dp"
+                    android:layout_below="@+id/health_tip_content"
+                    android:layout_toEndOf="@+id/health_tip_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/share_btn"
+                    android:text="Share"
+                    android:drawableStart="@drawable/ic_share"
+                    android:drawablePadding="10dp"
+                    android:layout_margin="5dp"
+                    android:layout_below="@+id/health_tip_content"
+                    android:layout_toEndOf="@+id/like_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <Button android:id="@+id/new_tip_btn"
+                    android:layout_below="@+id/share_btn"
+                    android:background="@drawable/btn_bg"
+                    android:text="Give Health Tip"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <TextView app:layout_constraintTop_toBottomOf="@+id/health_tips"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

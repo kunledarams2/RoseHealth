@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.NoteActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:title="Doctor's Note"
+        app:titleTextColor="#fff"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:context=".activity.TipsActivity">
+        <RelativeLayout
+            android:layout_margin="10dp"
+            android:background="@drawable/background_white"
+            android:elevation="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout android:id="@+id/heading"
+                android:background="@drawable/background_heading"
+                android:padding="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView android:id="@+id/note_label"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Dr. Bukky Seyi"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/note_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/note_date"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:text="15 Jan 2019"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <TextView android:id="@+id/share_btn"
+                android:text="Share"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:layout_margin="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/heading"
+                android:drawableStart="@drawable/ic_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView android:id="@+id/save_btn"
+                android:text="Save"
+                android:layout_below="@+id/heading"
+                android:drawablePadding="10dp"
+                android:textSize="16sp"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:layout_toStartOf="@+id/share_btn"
+                android:drawableStart="@drawable/ic_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:padding="15dp"
+                android:layout_below="@+id/share_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView android:id="@+id/patient_name_label"
+                    android:text="Patient's Name"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <View android:id="@+id/patient_name_divider"
+                    android:layout_below="@+id/patient_name_label"
+                    android:background="@color/colorGray"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+                <TextView android:id="@+id/patient_name"
+                    android:layout_below="@+id/patient_name_divider"
+                    android:text="Ozioma Tremendoc"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:textColor="@color/colorGray"
+                    android:layout_margin="10dp"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView android:id="@+id/symptoms_label"
+                    android:text="Symtoms"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:layout_below="@+id/patient_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <View android:id="@+id/symptoms_divider"
+                    android:layout_below="@+id/symptoms_label"
+                    android:background="@color/colorGray"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+                <TextView android:id="@+id/symptoms"
+                    android:layout_below="@+id/symptoms_divider"
+                    android:text="Cough, Catarrh, Sour throat"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:layout_margin="10dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorGray"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView android:id="@+id/diagnosis_label"
+                    android:text="Diagnoses"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:layout_below="@+id/symptoms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <View android:id="@+id/diagnosis_divider"
+                    android:layout_below="@+id/diagnosis_label"
+                    android:background="@color/colorGray"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+                <TextView android:id="@+id/diagnosis"
+                    android:layout_below="@+id/diagnosis_divider"
+                    android:text="Common cold"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:textColor="@color/colorGray"
+                    android:layout_margin="10dp"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView android:id="@+id/treatment_label"
+                    android:text="Treatment"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:layout_below="@+id/diagnosis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <View android:id="@+id/treatment_divider"
+                    android:layout_below="@+id/treatment_label"
+                    android:background="@color/colorGray"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+                <TextView android:id="@+id/treatment"
+                    android:layout_below="@+id/treatment_divider"
+                    android:text="Antibiotics, Rest, Sleep, Tom-tom"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:layout_margin="10dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorGray"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

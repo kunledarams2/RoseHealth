@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.hdodenhof.circleimageview.CircleImageView
+        app:layout_constraintBottom_toTopOf="@+id/caption"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="15dp"
+        android:src="@drawable/doctors"
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
+    <TextView android:id="@+id/caption"
+        android:text="Doctor's \nChatroom"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView android:id="@+id/desc"
+        android:textSize="16sp"
+        android:padding="15dp"
+        android:gravity="center"
+        android:text="Join the medical chat and health forums \n of fellow doctors all around the world."
+        app:layout_constraintTop_toBottomOf="@+id/caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/code_field_label"
+            android:text="Input Chatroom Code"
+            app:layout_constraintBottom_toTopOf="@+id/code_field"
+            android:layout_marginStart="30dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+            <EditText android:id="@+id/code_field"
+                app:layout_constraintTop_toBottomOf="@+id/desc"
+                android:layout_margin="30dp"
+                android:padding="10dp"
+                android:background="@drawable/input_background_block"
+                android:hint="Input Chatroom Code"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+
+        <Button android:id="@+id/btn"
+            app:layout_constraintTop_toBottomOf="@+id/code_field"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="50dp"
+            android:background="@drawable/rounded_btn_background"
+            android:text="Create Chatroom"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>

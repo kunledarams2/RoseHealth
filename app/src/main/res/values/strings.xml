@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Tremendoc Doctor</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="ic_dashboard">Dashboard</string>
+    <string name="ic_doctors_notes">Doctor\'s Notes</string>
+    <string name="ic_health_tips">Health Tips</string>
+    <string name="ic_appointments">Appointments</string>
+    <string name="ic_prescriptions">Prescriptions</string>
+    <string name="ic_chatroom">Chat Room</string>
+    <string name="ic_call_logs">Call Logs</string>
+    <string name="ic_notifications">Notifications</string>
+    <string name="ic_signout">Sign out</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

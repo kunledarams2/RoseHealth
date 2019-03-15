@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:title="New Note"
+        app:titleTextColor="#fff"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <ProgressBar android:id="@+id/progressBar"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:indeterminate="true"
+        android:scaleY="1.5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <RelativeLayout
+            android:padding="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/symptoms_wrapper"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <EditText android:id="@+id/symtoms_field"
+                    android:hint="Symptoms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/diagnoses_wrapper"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/symptoms_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <EditText android:id="@+id/diagnoses_field"
+                    android:hint="Diagnoses"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/treatments_wrapper"
+                android:layout_below="@+id/diagnoses_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <EditText android:id="@+id/treatment_field"
+                    android:hint="Treatment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

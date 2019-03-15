@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/nav_dashboard"
+        android:icon="@drawable/icon_dashboard"
+        android:title="@string/ic_dashboard" />
+    <item
+        android:id="@+id/nav_doctors_note"
+        android:icon="@drawable/icon_note"
+        android:title="@string/ic_doctors_notes" />
+    <item
+        android:id="@+id/nav_health_tips"
+        android:icon="@drawable/icon_tips"
+        android:title="@string/ic_health_tips" />
+    <item
+        android:id="@+id/nav_appointments"
+        android:icon="@drawable/icon_appointments"
+        android:title="@string/ic_appointments" />
+    <item
+        android:id="@+id/nav_prescriptions"
+        android:icon="@drawable/icon_appointments"
+        android:title="@string/ic_prescriptions" />
+    <item
+        android:id="@+id/nav_chatroom"
+        android:icon="@drawable/icon_chatroom"
+        android:title="@string/ic_chatroom" />
+    <item
+        android:id="@+id/nav_call_logs"
+        android:icon="@drawable/ic_call"
+        android:title="@string/ic_call_logs" />
+    <item
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/icon_notification"
+        android:title="@string/ic_notifications" />
+    <item
+        android:id="@+id/nav_signout"
+        android:icon="@drawable/icon_logout"
+        android:title="@string/ic_signout" />
+    <item
+        android:id="@+id/footer_spacer"
+        android:orderInCategory="200"
+        android:checkable="false"
+        android:title="" />
+
+</menu>

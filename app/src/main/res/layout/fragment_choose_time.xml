@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:titleTextColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
+        app:title="Choose Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <RelativeLayout
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <ImageView android:id="@+id/image"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:src="@drawable/appointment_image"
+            android:layout_width="match_parent"
+            android:layout_height="220dp" />
+
+        <TextView android:id="@+id/mask"
+            android:alpha="0.7"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="220dp" />
+
+        <TextView android:id="@+id/desc"
+            android:text="Select the time you will be available to consult with patients."
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/year"
+            android:text="2019"
+            android:textSize="20sp"
+            android:padding="20dp"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/month"
+            android:text=""
+            android:textSize="45sp"
+            android:padding="15dp"
+            android:gravity="center"
+            android:layout_marginTop="110dp"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar android:id="@+id/progressBar"
+            android:layout_below="@+id/image"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:scaleY="1.2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_above="@+id/done_btn"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:id="@+id/done_btn"
+            android:text="Done"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:background="@drawable/rounded_btn_background"
+            android:layout_alignParentBottom="true"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "219969358686",
+    "firebase_url": "https://tremendoc-51aee.firebaseio.com",
+    "project_id": "tremendoc-51aee",
+    "storage_bucket": "tremendoc-51aee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219969358686:android:e03b1636184f134f",
+        "android_client_info": {
+          "package_name": "com.digicomme.tremendoc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219969358686-6adg5i3juerem46pr29a94vcin74qhi4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digicomme.tremendoc",
+            "certificate_hash": "af28684d2a41059a7584a3e750ca31d1f11c5a94"
+          }
+        },
+        {
+          "client_id": "219969358686-rb4hb24jmcnubac6sm1ovj30v0vv1u7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuLlgr6i_X9Q1_PHey70R8WM3ewUUv38c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219969358686-rb4hb24jmcnubac6sm1ovj30v0vv1u7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219969358686:android:afa69919ef5ab910",
+        "android_client_info": {
+          "package_name": "com.digicomme.tremendocdoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219969358686-rb4hb24jmcnubac6sm1ovj30v0vv1u7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuLlgr6i_X9Q1_PHey70R8WM3ewUUv38c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

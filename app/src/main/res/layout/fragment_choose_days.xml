@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:titleTextColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
+        app:title="Choose Days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/appointment_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <RelativeLayout android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:background="@drawable/appointment_image"
+                android:layout_height="180dp">
+                <View android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.7"
+                    android:background="@color/colorPrimary" />
+                <TextView
+                    android:text="Select days you would be available"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/month"
+                    android:text="Jan"
+                    android:textSize="35sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_margin="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView android:id="@+id/year"
+                    android:text="2019"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:layout_marginStart="15dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_above="@+id/month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendar"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/header"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout android:id="@+id/chips"
+                app:layout_constraintBottom_toTopOf="@+id/spacer"
+                app:layout_constraintTop_toBottomOf="@+id/calendar"
+                android:padding="10dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_white"
+                android:elevation="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView android:id="@+id/chips_label"
+                    android:text="Selected Days"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/clearBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/clearBtn"
+                    android:text="Clear all"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:id="@+id/chips_container"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp"
+                    android:layout_below="@+id/clearBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </org.apmem.tools.layouts.FlowLayout>
+
+            </RelativeLayout>
+
+            <TextView android:id="@+id/spacer"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
