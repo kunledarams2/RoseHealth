@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallState;
 import com.sinch.android.rtc.video.VideoCallListener;
 import com.sinch.android.rtc.video.VideoController;
+
 
 import java.util.List;
 import java.util.Locale;
@@ -49,7 +52,8 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
     boolean mToggleVideoViewPositions = false;
 
     private View incomingView, activeView;
-    private TextView acceptBtn, rejectBtn, endBtn;
+    private TextView acceptBtn, rejectBtn;
+    private ImageButton endBtn;
     private Button speakerBtn, muteBtn, hideBtn;
 
     private NewNoteDialog noteDialog;
@@ -229,7 +233,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         if (isSpeakerMute) {
             getSinchServiceInterface().getAudioController().mute();
             isSpeakerMute = false;
-            muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            //muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
             muteBtn.setText("Mute");
             muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
             muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
@@ -237,7 +241,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             getSinchServiceInterface().getAudioController().unmute();
             isSpeakerMute = true;
             muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
-            muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            //muteBtn.setBackgroundResource(R.drawable.circle_white_border);
             muteBtn.setText("Unmute");
             muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
         }
@@ -247,13 +251,13 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         if (inSpeakOut) {
             getSinchServiceInterface().getAudioController().disableSpeaker();
             inSpeakOut = false;
-            speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            //speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
             speakerBtn.setText("Speaker");
             speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_up_gray), null, null);
         } else {
             getSinchServiceInterface().getAudioController().enableSpeaker();
             inSpeakOut = true;
-            speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
+            //speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
             speakerBtn.setText("Normal");
             speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_down_white), null, null);
         }
@@ -287,7 +291,12 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         if (vc != null) {
             runOnUiThread(() -> {
                 ViewGroup localView = getVideoView(true);
-                localView.addView(vc.getLocalView());
+                //localView.setBackgroundResource(R.drawable.circle_white_border);
+                //localView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+                //localView.setClipToOutline(true);
+                View local = vc.getLocalView();
+                local.setBackgroundResource(R.drawable.circle_white_border);
+                localView.addView(local);
                 localView.setOnClickListener(v -> vc.toggleCaptureDevicePosition());
                 mLocalVideoViewAdded = true;
                 vc.setLocalVideoZOrder(!mToggleVideoViewPositions);
@@ -364,8 +373,8 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
                 UI.createNotification(getApplicationContext(), call.getRemoteUserId());
             }
             setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
-            String endMsg = "Call ended: " + call.getDetails().toString();
-            Toast.makeText(VideoCallActivity.this, endMsg, Toast.LENGTH_LONG).show();
+            //String endMsg = "Call ended: " + call.getDetails().toString();
+            //Toast.makeText(VideoCallActivity.this, endMsg, Toast.LENGTH_LONG).show();
 
             endCall();
         }

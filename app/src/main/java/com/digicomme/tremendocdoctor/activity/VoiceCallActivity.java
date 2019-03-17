@@ -31,7 +31,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
     private View incomingView, activeView;
     private TextView acceptBtn, rejectBtn;
     private Button speakerBtn, muteBtn, hideBtn;
-    private TextView patientName, viewBtn, endBtn, timer;
+    private TextView patientNameView, viewBtn, endBtn, timer;
 
     private Timer mTimer;
     private AudioPlayer mAudioPlayer;
@@ -42,7 +42,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
 
     private NewNoteDialog noteDialog;
     private MedicalRecordDialog recordDialog;
-    private String patientId, consultationId;
+    private String patientId, patientName, consultationId;
 
     static final String TAG = VoiceCallActivity.class.getSimpleName();
 
@@ -65,6 +65,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
         mAudioPlayer.playRingtone();
         mCallId = getIntent().getStringExtra(CallService.CALL_ID);
         patientId = getIntent().getStringExtra(CallService.PATIENT_ID);
+        patientName = getIntent().getStringExtra(CallService.PATIENT_NAME);
         consultationId = getIntent().getStringExtra(CallService.CONSULTATION_ID);
     }
 
@@ -83,7 +84,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
         hideBtn.setOnClickListener(this);
         muteBtn.setOnClickListener(this);
 
-        patientName = findViewById(R.id.patient_name);
+        patientNameView = findViewById(R.id.patient_name);
         viewBtn = findViewById(R.id.view_btn);
         timer = findViewById(R.id.timer);
         viewBtn.setOnClickListener(this);
@@ -117,8 +118,8 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             //call.getRemoteUserId()
             call.addCallListener(new SinchCallListener());
             TextView label = findViewById(R.id.label);
-            label.setText("Incoming Call from " + call.getRemoteUserId());
-            patientName.setText(call.getRemoteUserId());
+            label.setText("Incoming Call from " + patientName);
+            patientNameView.setText(patientName);
             timer.setText(call.getState().toString());
         } else {
             Log.e("VoiceCallActivity", "Invalid call Id");
@@ -176,14 +177,14 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
             muteBtn.setText("Mute");
             muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
-            muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
         } else {
             getSinchServiceInterface().getAudioController().unmute();
             isSpeakerMute = true;
             muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
             muteBtn.setBackgroundResource(R.drawable.circle_white_border);
             muteBtn.setText("Unmute");
-            muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
         }
     }
 
@@ -193,13 +194,13 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             inSpeakOut = false;
             speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
             speakerBtn.setText("Speaker");
-            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_up_gray), null, null);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_gray), null, null);
         } else {
             getSinchServiceInterface().getAudioController().enableSpeaker();
             inSpeakOut = true;
             speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
             speakerBtn.setText("Normal");
-            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_down_white), null, null);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_white), null, null);
         }
     }
 

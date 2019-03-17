@@ -47,6 +47,7 @@ public class CallService extends Service {
     public static final String CALL_ID = "CALL_ID";
     public static final String CALLER_ID = "CALLER_ID";
     public static final String PATIENT_ID = "patientId";
+    public static final String PATIENT_NAME = "patientName";
     public static final String CONSULTATION_ID  = "consultationId";
     public static final String CALL_DIRECTION = "CALL_DIRECTION";
 
@@ -172,7 +173,8 @@ public class CallService extends Service {
         }
 
         public void retryStartAfterPermissionGranted() {
-            CallService.this.attemptAutoStart();
+            if (!isStarted())
+                CallService.this.attemptAutoStart();
         }
 
         public boolean isStarted() {
@@ -292,6 +294,7 @@ public class CallService extends Service {
             intent.putExtra(CALL_ID, call.getCallId());
             intent.putExtra(CALLER_ID, call.getRemoteUserId());
             intent.putExtra(PATIENT_ID, call.getHeaders().get(PATIENT_ID));
+            intent.putExtra(PATIENT_NAME, call.getHeaders().get(PATIENT_NAME));
             intent.putExtra(CONSULTATION_ID, call.getHeaders().get(CONSULTATION_ID));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

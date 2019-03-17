@@ -18,18 +18,15 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.ahamed.multiviewadapter.SimpleRecyclerAdapter;
 import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.api.API;
 import com.digicomme.tremendocdoctor.api.StringCall;
 import com.digicomme.tremendocdoctor.api.URLS;
 import com.digicomme.tremendocdoctor.binder.CircleAppBinder;
 import com.digicomme.tremendocdoctor.dialog.NewTipDialog;
-import com.digicomme.tremendocdoctor.model.Appointment;
 import com.digicomme.tremendocdoctor.model.Tip;
 import com.digicomme.tremendocdoctor.utils.Formatter;
 import com.digicomme.tremendocdoctor.utils.ImageLoader;
-import com.digicomme.tremendocdoctor.viewmodel.AppointmentViewModel;
 import com.digicomme.tremendocdoctor.viewmodel.ProfileViewModel;
 import com.digicomme.tremendocdoctor.viewmodel.TipsViewModel;
 
@@ -37,14 +34,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class Dashboard  extends Fragment {
@@ -89,7 +80,7 @@ public class Dashboard  extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.dashboard_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         appointmentsRecyclerView = view.findViewById(R.id.appointments_recycler_view);
         setupViews(view);
         setupAdapter();
@@ -250,7 +241,13 @@ public class Dashboard  extends Fragment {
             if (error.networkResponse != null) {
                 String string = Formatter.bytesToString(error.networkResponse.data);
                 Log.d("Dashboard Earnings Err", "SERver Error:   " + string);
+                appointmentText.setText("Sorry, something went wrong. Please try again");
+            } else {
+                appointmentText.setText("Please check your internet connection");
             }
+            appointmentText.setVisibility(View.VISIBLE);
+            appointmentLoader.setVisibility(View.GONE);
+            appointmentRetryBtn.setVisibility(View.VISIBLE);
         });
     }
 

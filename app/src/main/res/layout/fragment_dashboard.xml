@@ -49,13 +49,13 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar"
-            android:src="@drawable/doctor"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_margin="15dp"
             android:layout_gravity="center"
             android:layout_width="100dp"
             android:layout_height="100dp"/>
+        <!--android:src="@drawable/doctor"-->
 
     </RelativeLayout>
 
