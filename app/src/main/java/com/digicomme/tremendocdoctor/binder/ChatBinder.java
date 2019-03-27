@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.model.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatBinder extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -22,9 +23,9 @@ public class ChatBinder extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int SENT_MESSAGE = 0;
     private static final int RECEIVED_MESSAGE = 1;
 
-    public ChatBinder(Context context, List<Message> messages, boolean isGroup) {
+    public ChatBinder(Context context, boolean isGroup) {
         this.context = context;
-        this.messages = messages;
+        this.messages = messages = new ArrayList<>();
         this.isGroup = isGroup;
     }
 
@@ -61,6 +62,16 @@ public class ChatBinder extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    public void add(Message message) {
+        messages.add(message);
+        notifyDataSetChanged();
+    }
+
+    public void setData(List<Message> messages) {
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
+
     class SentMessageHolder extends RecyclerView.ViewHolder{
         TextView textView;
         SentMessageHolder(View view) {
@@ -86,6 +97,7 @@ public class ChatBinder extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 sender.setText(message.getSender());
             }
 
+            sender.setText(message.getSender());
             textView.setText(message.getContent());
         }
     }

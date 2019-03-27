@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setOnline();
+        //getWebSocketInterface().setOnline();
     }
 
     @Override

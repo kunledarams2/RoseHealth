@@ -3,6 +3,7 @@ package com.digicomme.tremendocdoctor.utils;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -66,6 +67,26 @@ public class UI {
                 (NotificationManager) appContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(1, builder.build());
+    }
+
+    public static void createNotification(Service service, String title, String content) {
+        createNotificationChannel(service);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(service, 0,
+                new Intent(service, AuthActivity.class), 0);
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(service, CHANNEL_ID)
+                        .setSmallIcon(R.mipmap.logo)
+                        .setContentTitle(title)
+                        .setContentText(content);
+        builder.setContentIntent(contentIntent);
+        builder.setAutoCancel(true);
+        //NotificationManager manager =
+        //       (NotificationManager) service
+        //                .getSystemService(Context.NOTIFICATION_SERVICE);
+        //manager.notify(1, builder.build());
+        service.startForeground(1, builder.build());
+
     }
 
 

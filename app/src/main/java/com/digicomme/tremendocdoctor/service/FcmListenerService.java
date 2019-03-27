@@ -59,6 +59,7 @@ public class FcmListenerService extends FirebaseMessagingService {
                             if (result.isValid() && result.isCall()) {
                                 log("Result is Valid and is Call");
                                 CallNotificationResult callResult = result.getCallResult();
+
                                 if (callResult != null && result.getDisplayName() != null) {
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString(callResult.getRemoteUserId(), result.getDisplayName());
@@ -67,7 +68,7 @@ public class FcmListenerService extends FirebaseMessagingService {
 
                                 if (callResult.isCallCanceled() || callResult.isTimedOut()) {
                                     log("call rejected or timed out");
-                                    String displayName = result.getDisplayName();
+                                    String displayName = callResult.getHeaders().get(CallService.PATIENT_NAME); //result.getDisplayName();
                                     if (displayName == null) {
                                         displayName = sharedPreferences.getString(callResult.getRemoteUserId(), "n/a");
                                     }
@@ -92,6 +93,8 @@ public class FcmListenerService extends FirebaseMessagingService {
                     getApplicationContext().bindService(new Intent(getApplicationContext(), CallService.class), this, BIND_AUTO_CREATE);
                 }
             }.relayMessageData(data);
+        } else {
+            log("Not Sinch payload");
         }
     }
 

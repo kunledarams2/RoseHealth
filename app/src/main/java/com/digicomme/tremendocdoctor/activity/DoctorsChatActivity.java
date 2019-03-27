@@ -18,7 +18,6 @@ public class DoctorsChatActivity extends BaseActivity {
     ChatBinder binder;
     RecyclerView recyclerView;
     LinearLayoutManager manager;
-    ArrayList<Message> messages;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -29,9 +28,8 @@ public class DoctorsChatActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        messages = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
-        binder = new ChatBinder(this, messages, true);
+        binder = new ChatBinder(this, true);
         setupAdapter();
     }
 
@@ -60,9 +58,8 @@ public class DoctorsChatActivity extends BaseActivity {
                 message.setType(Message.Type.INCOMING);
             }
 
-            messages.add(message);
+            binder.add(message);
         }
-        binder.notifyDataSetChanged();
     }
 
     @Override

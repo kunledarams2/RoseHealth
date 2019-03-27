@@ -37,7 +37,11 @@ dependencies {
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
     //implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'com.google.firebase:firebase-messaging:17.4.0'
+    implementation 'com.google.firebase:firebase-messaging:17.5.0'
+    implementation('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
     implementation 'com.amazonaws:aws-android-sdk-core:2.3.3'
     implementation 'com.amazonaws:aws-android-sdk-s3:2.3.3'
     implementation 'com.amazonaws:aws-android-sdk-ddb:2.3.3'

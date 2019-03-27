@@ -16,6 +16,7 @@ import android.view.WindowManager;
 
 import com.digicomme.tremendocdoctor.api.API;
 import com.digicomme.tremendocdoctor.service.CallService;
+import com.digicomme.tremendocdoctor.service.ChatService;
 import com.digicomme.tremendocdoctor.utils.ToastUtil;
 
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import androidx.core.app.ActivityCompat;
 public class BaseActivity extends AppCompatActivity implements ServiceConnection {
 
     private CallService.CallServiceInterface mSinchServiceInterface;
+    private ChatService.WebSocketInterface mWebSocketInterface;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,15 +42,28 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        log("onPostCreate()");
+    }
+
+    @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         log("onServiceConnected()");
 
         if (CallService.class.getName().equals(componentName.getClassName())) {
             mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
-            log(" TRUE");
+            log(" CONNECTING CALL SERVICE");
             onServiceConnected();
         } else {
             log("FALSE");
+        }
+        if (ChatService.class.getName().equals(componentName.getClassName())) {
+            log(" CONNECTING CHAT SERVICE");
+            mWebSocketInterface = (ChatService.WebSocketInterface) iBinder;
+            //mWebSocketInterface.setOnline();
+            onServiceConnected();
+
         }
     }
 
@@ -74,6 +89,11 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
 
     protected CallService.CallServiceInterface getSinchServiceInterface() {
         return mSinchServiceInterface;
+    }
+
+
+    protected ChatService.WebSocketInterface getWebSocketInterface() {
+        return mWebSocketInterface;
     }
 
     private Messenger messenger = new Messenger(new Handler() {
@@ -108,6 +128,10 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         Intent intent = new Intent(this, CallService.class);
         intent.putExtra(CallService.MESSENGER, messenger);
         getApplicationContext().bindService(intent, this, BIND_AUTO_CREATE);
+
+        Intent intent2 = new Intent(this, ChatService.class);
+        //intent.putExtra(CallService.MESSENGER, messenger);
+        getApplicationContext().bindService(intent2, this, BIND_AUTO_CREATE);
         log("bindService()");
     }
 

@@ -208,6 +208,13 @@ public class API {
         return credentials;
     }
 
+    public static String getFullName() {
+        SharedPreferences prefs = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        String firstName = prefs.getString(API.FIRST_NAME, "");
+        String lastName = prefs.getString(API.LAST_NAME, "");
+        return firstName + " " + lastName;
+    }
+
     public static void setUserData(Context context, JSONObject data){
         SharedPreferences.Editor editor = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE).edit();
         editor.putString(API.USER_DATA, data.toString());

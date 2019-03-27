@@ -54,7 +54,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
     private View incomingView, activeView;
     private TextView acceptBtn, rejectBtn;
     private ImageButton endBtn;
-    private Button speakerBtn, muteBtn, hideBtn;
+    private Button speakerBtn, muteBtn; //, hideBtn;
 
     private NewNoteDialog noteDialog;
     private String patientId, consultationId;
@@ -109,11 +109,14 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         endBtn.setOnClickListener(this);
         newTipBtn.setOnClickListener(this);
 
+        incomingView.setVisibility(View.VISIBLE);
+        activeView.setVisibility(View.GONE);
+
         speakerBtn = findViewById(R.id.speaker_btn);
-        hideBtn = findViewById(R.id.hide_btn);
+        //hideBtn = findViewById(R.id.hide_btn);
         muteBtn = findViewById(R.id.mute_btn);
         speakerBtn.setOnClickListener(this);
-        hideBtn.setOnClickListener(this);
+        //hideBtn.setOnClickListener(this);
         muteBtn.setOnClickListener(this);
     }
 
@@ -291,11 +294,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         if (vc != null) {
             runOnUiThread(() -> {
                 ViewGroup localView = getVideoView(true);
-                //localView.setBackgroundResource(R.drawable.circle_white_border);
-                //localView.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-                //localView.setClipToOutline(true);
                 View local = vc.getLocalView();
-                local.setBackgroundResource(R.drawable.circle_white_border);
                 localView.addView(local);
                 localView.setOnClickListener(v -> vc.toggleCaptureDevicePosition());
                 mLocalVideoViewAdded = true;

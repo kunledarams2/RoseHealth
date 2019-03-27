@@ -212,6 +212,7 @@ public class CallService extends Service {
         }
 
         public NotificationResult relayRemotePushNotificationPayload(final Map payload) {
+
             if (mSinchClient == null && !mSettings.getMyCallId().isEmpty()) {
                 createClient(mSettings.getMyCallId());
             } else if (mSinchClient == null && mSettings.getMyCallId().isEmpty()) {

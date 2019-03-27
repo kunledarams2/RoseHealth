@@ -1,6 +1,7 @@
 package com.digicomme.tremendocdoctor.api;
 
 public class URLS {
+    public static final String WEBSOCKET_URL = "http://173.230.149.104:3210";
     public static String SERVER = "http://138.68.159.246:9000/tremendoc/api/";
 
     public static String USER_CREATE =  SERVER + "doctor/create";
