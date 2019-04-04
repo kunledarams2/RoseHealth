@@ -4,22 +4,41 @@ import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
 public class Formatter {
     private static SimpleDateFormat formatter;
 
+    public static String formatTime(String str) throws ParseException{
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault());
+        Date date = format.parse(str);
+        format = new SimpleDateFormat("HH:mm EEE, d MMM Y", Locale.getDefault());
+        return format.format(date);
+    }
+
     public static String formatDate(Date date) {
         formatter = new SimpleDateFormat("EEE, d MMM Y", Locale.getDefault());
         return formatter.format(date);
     }
 
+    public static String formatDate(String dateStr) throws ParseException{
+        formatter = new SimpleDateFormat("EEE, d MMM Y");
+        return formatter.format(stringToDate(dateStr));
+    }
+
     public static String dayOfTheWeek(Date date) {
         formatter = new SimpleDateFormat("EEEE", Locale.getDefault());
         return formatter.format(date);
+    }
+
+    public static String dayOfTheWeek(String date)  throws ParseException{
+        formatter = new SimpleDateFormat("EEEE", Locale.getDefault());
+        return formatter.format(stringToDate(date));
     }
 
     public static String formatDay(Date date) {

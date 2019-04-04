@@ -3,13 +3,16 @@ package com.digicomme.tremendocdoctor.activity;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,14 +24,22 @@ import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.api.API;
 import com.digicomme.tremendocdoctor.binder.ChatBinder;
 import com.digicomme.tremendocdoctor.dialog.MedicalRecordDialog;
+import com.digicomme.tremendocdoctor.model.CallLog;
 import com.digicomme.tremendocdoctor.model.Message;
 import com.digicomme.tremendocdoctor.service.CallService;
 import com.digicomme.tremendocdoctor.service.ChatService;
+import com.digicomme.tremendocdoctor.service.FcmListenerService;
 import com.digicomme.tremendocdoctor.utils.AudioPlayer;
+import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.utils.IO;
+import com.digicomme.tremendocdoctor.utils.UI;
 import com.sinch.android.rtc.AudioController;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
@@ -37,16 +48,23 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private Button acceptBtn, rejectBtn, viewBtn;
 
     private MedicalRecordDialog recordDialog;
-    private String mCallId;
     private AudioPlayer mAudioPlayer;
 
     private ChatBinder binder;
     private RecyclerView recyclerView;
     private LinearLayoutManager manager;
+    private Toolbar toolbar;
 
     private EditText messageField;
     private ImageButton sendBtn;
-    private String patientName, myName;
+    private String patientName, myName, patientId;
+
+    private boolean answered = false;
+
+    private com.digicomme.tremendocdoctor.utils.Timer respTimer;
+
+    private MyChatListener chatListener = new MyChatListener();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +72,30 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_chat);
 
         myName = API.getFullName();
-        patientName = IO.getData(this, CallService.PATIENT_NAME);
-
+        patientId = IO.getData(this, CallConstants.PATIENT_ID);
+        patientName = IO.getData(this, CallConstants.PATIENT_NAME);
         mAudioPlayer = new AudioPlayer(this);
         mAudioPlayer.playRingtone();
+        toolbar = findViewById(R.id.toolbar);
 
         setViews();
         setupAdapter();
 
         log("onCreate()");
+
+        respTimer = new com.digicomme.tremendocdoctor.utils.Timer(30000 /* 30 seconds */, 1000 /* 1 second */, false) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                log("TIMER TICK");
+            }
+
+            @Override
+            public void onFinish() {
+                if (!answered)
+                    chatListener.onChatEnded("no answer");
+            }
+        }.create();
+
     }
 
     private void setupAdapter() {
@@ -120,10 +153,43 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         messageField = findViewById(R.id.message_field);
         sendBtn = findViewById(R.id.send_btn);
 
+        messageField.addTextChangedListener(new TextWatcher() {
+            boolean isTyping = false;
+            Timer timer = new Timer();
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!isTyping) {
+                    isTyping = true;
+                    getWebSocketInterface().setTyping(true);
+                }
+
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        isTyping = false;
+                        getWebSocketInterface().setTyping(false);
+                    }
+                }, 5000);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         endSession.setOnClickListener(btn -> endSession());
         sendBtn.setOnClickListener(btn -> {
             String msg = messageField.getText().toString();
-            String receiverId = IO.getData(this, CallService.PATIENT_ID);
+            String receiverId = IO.getData(this, CallConstants.PATIENT_ID);
             if (!TextUtils.isEmpty(msg)) {
                 getWebSocketInterface().send(receiverId, msg);
                 Message message = new Message();
@@ -137,8 +203,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             }
         });
 
-        incomingView.setVisibility(View.VISIBLE);
-        activeView.setVisibility(View.GONE);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.containsKey("status")) {
+            incomingView.setVisibility(View.GONE);
+            activeView.setVisibility(View.VISIBLE);
+            answered = true;
+        } else {
+            incomingView.setVisibility(View.VISIBLE);
+            activeView.setVisibility(View.GONE);
+        }
         label.setText("Incoming chat from " + patientName);
     }
 
@@ -157,11 +231,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             //incomingView.setVisibility(View.GONE);
             //activeView.setVisibility(View.VISIBLE);
             getWebSocketInterface().acceptChat();
+            answered = true;
         } else if (view == rejectBtn) {
             getWebSocketInterface().endChat("denied");
         } else if (view == viewBtn) {
             if (recordDialog == null) {
-                recordDialog = new MedicalRecordDialog(this, mCallId);
+                recordDialog = new MedicalRecordDialog(this, patientId);
             }
             recordDialog.show();
         }
@@ -169,18 +244,37 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     private class MyChatListener implements ChatService.ChatListener {
         @Override
-        public void onChatEnded() {
+        public void onChatEnded(String reason) {
+            if (!answered) {
+                UI.createNotification(getApplicationContext(), patientName);
+                try {
+                    String time = DateTime.now().toString();
+                    int pId = Integer.parseInt(patientId);
+                    CallLog.createCallLog(ChatActivity.this, patientName, pId, "CHAT", time);
+                } catch (Exception e) {
+                    log("error creating call log "+ e.getMessage());
+                }
+            }
             //log("Call ended. Reason: " + cause.toString());
             mAudioPlayer.stopProgressTone();
             mAudioPlayer.stopRingtone();
             setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
+
             //String endMsg = "Call ended: " + call.getDetails().toString();
             //ToastUtil.showLong(ContactActivity.this, endMsg);
 
             //boolean showCallbackModal = call.getDetails().getDuration() < FIFTEEN_MINUTES;
             // endCall(call, !showCallbackModal);
             //closeScreen();
-            runOnUiThread(() -> finish());
+            runOnUiThread(() -> {
+                if (CallConstants.CALL_DIRECTION_INCOMING.equals(IO.getData(ChatActivity.this, CallConstants.CALL_DIRECTION_INCOMING))) {
+                    finish();
+                } else {
+                    Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                    intent.putExtra("fragment", MainActivity.CALL_LOGS);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override
@@ -217,6 +311,18 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 recyclerView.smoothScrollToPosition(pos);
             });
         }
+
+
+        @Override
+        public void onTyping(boolean typing) {
+            runOnUiThread(()-> {
+                //if (typing)
+                //    toolbar.setSubtitle("typing...");
+                //else
+                //    toolbar.setSubtitle("");
+            });
+        }
+
     }
 
     private void log(String log) {

@@ -24,14 +24,18 @@ public class FileUploader {
 
     private static final String DO_SPACES_ACCESS_KEY = "NEPLASGGHJ4GDRXXJ4KJ";
     private static final String DO_SPACES_SECRET_KEY = "QTSluRz4PyMfFkxtbJMPDexRUWpFozBCDrDogglsTcM";
-    private static final String DO_SPACES_ENDPOINT = "https://sfo2.digitaloceanspaces.com/tremendoc";
+    //private static final String DO_SPACES_ENDPOINT = "https://sfo2.digitaloceanspaces.com/tremendoc";
+    private static final String DO_SPACES_ENDPOINT = "https://sfo2.digitaloceanspaces.com/";
 
     public FileUploader(Context context) {
-        bucketName = "";
+        bucketName = "tremendoc";
         credentials = new BasicAWSCredentials(DO_SPACES_ACCESS_KEY, DO_SPACES_SECRET_KEY);
         s3Client = new AmazonS3Client(credentials);
         s3Client.setEndpoint(DO_SPACES_ENDPOINT);
-        transferUtility = new TransferUtility(s3Client, context);
+        transferUtility = TransferUtility.builder()
+                .context(context)
+                .s3Client(s3Client)
+                .build();
 
     }
 
@@ -83,7 +87,6 @@ public class FileUploader {
     public boolean isCompleted() {
         return completed;
     }
-
 
 
     public interface FileUploadListener{

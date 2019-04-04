@@ -27,6 +27,7 @@ import com.digicomme.tremendocdoctor.dialog.NewTipDialog;
 import com.digicomme.tremendocdoctor.model.Tip;
 import com.digicomme.tremendocdoctor.utils.Formatter;
 import com.digicomme.tremendocdoctor.utils.ImageLoader;
+import com.digicomme.tremendocdoctor.utils.ToastUtil;
 import com.digicomme.tremendocdoctor.viewmodel.ProfileViewModel;
 import com.digicomme.tremendocdoctor.viewmodel.TipsViewModel;
 
@@ -47,7 +48,7 @@ public class Dashboard  extends Fragment {
     private CircleImageView tipImage;
     private TextView tipTitle, tipSummary;
 
-    private NewTipDialog tipDialog;
+    public static NewTipDialog tipDialog;
     private TipsViewModel viewModel;
     private int attempts = 0;
     private ProfileViewModel profileViewModel;
@@ -154,12 +155,13 @@ public class Dashboard  extends Fragment {
         StringCall call = new StringCall(getContext());
         call.get(URLS.CURRENT_EARNINGS, null, response -> {
             Log.d("Dashboard Earnings", response);
+            //ToastUtil.showModal(getContext(), response);
             try {
                 JSONObject data = new JSONObject(response);
                 if (data.has("code") && data.getInt("code") == 0) {
                     currentEarning.setText( "N" + data.getString("earnedToday"));
                     totalEarning.setText("N" + data.getString("totalEarned"));
-                    noConsultation.setText(data.getString("consultationsToday"));
+                    noConsultation.setText(data.getString("completeConsultationsToday"));
                     totalConsultation.setText(data.getString("totalConsultations"));
 
                     earningPlaceholder.setVisibility(View.GONE);
@@ -302,7 +304,6 @@ public class Dashboard  extends Fragment {
             }
         });
     }
-
 
 
     private static void log(String string) {

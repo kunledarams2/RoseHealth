@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.digicomme.tremendocdoctor.activity.ChatActivity;
 import com.digicomme.tremendocdoctor.api.API;
+import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.utils.DeviceName;
 import com.digicomme.tremendocdoctor.utils.Timer;
 import com.digicomme.tremendocdoctor.utils.UI;
@@ -98,11 +99,13 @@ public class ChatService extends Service {
 
                 mSocket.on("incoming-chat", args -> {
                     String callerId = (String) args[0];
-                    String callerName = (String) args[1];
-                    String consultationId = (String) args[2];
-                    com.digicomme.tremendocdoctor.utils.IO.setData(ChatService.this, CallService.PATIENT_ID, callerId);
-                    com.digicomme.tremendocdoctor.utils.IO.setData(ChatService.this, CallService.PATIENT_NAME, callerName);
-                    com.digicomme.tremendocdoctor.utils.IO.setData(ChatService.this, CallService.CONSULTATION_ID, consultationId);
+                    String callerUuid = (String) args[1];
+                    String callerName = (String) args[2];
+                    String consultationId = (String) args[3];
+                    com.digicomme.tremendocdoctor.utils.IO.setData(ChatService.this, CallConstants.PATIENT_ID, callerId);
+                    com.digicomme.tremendocdoctor.utils.IO.setData(ChatService.this, CallConstants.PATIENT_NAME, callerName);
+                    com.digicomme.tremendocdoctor.utils.IO.setData(ChatService.this, CallConstants.PATIENT_UUID, callerUuid);
+                    com.digicomme.tremendocdoctor.utils.IO.setData(ChatService.this, CallConstants.CONSULTATION_ID, consultationId);
 
                     listener.onIncomingChat(mSocket, args);
                 });
@@ -115,14 +118,20 @@ public class ChatService extends Service {
 
                 mSocket.on("chat-ended", args -> {
                     Log.d("WSService", "chat ended");
+                    String reason = (String) args[0];
 
-                    chatListener.onChatEnded();
+                    chatListener.onChatEnded(reason);
                 });
 
                 mSocket.on("new-message", args -> {
                     String msg = (String) args[0];
                     Log.d("ChatService", msg );
                     chatListener.onNewMessage(msg);
+                });
+
+                mSocket.on("typing", args -> {
+                    boolean typing = (boolean) args[0];
+                    chatListener.onTyping(typing);
                 });
 
                 mSocket.connect();
@@ -143,6 +152,7 @@ public class ChatService extends Service {
         }
 
         private void setOnline() {
+            //String username = API.getDoctorId(ChatService.this);
             String username = DeviceName.getUUID(ChatService.this);
             mSocket.emit("set-online", username, (Ack) args -> {
                 Log.d("WSService", (String) args[0]);
@@ -150,9 +160,10 @@ public class ChatService extends Service {
             });
         }
 
-        public void chatUp(String username, String consultationId) {
+        public void chatUp(String uuid, String consultationId) {
             String name = API.getFullName();
-            mSocket.emit("chatup-user", username, name, consultationId, (Ack) args -> {
+            String myId = API.getDoctorId(ChatService.this);
+            mSocket.emit("chatup-user", myId, uuid, name, consultationId, (Ack) args -> {
                 chatListener.onChatProgressing();
                 /*timer = new Timer(30000 /* 30 seconds /, 1000 /* 1 second /, true) {
                     @Override
@@ -171,14 +182,14 @@ public class ChatService extends Service {
         }
 
         public void acceptChat() {
-            String callerId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallService.PATIENT_ID);
+            String callerId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallConstants.PATIENT_ID);
             mSocket.emit("accept-chat", callerId);
             answered = true;
             timer = null;
         }
 
         public void endChat(String reason) {
-            String userId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallService.PATIENT_ID);
+            String userId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallConstants.PATIENT_ID);
             /*String direction = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallService.CALL_DIRECTION);
             if (direction.equals(CallService.CallDirection.OUTGOING.name())) {
                 userId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallService.PATIENT_ID);
@@ -194,6 +205,10 @@ public class ChatService extends Service {
 
         public void send(String receiverId, String msg) {
             mSocket.emit("message", receiverId, msg);
+        }
+
+        public void setTyping(boolean typing) {
+            mSocket.emit("typing", typing);
         }
 
         public boolean isConnected() {
@@ -220,10 +235,11 @@ public class ChatService extends Service {
     }
 
     public  interface  ChatListener {
-        void onChatEnded();
+        void onChatEnded(String reason);
         void onNewMessage(String message);
         void onChatEstablished();
         void onChatProgressing();
+        void onTyping(boolean isTyping);
     }
 
     private class WebSocketListenerImpl implements WebSocketListener {

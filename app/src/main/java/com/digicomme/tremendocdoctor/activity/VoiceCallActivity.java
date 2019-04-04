@@ -1,5 +1,7 @@
 package com.digicomme.tremendocdoctor.activity;
 
+import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,15 +10,20 @@ import android.widget.TextView;
 
 import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.dialog.MedicalRecordDialog;
+import com.digicomme.tremendocdoctor.model.CallLog;
 import com.digicomme.tremendocdoctor.service.CallService;
 import com.digicomme.tremendocdoctor.dialog.NewNoteDialog;
 import com.digicomme.tremendocdoctor.utils.AudioPlayer;
+import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.utils.IO;
 import com.digicomme.tremendocdoctor.utils.UI;
+import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallListener;
+
+import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +46,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
 
     private boolean isSpeakerMute = false;
     private boolean inSpeakOut = false;
+    private boolean answered = false;
 
     private NewNoteDialog noteDialog;
     private MedicalRecordDialog recordDialog;
@@ -63,10 +71,10 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
 
         mAudioPlayer = new AudioPlayer(this);
         mAudioPlayer.playRingtone();
-        mCallId = getIntent().getStringExtra(CallService.CALL_ID);
-        patientId = getIntent().getStringExtra(CallService.PATIENT_ID);
-        patientName = getIntent().getStringExtra(CallService.PATIENT_NAME);
-        consultationId = getIntent().getStringExtra(CallService.CONSULTATION_ID);
+        mCallId = getIntent().getStringExtra(CallConstants.CALL_ID);
+        patientId = getIntent().getStringExtra(CallConstants.PATIENT_ID);
+        patientName = getIntent().getStringExtra(CallConstants.PATIENT_NAME);
+        consultationId = getIntent().getStringExtra(CallConstants.CONSULTATION_ID);
     }
 
     private void setViews() {
@@ -94,15 +102,23 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
         newNoteBtn = findViewById(R.id.new_note);
         newNoteBtn.setOnClickListener(this);
 
-        activeView.setVisibility(View.GONE);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.containsKey("status")) {
+            incomingView.setVisibility(View.GONE);
+            activeView.setVisibility(View.VISIBLE);
+        } else {
+            incomingView.setVisibility(View.VISIBLE);
+            activeView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (getIntent() != null) {
-            if (getIntent().getStringExtra(CallService.CALL_ID) != null) {
-                mCallId = getIntent().getStringExtra(CallService.CALL_ID);
+            if (getIntent().getStringExtra(CallConstants.CALL_ID) != null) {
+                mCallId = getIntent().getStringExtra(CallConstants.CALL_ID);
 
                 mTimer = new Timer();
                 mDurationTask = new UpdateCallDurationTask();
@@ -147,6 +163,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             call.answer();
             incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
+            answered = true;
         } else {
             finish();
         }
@@ -249,22 +266,36 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             CallEndCause cause = call.getDetails().getEndCause();
             Log.d(TAG, "Call ended, cause: " + cause.toString());
             mAudioPlayer.stopRingtone();
-            if ((CallEndCause.TIMEOUT.getValue() == cause.getValue()
-                    || CallEndCause.CANCELED.getValue() == cause.getValue()) &&
-                    CallService.CallDirection.INCOMING.name()
-                            .equals(IO.getData(VoiceCallActivity.this, CallService.CALL_DIRECTION))) {
-                UI.createNotification(getApplicationContext(), call.getRemoteUserId());
+
+            if (!answered &&
+                    CallConstants.CALL_DIRECTION_INCOMING.equals(IO.getData(VoiceCallActivity.this, CallConstants.CALL_DIRECTION_INCOMING))) {
+                UI.createNotification(getApplicationContext(), patientName);
+                try {
+                    String time = DateTime.now().toString();
+                    int pId = Integer.parseInt(patientId);
+                    CallLog.createCallLog(VoiceCallActivity.this, patientName, pId, "AUDIO", time);
+                } catch (Exception e) {
+                    log("error creating call log "+ e.getMessage());
+                }
             }
-            //Intent mainActivity = new Intent(VoiceCallActivity.this, MainActivity.class);
-            //mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //startActivity(mainActivity);
-            finish();
+
+            if (CallConstants.CALL_DIRECTION_INCOMING.equals(IO.getData(VoiceCallActivity.this, CallConstants.CALL_DIRECTION_INCOMING))) {
+                finish();
+            } else {
+                Intent intent = new Intent(VoiceCallActivity.this, MainActivity.class);
+                intent.putExtra("fragment", MainActivity.CALL_LOGS);
+                startActivity(intent);
+            }
         }
 
 
         @Override
         public void onCallEstablished(Call call) {
             Log.d(TAG, "Call established");
+            setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
+            AudioController controller = getSinchServiceInterface().getAudioController();
+            controller.disableSpeaker();
+            controller.unmute();
         }
 
         @Override
@@ -283,6 +314,10 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void log(String log) {
+        Log.d("VoiceCallActivity", "--__--_--__-----___-----__-----_--_-----   " + log);
     }
 
 }

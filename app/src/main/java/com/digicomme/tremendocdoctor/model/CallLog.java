@@ -1,6 +1,7 @@
 package com.digicomme.tremendocdoctor.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.digicomme.tremendocdoctor.utils.IO;
 
@@ -15,10 +16,11 @@ public class CallLog {
 
     private static final String CALL_LOGS = "CallLogs";
 
-    String callerId, time, callType;
+    private int callerId;
+    String callerName, time, callType;
     private int count;
 
-    public void setCallerId(String callerId) {
+    public void setCallerId(int callerId) {
         this.callerId = callerId;
     }
 
@@ -26,7 +28,7 @@ public class CallLog {
         this.time = time;
     }
 
-    public String getCallerId() {
+    public int getCallerId() {
         return callerId;
     }
 
@@ -42,8 +44,27 @@ public class CallLog {
         return count;
     }
 
-    public static void createCallLog(Context context, String callerId, String callType, String time) throws JSONException{
+    public String getCallerName() {
+        return callerName;
+    }
+
+    public void setCallerName(String callerName) {
+        this.callerName = callerName;
+    }
+
+    public void setCallType(String callType) {
+        this.callType = callType;
+    }
+
+    public String getCallType() {
+        return callType;
+    }
+
+    public static void createCallLog(Context context, String callerName, int callerId, String callType, String time) throws JSONException{
         String string = IO.getData(context, CALL_LOGS);
+        if (string.length() < 2)
+            string = "[]";
+
         JSONArray callLogs = new JSONArray(string);
 
         // check if the caller has called before
@@ -53,7 +74,8 @@ public class CallLog {
                 int count = log.getInt("count") + 1;
                 log.put("count", count);
                 log.put("time", time);
-                callLogs.put(i, log);
+                callLogs.remove(i);
+                callLogs.put(log);
                 IO.setData(context, CALL_LOGS, callLogs.toString());
                 return;
             }
@@ -62,15 +84,26 @@ public class CallLog {
         //if the caller hasnt called before
         JSONObject log = new JSONObject();
         log.put("callerId", callerId)
-            .put("time", time)
-            .put("callType", callType);
+                .put("callerName", callerName)
+                .put("time", time)
+                .put("count", 1)
+                .put("callType", callType);
         callLogs.put(log);
+
+        //if length is more than 15, remove the first call
+        if (callLogs.length() > 15)
+            callLogs.remove(0);
+
         IO.setData(context, CALL_LOGS, callLogs.toString());
     }
 
     public static List<CallLog> getCallLogs(Context context) throws JSONException {
         List<CallLog> logs = new ArrayList<>();
         String string = IO.getData(context, CALL_LOGS);
+        Log.d("CallLog", "Call logs string " + string);
+        if (string.length() < 2)
+            string = "[]";
+
         JSONArray callLogs = new JSONArray(string);
         for (int i = 0; i < callLogs.length(); i++) {
             JSONObject log =  callLogs.getJSONObject(i);
@@ -81,9 +114,13 @@ public class CallLog {
 
     public static CallLog parse(JSONObject object) throws JSONException{
         CallLog log = new CallLog();
-        log.setCallerId(object.getString("callerId"));
+        log.setCallerName(object.getString("callerName"));
+        log.setCallerId(object.getInt("callerId"));
         log.setTime(object.getString("time"));
-        log.setCount(object.getInt("count"));
+        if (object.has("count") && !object.isNull("count"))
+            log.setCount(object.getInt("count"));
+        log.setCount(1);
+        log.setCallType(object.getString("callType"));
         return log;
     }
 }

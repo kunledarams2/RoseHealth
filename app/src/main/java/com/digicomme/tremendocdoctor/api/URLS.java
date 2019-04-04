@@ -33,5 +33,6 @@ public class URLS {
     public static final String DAILY_APPOINTMENT = SERVER + "appointments/retrieve-by-date";
 
     public static String APPOINTMENTS = SERVER + "appointments/retrieve/";
+    public static String INITIATE_CONSULTATION = SERVER + "consultation/initiate";
 
 }

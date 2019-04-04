@@ -29,6 +29,7 @@ import com.digicomme.tremendocdoctor.utils.Formatter;
 import com.digicomme.tremendocdoctor.utils.IO;
 import com.digicomme.tremendocdoctor.utils.Permission;
 import com.digicomme.tremendocdoctor.utils.ToastUtil;
+import com.digicomme.tremendocdoctor.utils.Uploader;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -174,8 +175,8 @@ public class NewTipDialog extends Dialog {
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setTitle("Attach Photo")
                 .setOnMenuItemClickListener(menuItem -> {
-                    //IO.galleryIntent(activity);
-                    ((MainActivity) activity).galleryIntent();
+                    IO.galleryIntent(activity);
+                    //((MainActivity) activity).galleryIntent();
                     /*if (snackbar.isShown()) {
                         snackbar.dismiss();
                     } else {
@@ -192,7 +193,7 @@ public class NewTipDialog extends Dialog {
                     return false;
                 });
 
-        createSnackbar();
+        //createSnackbar();
     }
 
     private void createSnackbar() {
@@ -228,7 +229,24 @@ public class NewTipDialog extends Dialog {
         if (data != null) {
             log("Data is not Null");
             imageUri = data.getData();
-            if (fileUploader == null) {
+
+            try {
+                Uploader uploader = new Uploader();
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageUri);
+                File file = new File(imageUri.getPath().split(":")[1]);
+                log("File name " + file.getName());
+                uploader.upload(getContext(), "test-file.jpg", file);
+                //File file = new File(imageUri.getPath());
+                //String[] frags = file.getAbsolutePath().split(":");
+                //file = new File( frags[1]);
+                //fileUploader.upload("images", file, "jdjjahfjhfah.jpg");
+                imagePreview.setImageURI(imageUri);
+                uploadOverlay.setVisibility(View.VISIBLE);
+            } catch (IOException e) {
+                ToastUtil.showLong(getContext(), e.getLocalizedMessage());
+            }
+
+            /*if (fileUploader == null) {
                 initFileUploader();
             }
             try {
@@ -242,7 +260,7 @@ public class NewTipDialog extends Dialog {
                 uploadOverlay.setVisibility(View.VISIBLE);
             } catch (IOException e) {
                 ToastUtil.showLong(getContext(), e.getLocalizedMessage());
-            }
+            }*/
         }
         log("Data maybe null");
     }

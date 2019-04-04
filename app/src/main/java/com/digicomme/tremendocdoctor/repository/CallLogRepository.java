@@ -1,7 +1,6 @@
 package com.digicomme.tremendocdoctor.repository;
 
 import android.content.Context;
-import android.telecom.Call;
 import android.util.Log;
 
 import com.digicomme.tremendocdoctor.api.Result;
@@ -37,14 +36,15 @@ public class CallLogRepository {
         MutableLiveData<Result<CallLog>> data = new MutableLiveData<>();
         Result<CallLog> result = new Result<>();
         try {
-            List<CallLog> list = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            List<CallLog> list = CallLog.getCallLogs(context);
+            /*for (int i = 0; i < 10; i++) {
                 JSONObject object = new JSONObject();
-                object.put("callerId", "Sample Caller Id");
+                object.put("callerId", i+ 1);
+                object.put("callerName", "Sample Caller Name");
                 object.put("time",  (i + 2 * 2) + " mins ago");
                 object.put("count", i + 1);
                 list.add(CallLog.parse(object));
-            }
+            }*/
             result.setDataList(list);
             //result.setDataList(CallLog.getCallLogs(context));
         } catch (JSONException e) {

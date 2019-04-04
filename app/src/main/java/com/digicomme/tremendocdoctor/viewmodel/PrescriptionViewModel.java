@@ -31,7 +31,6 @@ public class PrescriptionViewModel extends AndroidViewModel {
         mediatorLiveData.removeSource(prescriptionsResult);
         prescriptionsResult = PrescriptionRepository.getInstance(application.getApplicationContext()).getPrescriptions(page);
         mediatorLiveData.addSource(prescriptionsResult, noteResult -> mediatorLiveData.setValue(noteResult) );
-
     }
 
 

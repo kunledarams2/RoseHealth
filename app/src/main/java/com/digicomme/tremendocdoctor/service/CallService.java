@@ -13,6 +13,8 @@ import android.util.Log;
 
 import com.digicomme.tremendocdoctor.activity.VideoCallActivity;
 import com.digicomme.tremendocdoctor.activity.VoiceCallActivity;
+import com.digicomme.tremendocdoctor.api.API;
+import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.utils.DeviceName;
 import com.digicomme.tremendocdoctor.utils.IO;
 import com.digicomme.tremendocdoctor.utils.ToastUtil;
@@ -29,9 +31,16 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 import com.sinch.android.rtc.video.VideoController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
+
+import static com.digicomme.tremendocdoctor.utils.CallConstants.CALLER_ID;
+import static com.digicomme.tremendocdoctor.utils.CallConstants.CALL_ID;
+import static com.digicomme.tremendocdoctor.utils.CallConstants.CONSULTATION_ID;
+import static com.digicomme.tremendocdoctor.utils.CallConstants.PATIENT_ID;
+import static com.digicomme.tremendocdoctor.utils.CallConstants.PATIENT_NAME;
 
 public class CallService extends Service {
 
@@ -44,14 +53,6 @@ public class CallService extends Service {
     public static final String MESSENGER = "MESSENGER";
     private Messenger messenger;
 
-    public static final String CALL_ID = "CALL_ID";
-    public static final String CALLER_ID = "CALLER_ID";
-    public static final String PATIENT_ID = "patientId";
-    public static final String PATIENT_NAME = "patientName";
-    public static final String CONSULTATION_ID  = "consultationId";
-    public static final String CALL_DIRECTION = "CALL_DIRECTION";
-
-    public enum CallDirection { INCOMING, OUTGOING }
     static final String TAG = CallService.class.getSimpleName();
 
     private PersistedSettings mSettings;
@@ -105,7 +106,7 @@ public class CallService extends Service {
             createClient(username);
         }
 
-        try {
+        /*try {
             mSinchClient.checkManifest();
         } catch (MissingPermissionException e) {
             log("permission exception " + e.getMessage());
@@ -135,7 +136,7 @@ public class CallService extends Service {
             ToastUtil.showLong(this, "CLIENT STARTED");
         } else {
             log("Permission not granted");
-        }
+        } */
     }
 
     private void stop() {
@@ -164,8 +165,35 @@ public class CallService extends Service {
 
     public class CallServiceInterface extends Binder {
 
-        public Call callUser(String userId) {
-            return mSinchClient.getCallClient().callUser(userId);
+        public Call callUser(String userId, String consultationId) {
+            Map<String, String> payload = new HashMap<>();
+            payload.put("consultationId", consultationId);
+            payload.put("doctorId", API.getDoctorId(CallService.this));
+            Map<String, String> data = API.getCredentials(CallService.this);
+            payload.put("doctorName", data.get(API.FIRST_NAME) + " " + data.get(API.LAST_NAME));
+
+            //log("DOCTOR NAME: " + data.get(API.FIRST_NAME) + " " + data.get(API.LAST_NAME));
+            return mSinchClient.getCallClient().callUser(userId, payload);
+        }
+
+        public Call videoCallUser(String userId, String consultationId) {
+            Map<String, String> payload = new HashMap<>();
+            payload.put("consultationId", consultationId);
+            payload.put("doctorId", API.getDoctorId(CallService.this));
+            Map<String, String> data = API.getCredentials(CallService.this);
+            payload.put("doctorName", data.get(API.FIRST_NAME) + " " + data.get(API.LAST_NAME));
+
+            CallClient client = mSinchClient.getCallClient();
+            if (client == null || !isStarted()) {
+                startClient(getUsername());
+            }
+            if (isStarted()) {
+                return client.callUserVideo(userId, payload);
+            } else {
+                return null;
+            }
+
+            //return .callUserVideo(userId);
         }
 
         public String getUsername() {
@@ -288,7 +316,7 @@ public class CallService extends Service {
     private class SinchCallClientListener implements CallClientListener {
         @Override
         public void onIncomingCall(CallClient callClient, Call call) {
-            IO.setData(CallService.this, CallService.CALL_DIRECTION, CallDirection.INCOMING.name());
+            IO.setData(CallService.this, CallConstants.CALL_DIRECTION, CallConstants.CALL_DIRECTION_INCOMING);
             log( "onIncomingCall: " + call.getCallId());
             Intent intent = new Intent(CallService.this, call.getDetails().isVideoOffered() ?
                     VideoCallActivity.class : VoiceCallActivity.class);

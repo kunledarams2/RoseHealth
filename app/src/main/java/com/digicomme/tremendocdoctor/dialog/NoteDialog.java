@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class NoteDialog extends Dialog {
 
-    private TextView dateView, patientView, symptomsView, diagnosisView, treatmentView;
+    private TextView noteLabel, dateView, patientView, symptomsView, diagnosisView, treatmentView;
 
     public NoteDialog(Context context, Note note) {
         super(context, R.style.FullScreenDialog);
@@ -25,6 +25,7 @@ public class NoteDialog extends Dialog {
 
     private void setupViews() {
         dateView = findViewById(R.id.note_date);
+        noteLabel = findViewById(R.id.note_label);
         patientView = findViewById(R.id.patient_name);
         symptomsView = findViewById(R.id.symptoms);
         diagnosisView = findViewById(R.id.diagnosis);
@@ -36,6 +37,7 @@ public class NoteDialog extends Dialog {
 
     private void bind(Note note) {
         dateView.setText(note.getFormattedDate());
+        noteLabel.setText(note.getDoctorName());
         patientView.setText(note.getPatientName());
         symptomsView.setText(note.getSymptoms());
         diagnosisView.setText(note.getDiagnosis());

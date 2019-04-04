@@ -1,6 +1,7 @@
 package com.digicomme.tremendocdoctor.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -19,8 +20,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.digicomme.tremendocdoctor.R;
+import com.digicomme.tremendocdoctor.activity.RoutingActivity;
 import com.digicomme.tremendocdoctor.adapter.CallLogAdapter;
+import com.digicomme.tremendocdoctor.service.CallService;
 import com.digicomme.tremendocdoctor.ui.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.viewmodel.CallLogViewModel;
 import com.digicomme.tremendocdoctor.viewmodel.NoteViewModel;
 
@@ -69,7 +73,30 @@ public class CallLogs extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         adapter = new CallLogAdapter();
+        adapter.setClickListener(new CallLogAdapter.ClickListener() {
+            @Override
+            public void onVideoClicked(int callerId) {
+                route("VIDEO", callerId);
+            }
+
+            @Override
+            public void onVoiceClicked(int callerId) {
+                route("AUDIO", callerId);
+            }
+
+            @Override
+            public void onChatClicked(int callerId) {
+                route("CHAT", callerId);
+            }
+        });
         recyclerView.setAdapter(adapter);
+    }
+
+    private void route(String action, int callerId) {
+        Intent intent = new Intent(getContext(), RoutingActivity.class);
+        intent.putExtra(CallConstants.CALL_TYPE, action);
+        intent.putExtra("callerId", callerId);
+        getContext().startActivity(intent);
     }
 
     @Override

@@ -129,6 +129,7 @@ public class Login extends Fragment implements View.OnClickListener {
             StringCall call = new StringCall(getContext());
             call.post(URLS.USER_LOGIN, params, response -> {
                 progressDialog.hide();
+                Log.d("LOGIN", "response " + response);
                 //showModal("RESPONSE " + response);
                 try {
                     JSONObject resObj = new JSONObject(response);

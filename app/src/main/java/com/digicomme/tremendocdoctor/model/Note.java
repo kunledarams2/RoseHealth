@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class Note {
     private Date date;
-    private String patientName, diagnosis, symptoms, treatment;
+    private String doctorName,patientName, diagnosis, symptoms, treatment;
 
     public void setDate(Date date) {
         this.date = date;
@@ -19,6 +19,10 @@ public class Note {
 
     public void setPatientName(String patientName) {
         this.patientName = patientName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
     public Date getDate() {
@@ -56,6 +60,10 @@ public class Note {
         return diagnosis;
     }
 
+    public String getDoctorName() {
+        return doctorName;
+    }
+
     public String getFormattedDate() {
         return Formatter.formatDate(date);
     }
@@ -64,6 +72,9 @@ public class Note {
         Note note = new Note();
         if (object.has("date")) {
             note.setDate(object.getString("date"));
+        }
+        if (object.has("doctorName") && !object.isNull("doctorName")) {
+            note.setDoctorName(object.getString("doctorName"));
         }
         if (object.has("customerName"))
             note.setPatientName(object.getString("customerName"));

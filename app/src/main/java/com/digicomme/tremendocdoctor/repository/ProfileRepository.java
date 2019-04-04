@@ -8,6 +8,7 @@ import com.digicomme.tremendocdoctor.api.Result;
 import com.digicomme.tremendocdoctor.api.StringCall;
 import com.digicomme.tremendocdoctor.api.URLS;
 import com.digicomme.tremendocdoctor.utils.Formatter;
+import com.digicomme.tremendocdoctor.utils.IO;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +41,15 @@ public class ProfileRepository {
         call.get(URLS.PROFILE + doctorId, null, response -> {
             Log.d("ProfileRepo ", response);
             try {
+                String[] names = {"General Health", "Physiotherapy", "Child Health", "Dietician", "Dental & Oral Health" };
+
                 JSONObject object = new JSONObject(response);
+                for (int i = 0; i < names.length; i++) {
+                    if (object.getString("specialty").equalsIgnoreCase(names[i])) {
+                        IO.setData(context, API.SPECIALTY_ID, String.valueOf(i + 1));
+                        break;
+                    }
+                }
                 if (object.has("code") && object.getInt("code") == 0) {
                     result.setData(object);
                 } else {

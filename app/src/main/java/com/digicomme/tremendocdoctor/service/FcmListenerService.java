@@ -1,8 +1,5 @@
 package com.digicomme.tremendocdoctor.service;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +9,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.digicomme.tremendocdoctor.R;
-import com.digicomme.tremendocdoctor.activity.AuthActivity;
+import com.digicomme.tremendocdoctor.model.CallLog;
+import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.utils.UI;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -21,12 +18,11 @@ import com.sinch.android.rtc.NotificationResult;
 import com.sinch.android.rtc.SinchHelpers;
 import com.sinch.android.rtc.calling.CallNotificationResult;
 
+import org.joda.time.DateTime;
+
 import java.util.Map;
 
-import androidx.core.app.NotificationCompat;
-
 public class FcmListenerService extends FirebaseMessagingService {
-    private String CHANNEL_ID = "com.digicomme.tremendoc";
 
     //NB: example purposes only! Implement proper storage/database in order to be able to create
     //nice notification with display name / picture / other data of the caller.
@@ -68,11 +64,19 @@ public class FcmListenerService extends FirebaseMessagingService {
 
                                 if (callResult.isCallCanceled() || callResult.isTimedOut()) {
                                     log("call rejected or timed out");
-                                    String displayName = callResult.getHeaders().get(CallService.PATIENT_NAME); //result.getDisplayName();
+                                    String displayName = callResult.getHeaders().get(CallConstants.PATIENT_NAME); //result.getDisplayName();
                                     if (displayName == null) {
                                         displayName = sharedPreferences.getString(callResult.getRemoteUserId(), "n/a");
                                     }
                                     UI.createNotification(getApplicationContext(), displayName != null && !displayName.isEmpty() ? displayName : callResult.getRemoteUserId());
+                                    try {
+                                        String time = DateTime.now().toString();
+                                        String callType = callResult.isVideoOffered() ? "VIDEO" : "AUDIO";
+                                        int patientId = Integer.parseInt(callResult.getHeaders().get(CallConstants.PATIENT_ID));
+                                        CallLog.createCallLog(FcmListenerService.this, displayName, patientId, callType, time);
+                                    } catch (Exception e) {
+                                        log("error creating call log "+ e.getMessage());
+                                    }
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                         context.deleteSharedPreferences(PREFERENCE_FILE);
                                     }

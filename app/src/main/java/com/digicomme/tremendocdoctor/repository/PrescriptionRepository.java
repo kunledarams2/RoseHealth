@@ -43,9 +43,9 @@ public class PrescriptionRepository {
         MutableLiveData<Result<Prescription>> data = new MutableLiveData<>();
 
         String doctorId = API.getDoctorId(context);
-        Result<Prescription> result = new Result();
+        Result<Prescription> result = new Result<>();
 
-        Map<String, String> params = new HashMap();
+        Map<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(page));
 
         call.get(URLS.PRESCRIPTIONS + doctorId, params, response -> {

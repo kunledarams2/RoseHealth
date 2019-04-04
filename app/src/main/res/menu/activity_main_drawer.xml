@@ -22,10 +22,10 @@
         android:id="@+id/nav_prescriptions"
         android:icon="@drawable/icon_appointments"
         android:title="@string/ic_prescriptions" />
-    <item
+    <!--item
         android:id="@+id/nav_chatroom"
         android:icon="@drawable/icon_chatroom"
-        android:title="@string/ic_chatroom" />
+        android:title="@string/ic_chatroom" /-->
     <item
         android:id="@+id/nav_call_logs"
         android:icon="@drawable/ic_call"

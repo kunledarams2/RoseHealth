@@ -13,6 +13,7 @@ import com.digicomme.tremendocdoctor.api.StringCall;
 import com.digicomme.tremendocdoctor.api.URLS;
 import com.digicomme.tremendocdoctor.fragment.CallLogs;
 import com.digicomme.tremendocdoctor.fragment.Prescriptions;
+import com.digicomme.tremendocdoctor.fragment.appointments.AppointmentSchedule;
 import com.digicomme.tremendocdoctor.utils.Formatter;
 import com.digicomme.tremendocdoctor.utils.IO;
 import com.digicomme.tremendocdoctor.utils.ToastUtil;
@@ -20,14 +21,12 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.digicomme.tremendocdoctor.R;
-import com.digicomme.tremendocdoctor.fragment.Appointments;
 import com.digicomme.tremendocdoctor.fragment.Chatroom;
 import com.digicomme.tremendocdoctor.fragment.Dashboard;
 import com.digicomme.tremendocdoctor.fragment.Notes;
@@ -54,6 +53,8 @@ public class MainActivity extends BaseActivity
     public static final String NOTIFICATIONS = "Notifications";
     public static final String CALL_LOGS = "Call Logs";
 
+    private Fragment currentFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +75,7 @@ public class MainActivity extends BaseActivity
         if (bundle != null && bundle.containsKey("fragment")) {
             changeView(bundle.getString("fragment"));
         } else {
-            changeView(Dashboard.newInstance());
+            changeView(DASHBOARD);
         }
     }
 
@@ -111,18 +112,19 @@ public class MainActivity extends BaseActivity
             this.changeView(Tips.newInstance());
             this.setTitle("Health Tips");
         } else if (id == R.id.nav_appointments) {
-            changeView(CalendarActivity.class);
+            changeView(AppointmentActivity.class);
         } else if (id == R.id.nav_prescriptions) {
             this.changeView(Prescriptions.newInstance());
             this.setTitle(PRESCRIPTIONS);
         }
-        else if (id == R.id.nav_chatroom) {
+        /*else if (id == R.id.nav_chatroom) {
             this.changeView(Chatroom.newInstance());
             this.setTitle("Chatroom");
-        } else if(id == R.id.nav_call_logs){
+        }*/ else if(id == R.id.nav_call_logs){
             this.changeView(CallLogs.newInstance());
             this.setTitle(CALL_LOGS);
-        } else if (id == R.id.nav_notifications) {
+        }
+        else if (id == R.id.nav_notifications) {
             this.changeView(Notifications.newInstance());
             this.setTitle("Notifications");
         } else if (id == R.id.nav_signout) {
@@ -137,6 +139,7 @@ public class MainActivity extends BaseActivity
 
 
     private void changeView(Fragment fragment) {
+        currentFragment = fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame, fragment);
         transaction.commit();
@@ -151,18 +154,32 @@ public class MainActivity extends BaseActivity
     private void changeView(String fragmentName) {
         Fragment fragment = null;
         switch (fragmentName) {
-            case DASHBOARD: fragment = Dashboard.newInstance();
-            break;
-            case NOTES: fragment = Notes.newInstance();
-            break;
-            case TIPS: fragment = Tips.newInstance();
-            break;
-            case APPOINTMENTS: fragment = Appointments.newInstance();
-            break;
+            case DASHBOARD:
+                fragment = Dashboard.newInstance();
+                setTitle("Dashboard");
+                break;
+            case NOTES:
+                fragment = Notes.newInstance();
+                setTitle("Doctor's Notes");
+                break;
+            case TIPS:
+                fragment = Tips.newInstance();
+                setTitle("Health Tips");
+                break;
+            case APPOINTMENTS:
+                fragment = AppointmentSchedule.newInstance();
+                setTitle("Appointments");
+                break;
             case CHATROOM: fragment = Chatroom.newInstance();
             break;
-            case NOTIFICATIONS: fragment = Notifications.newInstance();
-            break;
+            case NOTIFICATIONS:
+                fragment = Notifications.newInstance();
+                setTitle("Notifications");
+                break;
+            case CALL_LOGS:
+                fragment = CallLogs.newInstance();
+                setTitle("Call Logs");
+                break;
             default: fragment = Dashboard.newInstance();
         }
         changeView(fragment);
@@ -206,7 +223,11 @@ public class MainActivity extends BaseActivity
                 log("Request Camera");
                 //newTipDialog.onCameraResult(data);
             } else if (requestCode == REQUEST_GALLERY){
-                Tips.newTipDialog.onGalleryResult(data);
+                if (currentFragment instanceof Tips) {
+                    Tips.newTipDialog.onGalleryResult(data);
+                } else if (currentFragment instanceof Dashboard) {
+                    Dashboard.tipDialog.onGalleryResult(data);
+                }
                 log("Request Gallery");
             }
         }

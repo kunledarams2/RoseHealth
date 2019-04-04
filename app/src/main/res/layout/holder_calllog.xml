@@ -5,8 +5,14 @@
     android:background="@drawable/background_white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img"
+    <TextView android:id="@+id/img"
+        android:background="@drawable/circle_black"
+        android:layout_centerVertical="true"
+        android:text="W"
+        android:textColor="@color/colorWhite"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:layout_margin="10dp"
         android:src="@drawable/ic_call_black"
         android:layout_width="50dp"

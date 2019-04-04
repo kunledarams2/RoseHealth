@@ -39,6 +39,7 @@ public class API {
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
     public static final String IMAGE = "image";
+    public static final String SPECIALTY_ID = "specialtyId";
 
     private API(Context context) {
         this.context = context;
@@ -166,6 +167,7 @@ public class API {
 
             if (obj.has(IMAGE))
                 map.put(IMAGE, obj.getString(IMAGE));
+
         }catch (JSONException e){
 
         }
@@ -235,7 +237,7 @@ public class API {
     }
 
     public static String getSessionId(Context ctx) {
-        SharedPreferences prefs = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences prefs = ctx.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(SESSION_ID, "");
     }
 
@@ -246,7 +248,7 @@ public class API {
     }
 
     public static String getDoctorId(Context ctx) {
-        SharedPreferences prefs = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences prefs = ctx.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(DOCTOR_ID, "");
     }
 
