@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Note {
+
     private Date date;
     private String doctorName,patientName, diagnosis, symptoms, treatment;
 

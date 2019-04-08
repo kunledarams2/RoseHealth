@@ -1,6 +1,7 @@
 package com.digicomme.tremendocdoctor.activity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import com.digicomme.tremendocdoctor.utils.ToastUtil;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class BaseActivity extends AppCompatActivity implements ServiceConnection {
 
@@ -32,12 +34,12 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bindService();
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        /*getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
         log("onCreate()");
     }
 
@@ -108,6 +110,11 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
             }
         }
     });
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

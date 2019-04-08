@@ -19,4 +19,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="background_image">background image</string>
+    <string name="version_1_0">Version 1.0</string>
 </resources>

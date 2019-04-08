@@ -150,10 +150,12 @@ public class Login extends Fragment implements View.OnClickListener {
                 else
                     Log.d("Login", "--_--_--_-- " + error.getMessage());
                 progressDialog.hide();
+
                 if (error.networkResponse == null) {
                     ToastUtil.showModal(getContext(), "Please check your internet connection");
                     return;
                 }
+
                 String msg = Formatter.bytesToString(error.networkResponse.data);
                 Log.d("Login ", "--_--__-__-___-----_ " + msg);
 

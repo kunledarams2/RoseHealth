@@ -10,52 +10,68 @@
         android:elevation="10dp"
         android:background="@drawable/background_header"
         android:layout_height="170dp">
+
+
         <ImageView android:id="@+id/bg"
-            android:src="@drawable/dash_bg"
+            android:src="@drawable/dashboard_top_bg"
+            android:scaleType="fitXY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView android:id="@+id/doctor_name"
-            android:text="Dr Jay Tokunbo"
-            android:textSize="23sp"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView android:id="@+id/doctor_spec"
-            android:text="General Doctor"
-            android:textSize="20sp"
-            android:layout_marginStart="25dp"
-            android:textColor="@color/colorWhite"
-            android:layout_below="@+id/doctor_name"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-        <include layout="@layout/ratings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_below="@+id/doctor_spec"
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/avatar"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="15dp"
-            android:layout_gravity="center"
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
-        <!--android:src="@drawable/doctor"-->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <TextView android:id="@+id/doctor_name"
+                        android:text="Dr Jay Tokunbo"
+                        android:textSize="@dimen/font_22"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:layout_marginStart="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView android:id="@+id/doctor_spec"
+                        android:text="General Doctor"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/font_14"
+                        android:textColor="@color/colorWhite"
+                        android:layout_marginStart="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <include layout="@layout/ratings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="10dp"
+                        />
+
+
+                </LinearLayout>
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/avatar"
+                    android:layout_margin="15dp"
+                    android:layout_gravity="center"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
+                <!--android:src="@drawable/doctor"-->
+
+
+            </LinearLayout>
+
+
 
     </RelativeLayout>
 
@@ -115,7 +131,9 @@
                     android:layout_alignBottom="@+id/filler"
                     android:layout_margin="10dp"
                     android:padding="10dp"
-                    android:elevation="10dp"
+                    android:elevation="@dimen/size_4"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:layout_width="0dp"
                     android:background="@drawable/background_black"
                     android:layout_height="match_parent">
@@ -167,10 +185,13 @@
                     android:layout_toEndOf="@+id/divider"
                     android:layout_margin="10dp"
                     android:padding="10dp"
-                    android:elevation="10dp"
+                    android:elevation="@dimen/size_4"
                     android:layout_width="0dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:background="@drawable/background_black"
                     android:layout_height="match_parent">
+
                     <ImageButton android:id="@+id/consultation_menu_btn"
                         android:src="@drawable/ic_more_horiz_black"
                         android:background="@drawable/circle_white"
@@ -224,6 +245,8 @@
             <RelativeLayout android:id="@+id/appments"
                 app:layout_constraintTop_toBottomOf="@+id/earnings"
                 android:layout_width="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:layout_height="wrap_content">
 
                 <RelativeLayout android:id="@+id/appointments_placeholder"
@@ -231,9 +254,10 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/background_white"
                     android:padding="10dp"
-                    android:elevation="10dp"
+                    android:elevation="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView android:id="@+id/appointments_placeholder_text"
                         android:text="Sample message"
                         android:layout_alignParentBottom="true"
@@ -267,6 +291,7 @@
                     android:elevation="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView android:id="@+id/appointments_label"
                         android:text="Appointment Days"
                         android:textSize="17sp"
@@ -315,16 +340,17 @@
 
             <RelativeLayout android:id="@+id/health_tips"
                 app:layout_constraintTop_toBottomOf="@+id/appments"
-                android:elevation="10dp"
                 android:background="@drawable/background_white"
                 android:layout_margin="10dp"
+                android:elevation="@dimen/size_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView android:id="@+id/health_tips_label"
                     android:text="Health Tip Of The Day"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
                     android:layout_margin="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
@@ -341,7 +367,7 @@
 
                 <TextView android:id="@+id/health_tip_title"
                     android:text="Drink Water"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
                     android:textStyle="bold"
                     android:paddingStart="10dp"
                     android:layout_below="@+id/health_tips_label"
@@ -351,10 +377,11 @@
                     android:layout_height="wrap_content" />
                 <TextView android:id="@+id/health_tip_time"
                     android:text="11:02 am"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/font_12"
                     android:textStyle="bold"
                     android:paddingEnd="10dp"
                     android:paddingStart="10dp"
+                    android:layout_marginTop="@dimen/size_2"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/health_tips_label"
                     android:layout_width="wrap_content"
@@ -364,7 +391,9 @@
                     android:layout_toEndOf="@+id/health_tip_image"
                     android:padding="10dp"
                     android:maxLines="3"
+                    android:textSize="@dimen/font_12"
                     android:text="Drinking enough water can help boost your concentration as well as keep you from overeating.."
+                    android:lineHeight="1.4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView android:id="@+id/like_btn"
@@ -383,6 +412,7 @@
                     android:drawableStart="@drawable/ic_share"
                     android:drawablePadding="10dp"
                     android:layout_margin="5dp"
+                    android:textSize="@dimen/font_12"
                     android:layout_below="@+id/health_tip_content"
                     android:layout_toEndOf="@+id/like_btn"
                     android:layout_width="wrap_content"
@@ -393,8 +423,8 @@
                     android:text="Give Health Tip"
                     android:textStyle="bold"
                     android:padding="10dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
+                    android:layout_marginTop="@dimen/size_20"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
