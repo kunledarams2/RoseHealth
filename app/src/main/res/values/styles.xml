@@ -40,8 +40,12 @@
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
-    <style name="NavDrawer">
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">@dimen/font_14</item>
+    </style>
+
+    <style name="NavDrawer">
+        <item name="android:textSize">@dimen/font_12</item>
     </style>
 
     <style name="TremendocTheme.TextInputTheme" parent="Base.Widget.MaterialComponents.TextInputLayout">

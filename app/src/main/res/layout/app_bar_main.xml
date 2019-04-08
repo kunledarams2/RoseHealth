@@ -18,6 +18,7 @@
             android:layout_gravity="center"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/transparent"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
             >
 
         </androidx.appcompat.widget.Toolbar>
