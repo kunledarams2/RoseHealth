@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <Button android:id="@+id/schedule_btn"
+        <!--Button android:id="@+id/schedule_btn"
             android:text="Schedule Appointment"
             android:textAllCaps="false"
             android:background="@drawable/rounded_btn_background"
@@ -20,19 +20,22 @@
             android:layout_margin="12dp"
             android:textColor="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" / -->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            app:layout_constraintTop_toBottomOf="@+id/schedule_btn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-        <include layout="@layout/placeholder_layout"
-            app:layout_constraintTop_toBottomOf="@+id/schedule_btn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:background="@color/colorPrimary"
+        app:tabTextColor="@color/colorGray"
+        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabIndicatorColor="@color/colorWhite"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <com.digicomme.tremendocdoctor.ui.MyViewPager
+        android:id="@+id/tab_container"
+        app:layout_constraintTop_toBottomOf="@+id/tabs"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>

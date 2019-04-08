@@ -20,16 +20,18 @@ public class AudioPlayer {
     static final String LOG_TAG = AudioPlayer.class.getSimpleName();
     private Context context;
     private MediaPlayer mPlayer;
+    private AudioManager manager;
     private AudioTrack progressTone;
 
     private final static int SAMPLE_RATE = 16000;
 
     public AudioPlayer(Context context) {
         this.context = context.getApplicationContext();
+        manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     public void playRingtone() {
-        AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        //AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         //Honour silent mode
         switch (manager.getRingerMode()) {
@@ -108,6 +110,14 @@ public class AudioPlayer {
             bytes += res;
         }
 
+    }
+
+    public boolean isMute() {
+        return manager.isMicrophoneMute();
+    }
+
+    public boolean isOnSpeaker(){
+        return manager.isSpeakerphoneOn();
     }
 
     private void log(String str) {

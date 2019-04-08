@@ -6,15 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.model.CallLog;
-import com.digicomme.tremendocdoctor.service.CallService;
 import com.digicomme.tremendocdoctor.dialog.NewNoteDialog;
 import com.digicomme.tremendocdoctor.utils.AudioPlayer;
 import com.digicomme.tremendocdoctor.utils.CallConstants;
@@ -63,9 +60,6 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
     private NewNoteDialog noteDialog;
     private String patientName, patientId, consultationId;
-
-    private boolean isSpeakerMute = false;
-    private boolean inSpeakOut = false;
 
     private boolean answered = false;
 
@@ -116,21 +110,22 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         endBtn.setOnClickListener(this);
         newTipBtn.setOnClickListener(this);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.containsKey("status")) {
-            incomingView.setVisibility(View.GONE);
-            activeView.setVisibility(View.VISIBLE);
-        } else {
-            incomingView.setVisibility(View.VISIBLE);
-            activeView.setVisibility(View.GONE);
-        }
-
         speakerBtn = findViewById(R.id.speaker_btn);
         //hideBtn = findViewById(R.id.hide_btn);
         muteBtn = findViewById(R.id.mute_btn);
         speakerBtn.setOnClickListener(this);
         //hideBtn.setOnClickListener(this);
         muteBtn.setOnClickListener(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.containsKey("status")) {
+            incomingView.setVisibility(View.GONE);
+            activeView.setVisibility(View.VISIBLE);
+            initAudio();
+        } else {
+            incomingView.setVisibility(View.VISIBLE);
+            activeView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -178,6 +173,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             call.answer();
             incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
+            initAudio();
         } else {
             finish();
         }
@@ -253,36 +249,34 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void toggleMute() {
-        if (isSpeakerMute) {
-            getSinchServiceInterface().getAudioController().mute();
-            isSpeakerMute = false;
-            //muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
-            muteBtn.setText("Mute");
-            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
-            muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
-        } else {
+        if (mAudioPlayer.isMute()) {
             getSinchServiceInterface().getAudioController().unmute();
-            isSpeakerMute = true;
-            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
-            //muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            muteBtn.setText("Mute");
+            //muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
+        } else {
+            getSinchServiceInterface().getAudioController().mute();
             muteBtn.setText("Unmute");
-            muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
+            //muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
         }
     }
 
     public void toggleSpeaker() {
-        if (inSpeakOut) {
+        if (mAudioPlayer.isOnSpeaker()) {
             getSinchServiceInterface().getAudioController().disableSpeaker();
-            inSpeakOut = false;
-            //speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
             speakerBtn.setText("Speaker");
-            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_up_gray), null, null);
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_gray), null, null);
         } else {
             getSinchServiceInterface().getAudioController().enableSpeaker();
-            inSpeakOut = true;
-            //speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
             speakerBtn.setText("Normal");
-            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_down_white), null, null);
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
         }
     }
 
@@ -359,6 +353,29 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             });
         }
     }
+
+    private void initAudio() {
+        if (mAudioPlayer.isMute()) {
+            muteBtn.setText("Unmute");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
+        } else {
+            muteBtn.setText("Mute");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
+        }
+
+        if (mAudioPlayer.isOnSpeaker()) {
+            speakerBtn.setText("Normal");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
+        } else {
+            speakerBtn.setText("Speaker");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_gray), null, null);
+        }
+    }
+
 
     private void setVideoViewsVisibility(final boolean localVideoVisibile, final boolean remoteVideoVisible) {
         if (getSinchServiceInterface() == null)

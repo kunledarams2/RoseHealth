@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/background_white"
+    android:padding="10dp"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Switch android:id="@+id/status_switch"
+        android:text="Online Status"
+        android:padding="10dp"
+        android:checked="true"
+        android:theme="@style/StatusSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View android:id="@+id/divider"
+        android:background="#ccc"
+        android:layout_below="@+id/status_switch"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <TextView android:id="@+id/status_label"
+        android:text="You are currently online"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_below="@+id/divider"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View android:id="@+id/status_indicator"
+        android:background="@drawable/circle_green"
+        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/divider"
+        android:layout_width="15dp"
+        android:layout_height="15dp" />
+
+    <Button android:id="@+id/close_btn"
+        android:text="Close"
+        android:textAllCaps="false"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/status_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

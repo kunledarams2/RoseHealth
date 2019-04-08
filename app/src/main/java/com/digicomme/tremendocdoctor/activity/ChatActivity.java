@@ -24,6 +24,7 @@ import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.api.API;
 import com.digicomme.tremendocdoctor.binder.ChatBinder;
 import com.digicomme.tremendocdoctor.dialog.MedicalRecordDialog;
+import com.digicomme.tremendocdoctor.dialog.NewNoteDialog;
 import com.digicomme.tremendocdoctor.model.CallLog;
 import com.digicomme.tremendocdoctor.model.Message;
 import com.digicomme.tremendocdoctor.service.CallService;
@@ -45,8 +46,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     private View incomingView, activeView;
     private TextView label, endSession;
-    private Button acceptBtn, rejectBtn, viewBtn;
+    private Button acceptBtn, rejectBtn, viewBtn, noteBtn;
 
+    private NewNoteDialog noteDialog;
     private MedicalRecordDialog recordDialog;
     private AudioPlayer mAudioPlayer;
 
@@ -57,7 +59,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText messageField;
     private ImageButton sendBtn;
-    private String patientName, myName, patientId;
+    private String patientName, myName, patientId, consultationId;
 
     private boolean answered = false;
 
@@ -74,6 +76,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         myName = API.getFullName();
         patientId = IO.getData(this, CallConstants.PATIENT_ID);
         patientName = IO.getData(this, CallConstants.PATIENT_NAME);
+        consultationId = IO.getData(this, CallConstants.CONSULTATION_ID);
         mAudioPlayer = new AudioPlayer(this);
         mAudioPlayer.playRingtone();
         toolbar = findViewById(R.id.toolbar);
@@ -104,7 +107,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(binder);
-        populate();
+        //populate();
     }
 
     private void populate() {
@@ -145,10 +148,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         acceptBtn = findViewById(R.id.accept_btn);
         rejectBtn = findViewById(R.id.reject_btn);
         viewBtn = findViewById(R.id.view_btn);
+        noteBtn = findViewById(R.id.write_note);
         endSession = findViewById(R.id.end_session);
         viewBtn.setOnClickListener(this);
         acceptBtn.setOnClickListener(this);
         rejectBtn.setOnClickListener(this);
+        noteBtn.setOnClickListener(this);
 
         messageField = findViewById(R.id.message_field);
         sendBtn = findViewById(R.id.send_btn);
@@ -189,7 +194,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         endSession.setOnClickListener(btn -> endSession());
         sendBtn.setOnClickListener(btn -> {
             String msg = messageField.getText().toString();
-            String receiverId = IO.getData(this, CallConstants.PATIENT_ID);
+            String receiverId = IO.getData(this, CallConstants.PATIENT_UUID);
             if (!TextUtils.isEmpty(msg)) {
                 getWebSocketInterface().send(receiverId, msg);
                 Message message = new Message();
@@ -239,6 +244,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 recordDialog = new MedicalRecordDialog(this, patientId);
             }
             recordDialog.show();
+        } else if (view == noteBtn) {
+            if (noteDialog == null) {
+                noteDialog = new NewNoteDialog(this, consultationId, patientId);
+            }
+            noteDialog.show();
         }
     }
 

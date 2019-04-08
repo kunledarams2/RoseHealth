@@ -66,8 +66,6 @@ public class ChatService extends Service {
 
     public class WebSocketInterface extends Binder {
 
-        private Timer timer;
-        private boolean answered = false;
 
         private WebSocketListener listener = new WebSocketListenerImpl();
         private ChatListener chatListener;
@@ -84,8 +82,12 @@ public class ChatService extends Service {
 
                 mSocket = IO.socket(WEBSOCKET_URL, options);
                 mSocket.on(Socket.EVENT_CONNECT, args -> {
-                    listener.onConnect(mSocket, args);
-                    setOnline();
+
+                    boolean isSetOnline = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
+                    if (isSetOnline) {
+                        listener.onConnect(mSocket, args);
+                        setOnline();
+                    }
                 });
 
                 mSocket.on(Socket.EVENT_CONNECTING, args -> listener.onConnecting(mSocket, args));
@@ -151,7 +153,10 @@ public class ChatService extends Service {
             ChatService.this.stopForeground(true);
         }
 
-        private void setOnline() {
+        public void setOnline() {
+            if (!isConnected()) {
+                start();
+            }
             //String username = API.getDoctorId(ChatService.this);
             String username = DeviceName.getUUID(ChatService.this);
             mSocket.emit("set-online", username, (Ack) args -> {
@@ -182,14 +187,12 @@ public class ChatService extends Service {
         }
 
         public void acceptChat() {
-            String callerId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallConstants.PATIENT_ID);
+            String callerId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallConstants.PATIENT_UUID);
             mSocket.emit("accept-chat", callerId);
-            answered = true;
-            timer = null;
         }
 
         public void endChat(String reason) {
-            String userId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallConstants.PATIENT_ID);
+            String userId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallConstants.PATIENT_UUID);
             /*String direction = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallService.CALL_DIRECTION);
             if (direction.equals(CallService.CallDirection.OUTGOING.name())) {
                 userId = com.digicomme.tremendocdoctor.utils.IO.getData(ChatService.this, CallService.PATIENT_ID);
@@ -248,7 +251,6 @@ public class ChatService extends Service {
             String msg = args.length > 0 ? (String) args[0] : " No message";
             //Toast.makeText(WSService.this, "Web socket connected " + msg, Toast.LENGTH_LONG).show();
             log("Web socket connected " + msg);
-            UI.createNotification(ChatService.this,"Tremendoc", "You are online and can receive incoming chats" );
         }
 
         @Override

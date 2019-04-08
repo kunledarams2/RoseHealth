@@ -35,8 +35,8 @@
                 android:text="Notifications"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_margin="10dp"
-                android:padding="10dp"
+                android:layout_margin="5dp"
+                android:padding="5dp"
                 />
             <TextView
                 android:text="Push "
@@ -49,8 +49,8 @@
                 android:text="Email"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:padding="10dp"
-                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"
                 />
         </TableRow>
 
@@ -73,9 +73,9 @@
             >
             <TextView
                 android:text="Appointment Dates"
-                android:textSize="18sp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
+                android:textSize="16sp"
+                android:layout_margin="5dp"
+                android:padding="5dp"
                 />
             <ImageView android:src="@drawable/ic_phone" />
             <ImageView android:src="@drawable/ic_email" />
@@ -100,9 +100,9 @@
             >
             <TextView
                 android:text="Chatroom"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_margin="10dp"
-                android:padding="10dp"
+                android:padding="5dp"
                 />
             <ImageView android:src="@drawable/ic_phone" />
             <ImageView android:src="@drawable/ic_email" />
@@ -127,9 +127,9 @@
             >
             <TextView
                 android:text="Doctor's Note"
-                android:textSize="18sp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
+                android:textSize="16sp"
+                android:layout_margin="5dp"
+                android:padding="5dp"
                 />
             <ImageView android:src="@drawable/ic_phone" />
             <ImageView android:src="@drawable/ic_email" />
@@ -154,9 +154,9 @@
             >
             <TextView
                 android:text="Health Tips"
-                android:textSize="18sp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
+                android:textSize="16sp"
+                android:layout_margin="5dp"
+                android:padding="5dp"
                 />
             <ImageView android:src="@drawable/ic_phone" />
             <ImageView android:src="@drawable/ic_email" />
@@ -181,9 +181,9 @@
             >
             <TextView
                 android:text="Consultation Reminder"
-                android:textSize="18sp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
+                android:textSize="16sp"
+                android:layout_margin="5dp"
+                android:padding="5dp"
                 />
             <ImageView android:src="@drawable/ic_phone" />
             <ImageView android:src="@drawable/ic_email" />

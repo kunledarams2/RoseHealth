@@ -79,7 +79,7 @@ public class NewNoteDialog extends Dialog {
 
         Context ctx = getContext();
         String diagnoses = diagField.getText().toString();
-        String symptoms = diagField.getText().toString();
+        String symptoms = sympField.getText().toString();
         String treatments = treatField.getText().toString();
 
         if (TextUtils.isEmpty(diagnoses)) {
@@ -137,6 +137,9 @@ public class NewNoteDialog extends Dialog {
             try {
                 JSONObject resObj = new JSONObject(response);
                 if (resObj.has("code") &&  resObj.getInt("code") == 0) {
+                    diagField.setText("");
+                    treatField.setText("");
+                    sympField.setText("");
                     ToastUtil.showLong(ctx, "Note saved successfully");
                     cancel();
                 } else if (resObj.has("description")) {

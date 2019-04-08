@@ -149,7 +149,7 @@
             android:layout_height="wrap_content">
             <Button android:id="@+id/speaker_btn"
                 android:layout_margin="10dp"
-                android:drawableTop="@drawable/ic_volume_up_gray"
+                android:drawableTop="@drawable/ic_volume_up_white"
                 android:text="Speaker"
                 android:textSize="10sp"
                 android:textStyle="bold"

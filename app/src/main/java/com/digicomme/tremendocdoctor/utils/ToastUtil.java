@@ -8,10 +8,10 @@ import androidx.appcompat.app.AlertDialog;
 
 public class ToastUtil {
     public static void showLong(Context context, String msg){
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
     public static void showShort(Context context, String msg){
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
     public static void showModal(Context ctx, String msg) {

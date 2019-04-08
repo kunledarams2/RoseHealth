@@ -31,10 +31,10 @@ public class SplashActivity extends AppCompatActivity {
 
     private void tryNext() {
         if (!Permission.permissionsAreGranted(this, new String[] {
-                Manifest.permission.INTERNET, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA})) {
+                Manifest.permission.INTERNET, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})) {
             if (!askedBefore) {
                 ActivityCompat.requestPermissions(this, new String[] {
-                        Manifest.permission.INTERNET, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA},
+                        Manifest.permission.INTERNET, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
                         INTERNET_PERMISSION);
                 askedBefore = true;
             } else {
