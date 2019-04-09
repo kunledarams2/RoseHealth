@@ -6,16 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.digicomme.tremendocdoctor.R;
-import com.digicomme.tremendocdoctor.model.CallLog;
-import com.digicomme.tremendocdoctor.service.CallService;
 import com.digicomme.tremendocdoctor.dialog.NewNoteDialog;
+import com.digicomme.tremendocdoctor.model.CallLog;
 import com.digicomme.tremendocdoctor.utils.AudioPlayer;
 import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.utils.IO;
@@ -27,7 +24,6 @@ import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallState;
 import com.sinch.android.rtc.video.VideoCallListener;
 import com.sinch.android.rtc.video.VideoController;
-
 
 import org.joda.time.DateTime;
 

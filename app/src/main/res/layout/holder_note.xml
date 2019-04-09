@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:background="@drawable/background_white"
     android:layout_height="wrap_content"
-    android:elevation="5dp"
+    android:elevation="@dimen/size_4"
     android:paddingStart="@dimen/size_10"
     android:paddingEnd="@dimen/size_10"
     android:paddingTop="@dimen/size_14"
@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/view_btn"
         android:textStyle="bold"
-        android:textSize="18sp"
+        android:textSize="@dimen/font_14"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 

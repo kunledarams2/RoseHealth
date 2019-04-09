@@ -95,6 +95,22 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content" />
 
+
+        <Button android:id="@+id/new_prescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/new_tip"
+            android:drawableTop="@drawable/ic_edit"
+            android:elevation="10dp"
+            android:textAllCaps="false"
+            android:text="@string/write_pres"
+            android:textColor="@color/colorWhite"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="@dimen/size_30"
+            android:layout_marginEnd="10dp"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content" />
+
             <RelativeLayout
                 android:id="@+id/local_video_view"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar"

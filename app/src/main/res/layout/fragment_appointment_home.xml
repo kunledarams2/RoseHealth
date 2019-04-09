@@ -15,6 +15,7 @@
         <Button android:id="@+id/schedule_btn"
             android:text="Schedule Appointment"
             android:textAllCaps="false"
+            android:visibility="gone"
             android:background="@drawable/rounded_btn_background"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             android:layout_margin="12dp"
@@ -35,4 +36,5 @@
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
