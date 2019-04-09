@@ -54,6 +54,7 @@
                     android:layout_marginBottom="20dp"
                     android:layout_below="@+id/symptoms_wrapper"
                     android:layout_width="match_parent"
+
                     android:layout_height="50dp">
 
                     <EditText
@@ -68,10 +69,59 @@
                     android:id="@+id/treatments_wrapper"
                     android:layout_below="@+id/diagnoses_wrapper"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
+                    android:layout_marginBottom="20dp"
                     android:layout_height="50dp">
-                    <EditText android:id="@+id/treatment_field"
-                        android:hint="@string/treatment"
+
+                    <EditText android:id="@+id/start_date_field"
+                        android:hint="@string/start_date"
+                        android:focusable="false"
+                        android:onClick="showDatePicker"
+                        android:layout_width="match_parent"
+                        android:textSize="@dimen/font_14"
+                        android:layout_height="match_parent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/end_date_wrapper"
+                    android:layout_below="@+id/treatments_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="20dp"
+                    android:layout_height="50dp">
+                    <EditText android:id="@+id/end_date_field"
+                        android:hint="@string/end_date"
+                        android:focusable="false"
+                        android:onClick="showDatePicker"
+                        android:layout_width="match_parent"
+                        android:textSize="@dimen/font_14"
+                        android:layout_height="match_parent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/reason_wrapper"
+                    android:layout_below="@+id/end_date_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="20dp"
+                    android:layout_height="50dp">
+                    <EditText android:id="@+id/reason_field"
+                        android:hint="@string/reasons"
+
+
+                        android:layout_width="match_parent"
+                        android:textSize="@dimen/font_14"
+                        android:layout_height="match_parent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/special_wrapper"
+                    android:layout_below="@+id/reason_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <EditText android:id="@+id/special_field"
+                        android:hint="@string/any_special_instructions"
+
+
                         android:layout_width="match_parent"
                         android:textSize="@dimen/font_14"
                         android:layout_height="match_parent" />
@@ -83,7 +133,7 @@
                     android:textAllCaps="false"
                     android:onClick="clickSavePrescription"
                     android:background="@drawable/rounded_btn_background"
-                    android:layout_below="@+id/treatments_wrapper"
+                    android:layout_below="@+id/special_wrapper"
                     android:layout_marginTop="@dimen/size_40"
                     android:textColor="@color/colorWhite"
                     android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.digicomme.tremendocdoctor.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -9,8 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.api.StringCall;
@@ -37,6 +40,8 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -174,6 +179,46 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    final Calendar myCalendar = Calendar.getInstance();
+    DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+        // TODO Auto-generated method stub
+        myCalendar.set(Calendar.YEAR, year);
+        myCalendar.set(Calendar.MONTH, monthOfYear);
+        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        Integer value = (Integer) view.getTag();
+        if (value == 4){
+            updateLabel("Start");
+        } else {
+            updateLabel("End");
+        }
+    };
+
+
+
+    public void showDatePicker(View view){
+        DatePickerDialog pick = new DatePickerDialog(this, date, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH));
+        if (view == activityVideoCallBinding.prescriptionDialog.startDateField){
+            pick.getDatePicker().setTag(4);
+        } else if (view == activityVideoCallBinding.prescriptionDialog.endDateField) {
+            pick.getDatePicker().setTag(5);
+        }
+
+        pick.show();
+    }
+
+    private void updateLabel(String viewToUpdate) {
+        String myFormat = "yyyy/MM/dd"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        if (viewToUpdate.equals("Start")){
+            activityVideoCallBinding.prescriptionDialog.startDateField.setText(sdf.format(myCalendar.getTime()));
+        } else if (viewToUpdate.equals("End")) {
+            activityVideoCallBinding.prescriptionDialog.endDateField.setText(sdf.format(myCalendar.getTime()));
+        }
+    }
+
     public void writePrescription(View view){
         showView(activityVideoCallBinding.prescriptionDialog.getRoot());
         activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationIcon(R.drawable.ic_close_white);
@@ -188,17 +233,26 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
     public void clickSavePrescription(View view){
         String dosage = activityVideoCallBinding.prescriptionDialog.dosagesField.getText().toString();
+        String startDate = activityVideoCallBinding.prescriptionDialog.startDateField.getText().toString();
+        String endDate = activityVideoCallBinding.prescriptionDialog.endDateField.getText().toString();
         String medication = activityVideoCallBinding.prescriptionDialog.medicationField.getText().toString();
+        String reason = activityVideoCallBinding.prescriptionDialog.reasonField.getText().toString();
+        String instruction = activityVideoCallBinding.prescriptionDialog.specialField.getText().toString();
         if (TextUtils.isEmpty(medication)){
             ToastUtil.showLong(this, "You haven't entered a medication");
         } else if (TextUtils.isEmpty(dosage)){
             ToastUtil.showLong(this, "You haven't entered a dosage");
+        } else if (TextUtils.isEmpty(startDate)){
+            ToastUtil.showLong(this, "You haven't entered the date this prescription starts");
+        } else if (TextUtils.isEmpty(endDate)){
+            ToastUtil.showLong(this, "You haven't entered the date this prescription ends");
         } else {
-            savePresription(dosage, medication);
+            savePresription(dosage, medication, startDate, endDate, reason, instruction);
         }
     }
 
-    private void savePresription(String dosage, String medication) {
+    private void savePresription(String dosage, String medication, String startDate, String endDate, String reason, String instruction) {
+        hideKeyboard(VideoCallActivity.this);
         activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.VISIBLE);
         //isBusy = true;
         Context ctx = this;
@@ -208,6 +262,10 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         params.put("patientId", patientId);
         params.put("dosage", dosage);
         params.put("medication", medication);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        params.put("doctorReason", reason);
+        params.put("specialInstruction", instruction);
 
         log(consultationId);
         log(patientId);
@@ -222,7 +280,8 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             try {
                 JSONObject resObj = new JSONObject(response);
                 if (resObj.has("code") &&  resObj.getInt("code") == 0) {
-                    ToastUtil.showLong(ctx, "Prescription saved successfully");
+                    //ToastUtil.showLong(ctx, "Prescription saved successfully");
+                    Toast.makeText(ctx, "Prescription saved successfully", Toast.LENGTH_LONG).show();
                     hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
                     //cancel();
                 } else if (resObj.has("description")) {
@@ -583,7 +642,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
 
     private void log(String log) {
-        Log.d("VoiceCallActivity", "--__--_--__-----___-----__-----_--_-----   " + log);
+        Log.e("VoiceCallActivity", "--__--_--__-----___-----__-----_--_-----   " + log);
     }
 
 }
