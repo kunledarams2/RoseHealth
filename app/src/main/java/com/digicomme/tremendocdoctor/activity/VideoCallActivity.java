@@ -111,6 +111,12 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         mAudioPlayer = new AudioPlayer(this);
         mAudioPlayer.playRingtone();
         setViews();
+
+        speakerBtn = findViewById(R.id.speaker_btn);
+
+        muteBtn = findViewById(R.id.mute_btn);
+        speakerBtn.setOnClickListener(this);
+        muteBtn.setOnClickListener(this);
         mCallId = getIntent().getStringExtra(CallConstants.CALL_ID);
         patientId = getIntent().getStringExtra(CallConstants.PATIENT_ID);
         patientName = getIntent().getStringExtra(CallConstants.PATIENT_NAME);
@@ -134,6 +140,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         if (bundle != null && bundle.containsKey("status")) {
             incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
+            initAudio();
         } else {
             incomingView.setVisibility(View.VISIBLE);
             activeView.setVisibility(View.GONE);
@@ -170,7 +177,13 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
     public void writePrescription(View view){
         showView(activityVideoCallBinding.prescriptionDialog.getRoot());
         activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationIcon(R.drawable.ic_close_white);
-        activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationOnClickListener(v -> hideView(activityVideoCallBinding.prescriptionDialog.getRoot()));
+        activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
+                hideKeyboard(VideoCallActivity.this);
+            }
+        });
     }
 
     public void clickSavePrescription(View view){
@@ -196,6 +209,11 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         params.put("dosage", dosage);
         params.put("medication", medication);
 
+        log(consultationId);
+        log(patientId);
+        log(dosage);
+        log(medication);
+
         StringCall call = new StringCall(ctx);
         call.post(URLS.SAVE_PRESCRIPTION, params, response -> {
             activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.INVISIBLE);
@@ -204,7 +222,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             try {
                 JSONObject resObj = new JSONObject(response);
                 if (resObj.has("code") &&  resObj.getInt("code") == 0) {
-                    ToastUtil.showLong(ctx, "Note saved successfully");
+                    ToastUtil.showLong(ctx, "Prescription saved successfully");
                     hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
                     //cancel();
                 } else if (resObj.has("description")) {
@@ -264,6 +282,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             call.answer();
             incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
+            initAudio();
         } else {
             finish();
         }
@@ -343,36 +362,56 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void toggleMute() {
-        if (isSpeakerMute) {
-            getSinchServiceInterface().getAudioController().mute();
-            isSpeakerMute = false;
-            //muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
-            muteBtn.setText("Mute");
-            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
-            muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
-        } else {
+        if (mAudioPlayer.isMute()) {
             getSinchServiceInterface().getAudioController().unmute();
-            isSpeakerMute = true;
-            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
-            //muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            muteBtn.setText("Mute");
+            //muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
+        } else {
+            getSinchServiceInterface().getAudioController().mute();
             muteBtn.setText("Unmute");
-            muteBtn.setCompoundDrawables(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
+            //muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
         }
     }
 
     public void toggleSpeaker() {
-        if (inSpeakOut) {
+        if (mAudioPlayer.isOnSpeaker()) {
             getSinchServiceInterface().getAudioController().disableSpeaker();
-            inSpeakOut = false;
-            //speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
             speakerBtn.setText("Speaker");
-            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_gray), null, null);
         } else {
             getSinchServiceInterface().getAudioController().enableSpeaker();
-            inSpeakOut = true;
-            //speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
             speakerBtn.setText("Normal");
-            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_down_white), null, null);
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
+        }
+    }
+
+    private void initAudio() {
+        if (mAudioPlayer.isMute()) {
+            muteBtn.setText("Unmute");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
+        } else {
+            muteBtn.setText("Mute");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
+        }
+
+        if (mAudioPlayer.isOnSpeaker()) {
+            speakerBtn.setText("Normal");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
+        } else {
+            speakerBtn.setText("Speaker");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_gray), null, null);
         }
     }
 

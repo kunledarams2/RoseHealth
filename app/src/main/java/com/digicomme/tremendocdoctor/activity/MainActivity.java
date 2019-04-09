@@ -11,20 +11,25 @@ import androidx.fragment.app.FragmentTransaction;
 import com.digicomme.tremendocdoctor.api.API;
 import com.digicomme.tremendocdoctor.api.StringCall;
 import com.digicomme.tremendocdoctor.api.URLS;
+import com.digicomme.tremendocdoctor.dialog.StatusDialog;
 import com.digicomme.tremendocdoctor.fragment.CallLogs;
 import com.digicomme.tremendocdoctor.fragment.Prescriptions;
 import com.digicomme.tremendocdoctor.fragment.appointments.AppointmentSchedule;
+import com.digicomme.tremendocdoctor.utils.CallConstants;
 import com.digicomme.tremendocdoctor.utils.Formatter;
 import com.digicomme.tremendocdoctor.utils.IO;
+import com.digicomme.tremendocdoctor.utils.ImageLoader;
 import com.digicomme.tremendocdoctor.utils.ToastUtil;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.fragment.Chatroom;
@@ -55,6 +60,10 @@ public class MainActivity extends BaseActivity
 
     private Fragment currentFragment;
 
+    private StatusDialog statusDialog;
+    private View statusIndicator;
+    private CircleImageView profileImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,12 +86,21 @@ public class MainActivity extends BaseActivity
         } else {
             changeView(DASHBOARD);
         }
+
+        statusDialog = new StatusDialog(this);
+        profileImage = findViewById(R.id.profile_image);
+        statusIndicator = findViewById(R.id.online_status_indicator);
+        boolean isSetOnline = IO.getData(this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
+        statusIndicator.setBackgroundResource(isSetOnline ? R.drawable.circle_green : R.drawable.circle_red);
+        profileImage.setOnClickListener(v -> statusDialog.show());
+        Map<String, String> data = API.getCredentials(this);
+        new ImageLoader(profileImage).execute(data.get(API.IMAGE));
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setOnline();
+        //setOnline();
         //getWebSocketInterface().setOnline();
     }
 
@@ -234,15 +252,16 @@ public class MainActivity extends BaseActivity
     }
 
     public void setOnline() {
-        getWebSocketInterface().setOnline();
+
         getSinchServiceInterface().startClient();
-        //statusIndicator.setBackgroundResource(R.drawable.circle_green);
+        getWebSocketInterface().setOnline();
+        statusIndicator.setBackgroundResource(R.drawable.circle_green);
     }
 
     public void setOffline() {
         getSinchServiceInterface().stopClient();
         getWebSocketInterface().disconnect();
-        //statusIndicator.setBackgroundResource( R.drawable.circle_red);
+        statusIndicator.setBackgroundResource( R.drawable.circle_red);
     }
 
     public  void galleryIntent() {

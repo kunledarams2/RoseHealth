@@ -1,5 +1,6 @@
 package com.digicomme.tremendocdoctor.activity;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +12,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
-
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.digicomme.tremendocdoctor.api.API;
 import com.digicomme.tremendocdoctor.service.CallService;
@@ -37,11 +37,19 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         /*getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
+                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
         log("onCreate()");
     }
+
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -53,10 +61,7 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         log("onServiceConnected()");
 
-        log(componentName.getClassName());
-        log(CallService.class.getName());
-
-        /*if (CallService.class.getName().equals(componentName.getClassName())) {
+        if (CallService.class.getName().equals(componentName.getClassName())) {
             mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
             mSinchServiceInterface.startClient();
             log(" CONNECTING CALL SERVICE");
@@ -69,11 +74,8 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
             mWebSocketInterface = (ChatService.WebSocketInterface) iBinder;
             //mWebSocketInterface.setOnline();
             onServiceConnected();
-        }*/
-        mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
-        //mWebSocketInterface = (ChatService.WebSocketInterface) iBinder;
-        log(" CONNECTING CALL SERVICE");
-        //onServiceConnected();
+
+        }
     }
 
     @Override
@@ -118,9 +120,13 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         }
     });
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+
+    public static void hideKeyboard(Activity activity) {
+        View view = activity.findViewById(android.R.id.content);
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 
@@ -143,13 +149,13 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         intent.putExtra(CallService.MESSENGER, messenger);
         getApplicationContext().bindService(intent, this, BIND_AUTO_CREATE);
 
-        //Intent intent2 = new Intent(this, ChatService.class);
+        Intent intent2 = new Intent(this, ChatService.class);
         //intent.putExtra(CallService.MESSENGER, messenger);
-        //getApplicationContext().bindService(intent2, this, BIND_AUTO_CREATE);
+        getApplicationContext().bindService(intent2, this, BIND_AUTO_CREATE);
         log("bindService()");
     }
 
     private void log(String string) {
-        Log.e("BaseActivity", "--_--_------------___-__--__--_--__-_ " + string);
+        Log.d("BaseActivity", "--_--_------------___-__--__--_--__-_ " + string);
     }
 }

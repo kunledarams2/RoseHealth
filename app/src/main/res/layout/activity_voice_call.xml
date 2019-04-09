@@ -184,7 +184,7 @@
                     android:layout_height="70dp"
                     android:layout_margin="10dp"
                     android:background="@drawable/circle_gray_border"
-                    android:drawableTop="@drawable/ic_volume_up_gray"
+                    android:drawableTop="@drawable/ic_volume_up_white"
                     android:padding="10dp"
                     android:text="Speaker"
                     android:textAllCaps="false"

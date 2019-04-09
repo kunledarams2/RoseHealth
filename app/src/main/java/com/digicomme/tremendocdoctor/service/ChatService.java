@@ -266,16 +266,17 @@ public class ChatService extends Service {
 
         @Override
         public void onConnecting(Socket socket, Object... args) {
-            String msg = args.length > 0 ? (String) args[0] : " No message";
+            //String msg = args.length > 0 ? (String) args[0] : " No message";
             //Toast.makeText(WSService.this, "Connecting... " + msg, Toast.LENGTH_LONG).show();
-            log("Connecting...   " + msg);
+            //log("Connecting...   " + msg);
         }
 
         @Override
         public void onConnectTimeout(Socket socket, Object... args) {
-            String msg = args.length > 0 ? (String) args[0] : " No message";
+            //log(String.valueOf(args.length));
+            //String msg = args.length > 0 ? (String) args[0] : " No message";
             //Toast.makeText(WSService.this, "Connection timeout " + msg, Toast.LENGTH_LONG).show();
-            log("Connection timeout " + msg);
+            //log("Connection timeout " + msg);
         }
 
         @Override
@@ -296,6 +297,6 @@ public class ChatService extends Service {
 
 
     private void log(String log){
-        Log.d("ChatService", "--__-_--_--_--_-_--_--_--_--" + log);
+        Log.e("ChatService", "--__-_--_--_--_-_--_--_--_--" + log);
     }
 }
