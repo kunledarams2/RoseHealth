@@ -9,8 +9,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +19,6 @@ import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.api.StringCall;
 import com.digicomme.tremendocdoctor.api.URLS;
 import com.digicomme.tremendocdoctor.databinding.ActivityVideoCallBinding;
-import com.digicomme.tremendocdoctor.databinding.DialogNewPrescriptionBinding;
 import com.digicomme.tremendocdoctor.dialog.NewNoteDialog;
 import com.digicomme.tremendocdoctor.model.CallLog;
 import com.digicomme.tremendocdoctor.utils.AudioPlayer;
@@ -126,6 +125,8 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         patientId = getIntent().getStringExtra(CallConstants.PATIENT_ID);
         patientName = getIntent().getStringExtra(CallConstants.PATIENT_NAME);
         consultationId = getIntent().getStringExtra(CallConstants.CONSULTATION_ID);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void setViews() {

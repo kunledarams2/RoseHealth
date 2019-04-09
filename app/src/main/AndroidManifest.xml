@@ -88,7 +88,8 @@
         </activity>
         <activity android:name=".activity.AuthActivity" />
         <activity android:name=".activity.VoiceCallActivity" />
-        <activity android:name=".activity.VideoCallActivity" />
+        <activity android:name=".activity.VideoCallActivity"
+            android:keepScreenOn="true"/>
 
         <activity android:name=".activity.AppointmentActivity" />
         <activity android:name=".activity.RoutingActivity"></activity>
