@@ -23,7 +23,7 @@ public class AppointmentViewModel extends AndroidViewModel {
         this.application = application;
         mediatorLiveData = new MediatorLiveData<>();
         liveData = AppointmentRepository.getInstance(application.getApplicationContext())
-                .getAppointmentList(statuses[1]);
+                .getAppointmentList(statuses[0]);
         mediatorLiveData.addSource(liveData, mediatorLiveData::setValue);
     }
 

@@ -159,8 +159,8 @@ public class Dashboard  extends Fragment {
             try {
                 JSONObject data = new JSONObject(response);
                 if (data.has("code") && data.getInt("code") == 0) {
-                    currentEarning.setText( "N" + data.getString("earnedToday"));
-                    totalEarning.setText("N" + data.getString("totalEarned"));
+                    currentEarning.setText( "₦" + data.getString("earnedToday"));
+                    totalEarning.setText("₦" + data.getString("totalEarned"));
                     noConsultation.setText(data.getString("completeConsultationsToday"));
                     totalConsultation.setText(data.getString("totalConsultations"));
 

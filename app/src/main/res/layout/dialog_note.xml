@@ -28,12 +28,15 @@
             android:layout_height="wrap_content">
             <RelativeLayout android:id="@+id/heading"
                 android:background="@drawable/background_heading"
-                android:padding="15dp"
+                android:paddingStart="@dimen/size_14"
+                android:paddingEnd="@dimen/size_14"
+                android:paddingTop="@dimen/size_20"
+                android:paddingBottom="@dimen/size_20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView android:id="@+id/note_label"
                     android:textColor="@color/colorWhite"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
                     android:textStyle="bold"
                     android:text="Dr. Bukky Seyi"
                     android:layout_alignParentStart="true"
@@ -42,7 +45,7 @@
                     android:layout_height="wrap_content" />
                 <TextView android:id="@+id/note_date"
                     android:textColor="@color/colorWhite"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_12"
                     android:text="15 Jan 2019"
                     android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
@@ -54,6 +57,7 @@
                 android:drawablePadding="10dp"
                 android:padding="10dp"
                 android:textSize="16sp"
+                android:visibility="gone"
                 android:layout_margin="5dp"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/heading"
@@ -66,6 +70,7 @@
                 android:layout_below="@+id/heading"
                 android:drawablePadding="10dp"
                 android:textSize="16sp"
+                android:visibility="gone"
                 android:layout_margin="5dp"
                 android:padding="10dp"
                 android:layout_toStartOf="@+id/share_btn"
@@ -78,9 +83,10 @@
                 android:layout_below="@+id/share_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView android:id="@+id/patient_name_label"
                     android:text="Patient's Name"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
                     android:textStyle="bold"
                     android:layout_alignParentTop="true"
                     android:layout_margin="5dp"
@@ -98,14 +104,14 @@
                     android:gravity="end"
                     android:textColor="@color/colorGray"
                     android:layout_margin="10dp"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/font_14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
 
                 <TextView android:id="@+id/symptoms_label"
                     android:text="Symtoms"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
                     android:textStyle="bold"
                     android:layout_margin="5dp"
                     android:layout_below="@+id/patient_name"
@@ -122,7 +128,7 @@
                     android:layout_alignParentEnd="true"
                     android:gravity="end"
                     android:layout_margin="10dp"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/font_14"
                     android:textColor="@color/colorGray"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -130,7 +136,7 @@
 
                 <TextView android:id="@+id/diagnosis_label"
                     android:text="Diagnoses"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
                     android:textStyle="bold"
                     android:layout_margin="5dp"
                     android:layout_below="@+id/symptoms"
@@ -148,14 +154,14 @@
                     android:gravity="end"
                     android:textColor="@color/colorGray"
                     android:layout_margin="10dp"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/font_14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
 
                 <TextView android:id="@+id/treatment_label"
                     android:text="Treatment"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_14"
                     android:textStyle="bold"
                     android:layout_margin="5dp"
                     android:layout_below="@+id/diagnosis"
@@ -172,7 +178,7 @@
                     android:layout_alignParentEnd="true"
                     android:gravity="end"
                     android:layout_margin="10dp"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/font_14"
                     android:textColor="@color/colorGray"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

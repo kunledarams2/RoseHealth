@@ -1,6 +1,7 @@
 package com.digicomme.tremendocdoctor.activity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import com.digicomme.tremendocdoctor.utils.ToastUtil;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class BaseActivity extends AppCompatActivity implements ServiceConnection {
 
@@ -32,12 +34,12 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bindService();
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        /*getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
         log("onCreate()");
     }
 
@@ -51,7 +53,10 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         log("onServiceConnected()");
 
-        if (CallService.class.getName().equals(componentName.getClassName())) {
+        log(componentName.getClassName());
+        log(CallService.class.getName());
+
+        /*if (CallService.class.getName().equals(componentName.getClassName())) {
             mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
             log(" CONNECTING CALL SERVICE");
             onServiceConnected();
@@ -63,8 +68,11 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
             mWebSocketInterface = (ChatService.WebSocketInterface) iBinder;
             //mWebSocketInterface.setOnline();
             onServiceConnected();
-
-        }
+        }*/
+        mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
+        //mWebSocketInterface = (ChatService.WebSocketInterface) iBinder;
+        log(" CONNECTING CALL SERVICE");
+        //onServiceConnected();
     }
 
     @Override
@@ -109,6 +117,11 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         }
     });
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         boolean granted = grantResults.length > 0;
@@ -129,13 +142,13 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         intent.putExtra(CallService.MESSENGER, messenger);
         getApplicationContext().bindService(intent, this, BIND_AUTO_CREATE);
 
-        Intent intent2 = new Intent(this, ChatService.class);
+        //Intent intent2 = new Intent(this, ChatService.class);
         //intent.putExtra(CallService.MESSENGER, messenger);
-        getApplicationContext().bindService(intent2, this, BIND_AUTO_CREATE);
+        //getApplicationContext().bindService(intent2, this, BIND_AUTO_CREATE);
         log("bindService()");
     }
 
     private void log(String string) {
-        Log.d("BaseActivity", "--_--_------------___-__--__--_--__-_ " + string);
+        Log.e("BaseActivity", "--_--_------------___-__--__--_--__-_ " + string);
     }
 }

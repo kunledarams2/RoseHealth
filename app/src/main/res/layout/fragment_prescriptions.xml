@@ -4,15 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <EditText android:id="@+id/search_field"
         android:background="@drawable/input_background_rounded"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="10dp"
-        android:hint="Search Patient's Username"
+        android:hint="@string/search_patient_s_username"
         android:paddingStart="15dp"
+        android:lines="1"
+        android:textSize="@dimen/font_14"
         android:paddingEnd="15dp"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
+
     <include layout="@layout/placeholder_layout"
         app:layout_constraintTop_toBottomOf="@+id/search_field"
         app:layout_constraintBottom_toBottomOf="parent"

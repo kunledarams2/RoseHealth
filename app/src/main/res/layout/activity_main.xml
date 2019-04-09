@@ -20,6 +20,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start|bottom"
         android:fitsSystemWindows="true"
+        style="@style/NavDrawer"
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@color/colorWhite"
         app:itemTextColor="@color/colorWhite"
@@ -27,12 +28,13 @@
         android:backgroundTint="@color/colorPrimary"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" >
+
         <TextView android:layout_gravity="bottom"
-            android:text="Version 1.0"
+            android:text="@string/version_1_0"
             android:textColor="#fff"
-            android:textSize="18dp"
+            android:textSize="@dimen/font_12"
             android:gravity="center"
-            android:padding="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.navigation.NavigationView>
