@@ -16,7 +16,6 @@ import com.digicomme.tremendocdoctor.api.URLS;
 import com.digicomme.tremendocdoctor.databinding.ActivityVoiceCallBinding;
 import com.digicomme.tremendocdoctor.dialog.MedicalRecordDialog;
 import com.digicomme.tremendocdoctor.model.CallLog;
-import com.digicomme.tremendocdoctor.service.CallService;
 import com.digicomme.tremendocdoctor.dialog.NewNoteDialog;
 import com.digicomme.tremendocdoctor.utils.AudioPlayer;
 import com.digicomme.tremendocdoctor.utils.CallConstants;
@@ -57,8 +56,6 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
     private AudioPlayer mAudioPlayer;
     private UpdateCallDurationTask mDurationTask;
 
-    private boolean isSpeakerMute = false;
-    private boolean inSpeakOut = false;
     private boolean answered = false;
 
     private NewNoteDialog noteDialog;
@@ -124,9 +121,36 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
         if (bundle != null && bundle.containsKey("status")) {
             incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
+            initAudio();
         } else {
             incomingView.setVisibility(View.VISIBLE);
             activeView.setVisibility(View.GONE);
+        }
+    }
+
+    private void initAudio() {
+        if (mAudioPlayer.isMute()) {
+            muteBtn.setText("Unmute");
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
+        } else {
+            muteBtn.setText("Mute");
+            muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
+        }
+
+        if (mAudioPlayer.isOnSpeaker()) {
+            speakerBtn.setText("Normal");
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
+        } else {
+            speakerBtn.setText("Speaker");
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_gray), null, null);
         }
     }
 
@@ -181,6 +205,8 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
             answered = true;
+            initAudio();
+            //ToastUtil.showLong(this, "Call answered");
         } else {
             finish();
         }
@@ -188,6 +214,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
 
     private void decline() {
         mAudioPlayer.stopRingtone();
+        ToastUtil.showLong(this, "Call rejected");
         Call call = getSinchServiceInterface().getCall(mCallId);
         if (call != null) {
             call.hangup();
@@ -205,36 +232,34 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void toggleMute() {
-        if (isSpeakerMute) {
-            getSinchServiceInterface().getAudioController().mute();
-            isSpeakerMute = false;
-            muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
+        if (mAudioPlayer.isMute()) {
+            getSinchServiceInterface().getAudioController().unmute();
             muteBtn.setText("Mute");
+            muteBtn.setBackgroundResource(R.drawable.circle_gray_border);
             muteBtn.setTextColor(getResources().getColor(R.color.colorGray));
             muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_off_gray), null, null);
         } else {
-            getSinchServiceInterface().getAudioController().unmute();
-            isSpeakerMute = true;
-            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
-            muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            getSinchServiceInterface().getAudioController().mute();
             muteBtn.setText("Unmute");
+            muteBtn.setBackgroundResource(R.drawable.circle_white_border);
+            muteBtn.setTextColor(getResources().getColor(R.color.colorWhite));
             muteBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_mic_white), null, null);
         }
     }
 
     public void toggleSpeaker() {
-        if (inSpeakOut) {
+        if (mAudioPlayer.isOnSpeaker()) {
             getSinchServiceInterface().getAudioController().disableSpeaker();
-            inSpeakOut = false;
-            speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
             speakerBtn.setText("Speaker");
-            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_gray), null, null);
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorGray));
+            speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_gray), null, null);
         } else {
             getSinchServiceInterface().getAudioController().enableSpeaker();
-            inSpeakOut = true;
-            speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
             speakerBtn.setText("Normal");
-            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_down_white), null, null);
+            speakerBtn.setTextColor(getResources().getColor(R.color.colorWhite));
+            speakerBtn.setBackgroundResource(R.drawable.circle_white_border);
+            speakerBtn.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
         }
     }
 

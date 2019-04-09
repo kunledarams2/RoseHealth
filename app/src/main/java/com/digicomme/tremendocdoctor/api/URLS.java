@@ -24,6 +24,8 @@ public class URLS {
     public static String SAVE_TIP = SERVER + "healthtip/add";
 
     public static final String SAVE_CALENDAR = SERVER + "calendar/add";
+    public static final String CALENDAR_RETRIEVE = SERVER + "calendar/retrieve";
+
 
     public static final String PRESCRIPTIONS = SERVER + "prescriptions/doctor/";
 

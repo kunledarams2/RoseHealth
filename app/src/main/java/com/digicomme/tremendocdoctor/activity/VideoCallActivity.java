@@ -366,7 +366,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             inSpeakOut = false;
             //speakerBtn.setBackgroundResource(R.drawable.circle_gray_border);
             speakerBtn.setText("Speaker");
-            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_up_gray), null, null);
+            speakerBtn.setCompoundDrawables(null, getDrawable(R.drawable.ic_volume_up_white), null, null);
         } else {
             getSinchServiceInterface().getAudioController().enableSpeaker();
             inSpeakOut = true;

@@ -3,47 +3,31 @@ package com.digicomme.tremendocdoctor.fragment.appointments;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.digicomme.tremendocdoctor.R;
 import com.digicomme.tremendocdoctor.activity.AppointmentActivity;
-import com.digicomme.tremendocdoctor.adapter.AppointmentAdapter;
 import com.digicomme.tremendocdoctor.callback.FragmentChanger;
-import com.digicomme.tremendocdoctor.service.CallService;
-import com.digicomme.tremendocdoctor.utils.IO;
-import com.digicomme.tremendocdoctor.viewmodel.AppointmentViewModel;
-import com.google.android.material.snackbar.Snackbar;
+import com.digicomme.tremendocdoctor.ui.MyViewPager;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AppointmentHome extends Fragment {
 
-    private RecyclerView recyclerView;
-
-    private AppointmentAdapter adapter;
     private FragmentChanger fragmentChanger;
-    private AppointmentViewModel viewModel;
-    private ImageView emptyIcon;
-    private TextView emptyText;
-    private Button retryBtn, bookBtn;
-    private ProgressBar loader;
 
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private MyViewPager mViewPager;
 
     public AppointmentHome() {
         // Required empty public constructor
@@ -63,7 +47,6 @@ public class AppointmentHome extends Fragment {
         View view = inflater.inflate(R.layout.fragment_appointment_home, container, false);
         fragmentChanger = (AppointmentActivity) getActivity();
         setupViews(view);
-        setupAdapter();
         return  view;
     }
 
@@ -73,71 +56,48 @@ public class AppointmentHome extends Fragment {
 
         ((AppointmentActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppointmentActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
-        bookBtn = view.findViewById(R.id.schedule_btn);
-        retryBtn = view.findViewById(R.id.retryBtn);
-        loader = view.findViewById(R.id.progressBar);
-        emptyIcon = view.findViewById(R.id.placeholder_icon);
-        emptyText = view.findViewById(R.id.placeholder_label);
-        recyclerView = view.findViewById(R.id.recycler_view);
-        bookBtn.setOnClickListener(btn -> fragmentChanger.changeFragment(AppointmentSchedule.newInstance()));
-        retryBtn.setOnClickListener(btn -> retry());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = view.findViewById(R.id.tab_container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
+        TabLayout.Tab tab = tabLayout.newTab();
+        tab.setText("Schedule");
+        tabLayout.addTab(tab);
+        TabLayout.Tab tab2 = tabLayout.newTab();
+        tab2.setText("Appointments");
+        tabLayout.addTab(tab2);
+
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 
-    private void setupAdapter() {
-        adapter  = new AppointmentAdapter();
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.addItemDecoration(
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL)
-        );
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-    }
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        viewModel = ViewModelProviders.of(this).get(AppointmentViewModel.class);
-        observe(viewModel);
-    }
-
-    private void observe(AppointmentViewModel viewModel) {
-        viewModel.getMediatorLiveData().observe(this, result -> {
-            loader.setVisibility(View.GONE);
-            if (result.isSuccessful() && result.getDataList().isEmpty()) {
-                recyclerView.setVisibility(View.GONE);
-                emptyText.setText("No appointments found");
-                emptyIcon.setImageResource(R.drawable.placeholder_empty);
-                emptyIcon.setVisibility(View.VISIBLE);
-                emptyText.setVisibility(View.VISIBLE);
-                retryBtn.setVisibility(View.VISIBLE);
-            } else if (result.isSuccessful() && !result.getDataList().isEmpty()) {
-                emptyIcon.setVisibility(View.GONE);
-                emptyText.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                retryBtn.setVisibility(View.GONE);
-                adapter.setAppointments(result.getDataList());
-                adapter.notifyDataSetChanged();
-            } else if (!result.isSuccessful()) {
-                recyclerView.setVisibility(View.GONE);
-                emptyText.setText(result.getMessage());
-                emptyIcon.setImageResource(R.drawable.placeholder_error);
-                emptyIcon.setVisibility(View.VISIBLE);
-                retryBtn.setVisibility(View.VISIBLE);
-                emptyText.setVisibility(View.VISIBLE);
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            switch (position) {
+                case 0:
+                    return MySchedules.newInstance();
+                case 1:
+                    return MyAppointments.newInstance();
+                default:
+                    return MySchedules.newInstance();
             }
-        });
-    }
+        }
 
-    private void retry() {
-        emptyIcon.setVisibility(View.GONE);
-        emptyText.setVisibility(View.GONE);
-        retryBtn.setVisibility(View.GONE);
-        loader.setVisibility(View.VISIBLE);
-        viewModel.refresh();
-    }
+        public int getCount() {
+            return 2;
+        }
 
+    }
 
 }

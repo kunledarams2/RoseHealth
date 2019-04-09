@@ -58,6 +58,7 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
 
         /*if (CallService.class.getName().equals(componentName.getClassName())) {
             mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
+            mSinchServiceInterface.startClient();
             log(" CONNECTING CALL SERVICE");
             onServiceConnected();
         } else {

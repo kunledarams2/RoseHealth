@@ -37,12 +37,12 @@ public class MedicalRecordDialog extends Dialog {
     private CircleImageView imageView;
     private View profileView, scrollView;
     private TextView patientName, gender, age, bloodGroup;
-    private EditText ethnicityField, weightField, heightField, bmiField,
+    private TextView ethnicityField, weightField, heightField, bmiField,
              currPregField, noPregField, noFullPregField, prematureField,
              miscarriageField, childrenField,
              restrictionField, alcoholField, smokeField,
-             sexualField, drugField,
-             vaccineField, symptomsField, allergiesField, medicationField, treatmentField;
+             sexualField, drugField;
+    private EditText vaccineField, symptomsField, allergiesField, medicationField, treatmentField;
 
     private FlowLayout symptomsView, allergiesView, medicationsView, treatmentsView;
     private List<String> symptomsList, allergiesList, medicationsList, treatmentsList;

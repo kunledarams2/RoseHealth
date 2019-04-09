@@ -185,7 +185,7 @@ public class MainActivity extends BaseActivity
         changeView(fragment);
     }
 
-    private void setOnline() {
+    /*private void setOnline() {
         StringCall call = new StringCall(this);
         Map<String, String> params = new HashMap<>();
         params.put("mode", "ONLINE");
@@ -212,11 +212,11 @@ public class MainActivity extends BaseActivity
             }
         });
 
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         Log.d("TipS Fragment", "onActivityResult()");
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IO.REQUEST_CAMERA) {
@@ -231,6 +231,18 @@ public class MainActivity extends BaseActivity
                 log("Request Gallery");
             }
         }
+    }
+
+    public void setOnline() {
+        getWebSocketInterface().setOnline();
+        getSinchServiceInterface().startClient();
+        //statusIndicator.setBackgroundResource(R.drawable.circle_green);
+    }
+
+    public void setOffline() {
+        getSinchServiceInterface().stopClient();
+        getWebSocketInterface().disconnect();
+        //statusIndicator.setBackgroundResource( R.drawable.circle_red);
     }
 
     public  void galleryIntent() {

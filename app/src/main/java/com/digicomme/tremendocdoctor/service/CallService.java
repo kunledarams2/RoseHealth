@@ -55,7 +55,6 @@ public class CallService extends Service {
 
     static final String TAG = CallService.class.getSimpleName();
 
-    private PersistedSettings mSettings;
     private CallServiceInterface mCallServiceInterface = new CallServiceInterface();
     private SinchClient mSinchClient;
 
@@ -64,16 +63,14 @@ public class CallService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mSettings = new PersistedSettings(getApplicationContext());
         attemptAutoStart();
-        //log("onCreate()");
+        log("onCreate()");
     }
 
     private void attemptAutoStart(){
-        String userName = mSettings.getMyCallId();
+        String userName = DeviceName.getUUID(this);
         if (!userName.isEmpty() && messenger != null) {
             start(userName);
-            //log("autoStart()");
         }
     }
 
@@ -90,7 +87,6 @@ public class CallService extends Service {
         mSinchClient.startListeningOnActiveConnection();
         mSinchClient.addSinchClientListener(new MySinchClientListener());
         mSinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
-        //log("autoCreateClient()" + username);
     }
 
     @Override
@@ -103,9 +99,21 @@ public class CallService extends Service {
 
     private void start(String username) {
         boolean permissionGranted = true;
+        boolean isSetOnline = IO.getData(this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
         if (mSinchClient == null) {
             //mSettings.setUsername(username);
+            log("mSinchClient is null, trying to create another with username = " +username);
             createClient(username);
+        }
+
+        if (mSinchClient != null && !mSinchClient.isStarted() && isSetOnline) {
+            log("trying to start sinch client");
+            mSinchClient.start();
+            if (isStarted()) {
+                log("Sinch client started");
+            } else {
+                log("Sinch client failed to start");
+            }
         }
 
         /*try {
@@ -215,6 +223,13 @@ public class CallService extends Service {
             start(userName);
         }
 
+        public void startClient() {
+            if (!isStarted()) {
+                String username = DeviceName.getUUID(CallService.this);
+                start(username);
+            }
+        }
+
         public void stopClient() {
             stop();
         }
@@ -242,10 +257,11 @@ public class CallService extends Service {
         }
 
         public NotificationResult relayRemotePushNotificationPayload(final Map payload) {
-
-            if (mSinchClient == null && !mSettings.getMyCallId().isEmpty()) {
-                createClient(mSettings.getMyCallId());
-            } else if (mSinchClient == null && mSettings.getMyCallId().isEmpty()) {
+            log("relayRemotePayload");
+            String myCallId = DeviceName.getUUID(CallService.this);
+            if (mSinchClient == null && !myCallId.isEmpty()) {
+                createClient(myCallId);
+            } else if (mSinchClient == null && myCallId.isEmpty()) {
                 Log.e(TAG, "Can't start a SinchClient as no username is available, unable to relay push.");
                 return null;
             }
@@ -271,15 +287,13 @@ public class CallService extends Service {
             if (mListener != null) {
                 mListener.onStartFailed(sinchError);
             }
-            Log.e("SinchError" , sinchError.getMessage());
-            Log.e("SinchError" , "Sinch Failed To Start");
             mSinchClient.terminate();
             mSinchClient = null;
         }
 
         @Override
         public void onClientStarted(SinchClient sinchClient) {
-            Log.e(TAG, "SinchClient started");
+            Log.d(TAG, "SinchClient started");
             if (mListener != null) {
                 mListener.onStarted();
             }
@@ -287,7 +301,7 @@ public class CallService extends Service {
 
         @Override
         public void onClientStopped(SinchClient sinchClient) {
-            Log.e(TAG, "SinchClient stopped");
+            Log.d(TAG, "SinchClient stopped");
         }
 
         @Override
@@ -313,7 +327,7 @@ public class CallService extends Service {
 
         @Override
         public void onRegistrationCredentialsRequired(SinchClient sinchClient, ClientRegistration clientRegistration) {
-            Log.e(TAG, "SinchClient registation required");
+
         }
     }
 
@@ -340,33 +354,7 @@ public class CallService extends Service {
         }
     }
 
-    private class PersistedSettings {
-        //private SharedPreferences mStore;
-        private Context context;
-        //private static final String PREF_KEY = "Sinch";
-
-        public PersistedSettings(Context context) {
-            this.context = context;
-            //mStore = context.getSharedPreferences(API.SHARED_PREFERENCES, MODE_PRIVATE);
-        }
-
-        public String getMyCallId() {
-            return DeviceName.getUUID(context);
-        }
-
-        /*public String getUsername() {
-            return mStore.getString(API.USERNAME, "");
-        }
-
-        public void setUsername(String username) {
-            SharedPreferences.Editor editor = mStore.edit();
-            editor.putString(API.USERNAME, username);
-            editor.apply();
-        }*/
-    }
-
     private void log(String log){
-        Log.e("CallService", "--__-_--_--_--_-_--_--_--_--" + log);
-        ToastUtil.showShort(this, log);
+        Log.d("CallService", "--__-_--_--_--_-_--_--_--_--" + log);
     }
 }
