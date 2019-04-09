@@ -16,6 +16,7 @@ public class URLS {
     public static String ONLINE_STATUS = SERVER + "doctor/online-mode";
 
     public static String SAVE_NOTE = SERVER + "doctor_notes/add";
+    public static String SAVE_PRESCRIPTION = SERVER + "prescriptions/add";
     public static String DOCTORS_NOTES = SERVER + "doctor_notes/doctor/";
 
     public static String FETCH_TIPS = SERVER + "healthtips/get";

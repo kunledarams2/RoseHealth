@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity
     public static final String APPOINTMENTS = "APPOINTMENTS";
     public static final String PRESCRIPTIONS = "Prescriptions";
     public static final String CHATROOM = "CHATROOM";
-    public static final String NOTIFICATIONS = "Notifications";
+    //public static final String NOTIFICATIONS = "Notifications";
     public static final String CALL_LOGS = "Call Logs";
 
     private Fragment currentFragment;
@@ -171,11 +171,11 @@ public class MainActivity extends BaseActivity
                 setTitle("Appointments");
                 break;
             case CHATROOM: fragment = Chatroom.newInstance();
-            break;
-            case NOTIFICATIONS:
+                break;
+            /*case NOTIFICATIONS:
                 fragment = Notifications.newInstance();
                 setTitle("Notifications");
-                break;
+                break;*/
             case CALL_LOGS:
                 fragment = CallLogs.newInstance();
                 setTitle("Call Logs");
@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity
                     ToastUtil.showLong(this, "You are now online");
                     //initiateConsultation(doctor, subId);
                 } else {
-                    ToastUtil.showLong(this, object.getString("description"));
+                    //ToastUtil.showLong(this, object.getString("description"));
                 }
             }catch (JSONException e) {
                 log(e.getLocalizedMessage());
