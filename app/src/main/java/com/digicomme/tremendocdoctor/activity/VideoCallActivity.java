@@ -81,7 +81,6 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
 
     ActivityVideoCallBinding activityVideoCallBinding;
-    DialogNewPrescriptionBinding dialogNewPrescriptionBinding;
 
     private class UpdateCallDurationTask extends TimerTask {
 

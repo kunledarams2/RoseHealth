@@ -53,7 +53,10 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         log("onServiceConnected()");
 
-        if (CallService.class.getName().equals(componentName.getClassName())) {
+        log(componentName.getClassName());
+        log(CallService.class.getName());
+
+        /*if (CallService.class.getName().equals(componentName.getClassName())) {
             mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
             log(" CONNECTING CALL SERVICE");
             onServiceConnected();
@@ -65,8 +68,11 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
             mWebSocketInterface = (ChatService.WebSocketInterface) iBinder;
             //mWebSocketInterface.setOnline();
             onServiceConnected();
-
-        }
+        }*/
+        mSinchServiceInterface = (CallService.CallServiceInterface) iBinder;
+        //mWebSocketInterface = (ChatService.WebSocketInterface) iBinder;
+        log(" CONNECTING CALL SERVICE");
+        //onServiceConnected();
     }
 
     @Override
@@ -136,13 +142,13 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         intent.putExtra(CallService.MESSENGER, messenger);
         getApplicationContext().bindService(intent, this, BIND_AUTO_CREATE);
 
-        Intent intent2 = new Intent(this, ChatService.class);
+        //Intent intent2 = new Intent(this, ChatService.class);
         //intent.putExtra(CallService.MESSENGER, messenger);
-        getApplicationContext().bindService(intent2, this, BIND_AUTO_CREATE);
+        //getApplicationContext().bindService(intent2, this, BIND_AUTO_CREATE);
         log("bindService()");
     }
 
     private void log(String string) {
-        Log.d("BaseActivity", "--_--_------------___-__--__--_--__-_ " + string);
+        Log.e("BaseActivity", "--_--_------------___-__--__--_--__-_ " + string);
     }
 }

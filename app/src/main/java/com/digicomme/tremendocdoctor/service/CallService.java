@@ -66,13 +66,14 @@ public class CallService extends Service {
         super.onCreate();
         mSettings = new PersistedSettings(getApplicationContext());
         attemptAutoStart();
-        log("onCreate()");
+        //log("onCreate()");
     }
 
     private void attemptAutoStart(){
         String userName = mSettings.getMyCallId();
         if (!userName.isEmpty() && messenger != null) {
             start(userName);
+            //log("autoStart()");
         }
     }
 
@@ -89,6 +90,7 @@ public class CallService extends Service {
         mSinchClient.startListeningOnActiveConnection();
         mSinchClient.addSinchClientListener(new MySinchClientListener());
         mSinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
+        //log("autoCreateClient()" + username);
     }
 
     @Override
@@ -269,13 +271,15 @@ public class CallService extends Service {
             if (mListener != null) {
                 mListener.onStartFailed(sinchError);
             }
+            Log.e("SinchError" , sinchError.getMessage());
+            Log.e("SinchError" , "Sinch Failed To Start");
             mSinchClient.terminate();
             mSinchClient = null;
         }
 
         @Override
         public void onClientStarted(SinchClient sinchClient) {
-            Log.d(TAG, "SinchClient started");
+            Log.e(TAG, "SinchClient started");
             if (mListener != null) {
                 mListener.onStarted();
             }
@@ -283,7 +287,7 @@ public class CallService extends Service {
 
         @Override
         public void onClientStopped(SinchClient sinchClient) {
-            Log.d(TAG, "SinchClient stopped");
+            Log.e(TAG, "SinchClient stopped");
         }
 
         @Override
@@ -309,7 +313,7 @@ public class CallService extends Service {
 
         @Override
         public void onRegistrationCredentialsRequired(SinchClient sinchClient, ClientRegistration clientRegistration) {
-
+            Log.e(TAG, "SinchClient registation required");
         }
     }
 
@@ -362,7 +366,7 @@ public class CallService extends Service {
     }
 
     private void log(String log){
-        Log.d("CallService", "--__-_--_--_--_-_--_--_--_--" + log);
+        Log.e("CallService", "--__-_--_--_--_-_--_--_--_--" + log);
         ToastUtil.showShort(this, log);
     }
 }
