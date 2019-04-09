@@ -13,7 +13,12 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/background_image"
         android:scaleType="centerCrop"
-        android:src="@drawable/background_login" />
+        android:src="@drawable/login" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimaryTrans"
+        android:layout_height="match_parent"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -99,7 +104,7 @@
                 <Button android:id="@+id/login_btn"
                     android:layout_below="@+id/forgot_password_btn"
                     android:text="Login"
-                    android:layout_margin="15dp"
+                    android:layout_marginTop="@dimen/size_40"
                     android:textSize="@dimen/font_14"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
@@ -118,8 +123,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/form"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="40dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="@dimen/size_40"
+                android:layout_marginEnd="@dimen/size_40"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

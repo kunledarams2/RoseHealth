@@ -170,6 +170,8 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
     public void writePrescription(View view){
         showView(activityVideoCallBinding.prescriptionDialog.getRoot());
+        activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationIcon(R.drawable.ic_close_white);
+        activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationOnClickListener(v -> hideView(activityVideoCallBinding.prescriptionDialog.getRoot()));
     }
 
     public void clickSavePrescription(View view){
@@ -317,7 +319,11 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        // User should exit activity by ending call, not by going back.
+        if (activityVideoCallBinding.prescriptionDialog.getRoot().getVisibility() == View.VISIBLE){
+            hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
+        } else {
+            // User should exit activity by ending call, not by going back.
+        }
     }
 
     private void endCall() {

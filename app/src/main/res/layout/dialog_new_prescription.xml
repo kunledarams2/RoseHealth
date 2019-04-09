@@ -43,6 +43,7 @@
                     <EditText
                         android:id="@+id/medication_field"
                         android:layout_width="match_parent"
+                        android:textSize="@dimen/font_14"
                         android:layout_height="match_parent"
                         android:hint="Medication" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -58,6 +59,7 @@
                         android:id="@+id/dosages_field"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textSize="@dimen/font_14"
                         android:hint="Dosage e.g 2 times a day" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,8 +70,9 @@
                     android:visibility="gone"
                     android:layout_height="50dp">
                     <EditText android:id="@+id/treatment_field"
-                        android:hint="Treatment"
+                        android:hint="@string/treatment"
                         android:layout_width="match_parent"
+                        android:textSize="@dimen/font_14"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
 
