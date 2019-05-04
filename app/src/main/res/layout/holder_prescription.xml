@@ -21,6 +21,7 @@
             android:layout_toStartOf="@+id/doctor_name"
             android:layout_height="wrap_content" />
         <TextView android:id="@+id/doctor_name"
+            android:visibility="gone"
             android:text="Dr Jay Tokunbo"
             android:layout_alignParentEnd="true"
             android:textColor="@color/colorWhite"

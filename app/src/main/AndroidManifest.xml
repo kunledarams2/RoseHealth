@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.digicomme.tremendocdoctor">
+    package="com.tremendoc.tremendocdoctor">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.BIND_JOB_SERVICE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -28,6 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/TremendocTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.IncomingVoiceCallActivity"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -35,7 +37,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.digicomme.tremendocdoctor.provider"
+            android:authorities="com.tremendoc.tremendocdoctor.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -44,19 +46,12 @@
         </provider>
 
         <service android:name=".service.CallService" />
+        <service android:name=".service.ChatService" />
         <service android:name=".service.FcmListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
-            android:enabled="true" />
-
-        <service
-            android:name=".service.ChatService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -88,11 +83,12 @@
         </activity>
         <activity android:name=".activity.AuthActivity" />
         <activity android:name=".activity.VoiceCallActivity" />
-        <activity android:name=".activity.VideoCallActivity"
-            android:keepScreenOn="true"/>
-
+        <activity
+            android:name=".activity.VideoCallActivity"
+            android:keepScreenOn="true" />
         <activity android:name=".activity.AppointmentActivity" />
-        <activity android:name=".activity.RoutingActivity"></activity>
+        <activity android:name=".activity.RoutingActivity" />
+        <activity android:name=".activity.ScheduleActivity" />
     </application>
 
 </manifest>

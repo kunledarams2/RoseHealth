@@ -23,10 +23,22 @@
 
             <RelativeLayout
                 android:orientation="horizontal"
-                android:gravity="end|center|center_horizontal"
                 android:paddingEnd="20dp"
+                android:paddingStart="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
+                <TextView android:id="@+id/title"
+                    android:text="Dashboard"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/font_16"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/profile_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
                 <!--ImageView android:src="@drawable/logo_text_small"
                     android:layout_marginEnd="80dp"
                     android:layout_width="wrap_content"
@@ -34,14 +46,15 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
                     android:src="@drawable/ic_account"
+                    android:layout_alignParentEnd="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
                 <View android:id="@+id/online_status_indicator"
                     android:background="@drawable/circle_green"
                     android:layout_toEndOf="@+id/profile_image"
-                    android:layout_marginStart="-10dp"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp" />
+                    android:layout_marginStart="-12dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp" />
 
             </RelativeLayout>
 

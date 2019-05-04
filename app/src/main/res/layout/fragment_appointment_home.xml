@@ -12,16 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <!--<Button android:id="@+id/schedule_btn"
-            android:text="Schedule Appointment"
-            android:textAllCaps="false"
-            android:visibility="gone"
-            android:background="@drawable/rounded_btn_background"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            android:layout_margin="12dp"
-            android:textColor="@color/colorWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />-->
 
         <!--<androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -48,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <com.digicomme.tremendocdoctor.ui.MyViewPager
+    <com.tremendoc.tremendocdoctor.ui.MyViewPager
         android:id="@+id/tab_container"
         app:layout_constraintTop_toBottomOf="@+id/tabs"
         app:layout_constraintBottom_toBottomOf="parent"

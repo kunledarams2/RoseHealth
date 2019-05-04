@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.digicomme.tremendocdoctor"
+        applicationId "com.tremendoc.tremendocdoctor"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,20 +40,20 @@ dependencies {
     implementation 'org.apmem.tools:layouts:1.10@aar'
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
-    //implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
-    implementation 'com.google.firebase:firebase-messaging:17.5.0'
-    implementation('io.socket:socket.io-client:1.0.0') {
-        // excluding org.json which is provided by Android
-        exclude group: 'org.json', module: 'json'
-    }
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    implementation 'com.pusher:pusher-java-client:1.8.0'
     implementation 'com.github.thellmund:Android-Week-View:3.3'
-    implementation 'com.amazonaws:aws-android-sdk-core:2.12.6'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //implementation 'com.amazonaws:aws-android-sdk-core:2.12.6'
     //implementation 'com.amazonaws:aws-android-sdk-core:2.6.9'
     //implementation 'com.amazonaws:aws-android-sdk-s3:2.6.9'
-    implementation 'com.amazonaws:aws-android-sdk-s3:2.12.6'
+    //implementation 'com.amazonaws:aws-android-sdk-s3:2.12.6'
     //implementation 'com.amazonaws:aws-android-sdk-ddb:2.3.3'
     implementation(name: 'sinch-android-rtc', version: '+', ext: 'aar')
+
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     // Arch
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.0.0"
@@ -65,8 +66,9 @@ dependencies {
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
+    androidTestImplementation 'androidx.test:runner:1.2.0-alpha04'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha04'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 repositories {
@@ -75,3 +77,5 @@ repositories {
     }
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'

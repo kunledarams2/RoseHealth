@@ -319,12 +319,14 @@
                     <TextView android:id="@+id/last_appointment_label"
                         android:layout_below="@+id/appointments_recycler_view"
                         android:layout_margin="10dp"
+                        android:visibility="gone"
                         android:text="Last appointment: "
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <TextView android:id="@+id/last_appointment"
+                        android:visibility="gone"
                         android:layout_below="@+id/appointments_recycler_view"
                         android:layout_margin="10dp"
                         android:text="Ozioma 15/01/2019"
@@ -362,8 +364,9 @@
                     android:layout_below="@+id/health_tips_label"
                     android:layout_margin="10dp"
                     android:layout_gravity="center"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp" />
+                    android:layout_centerVertical="true"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp" />
 
                 <TextView android:id="@+id/health_tip_title"
                     android:text="Drink Water"
@@ -390,10 +393,9 @@
                     android:layout_below="@+id/health_tip_title"
                     android:layout_toEndOf="@+id/health_tip_image"
                     android:padding="10dp"
-                    android:maxLines="3"
+                    android:maxLines="2"
                     android:textSize="@dimen/font_12"
                     android:text="Drinking enough water can help boost your concentration as well as keep you from overeating.."
-                    android:lineHeight="1.4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView android:id="@+id/like_btn"

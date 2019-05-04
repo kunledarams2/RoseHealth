@@ -25,6 +25,7 @@
     <RelativeLayout android:id="@+id/profile"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         android:background="@drawable/background_white"
+        android:visibility="gone"
         android:padding="5dp"
         android:elevation="5dp"
         android:layout_width="match_parent"
@@ -33,10 +34,9 @@
             android:id="@+id/patient_photo"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/doctor"
             android:layout_margin="5dp"
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
         <TextView android:id="@+id/patient_name"
             android:text="Patient Name"
             android:padding="5dp"
@@ -94,525 +94,207 @@
     </RelativeLayout>
 
     <ScrollView android:id="@+id/scrollView"
-        app:layout_constraintTop_toBottomOf="@+id/profile"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <RelativeLayout
+        <LinearLayout android:id="@+id/form_1"
+            android:orientation="vertical"
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <RelativeLayout android:id="@+id/form_1"
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/ethnicity_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/ethnicity"
-                        android:hint="Ethnicity"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/weight_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/ethnicity_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/weight"
-                        android:hint="Weight"
-                        android:inputType="numberDecimal"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/height_wrapper"
-                    android:inputType="numberDecimal"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/weight_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/height"
-                        android:hint="Height"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_below="@id/weight"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/bmi_wrapper"
-                    android:layout_below="@+id/height_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/bmi"
-                        android:hint="BMI"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_below="@id/height"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_2"
-                android:layout_below="@+id/form_1"
+            <TextView android:id="@+id/ethnicity"
+                android:text="Ethnicity"
+                android:paddingStart="15dp"
                 android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="55dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/pregnancy_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/pregnancy"
-                        android:hint="Are you currently pregnant"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/pregnancy2_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/pregnancy_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/pregnancy_2"
-                        android:inputType="number"
-                        android:hint="How many times have you been pregnant?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:layout_below="@+id/pregnancy"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/pregnancy_3_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/pregnancy2_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/pregnancy_3"
-                        android:inputType="number"
-                        android:hint="How many full term pregnancies?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/pregnancy_4_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/pregnancy_3_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/pregnancy_4"
-                        android:inputType="number"
-                        android:hint="How many premature births?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:layout_below="@+id/pregnancy_3"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_3"
-                android:layout_below="@+id/form_2"
+            <TextView android:id="@+id/weight"
+                android:text="Weight"
+                android:paddingStart="15dp"
                 android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/miscarriages_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/miscarriages"
-                        android:inputType="number"
-                        android:hint="How many miscarriages?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="55dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/living_children_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/miscarriages_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/living_children"
-                        android:hint="How many living children?"
-                        android:inputType="number"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_4"
-                android:layout_below="@+id/form_3"
+            <TextView android:id="@+id/height"
+                android:text="Height"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/daily_restrictions_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/daily_restrictions"
-                        android:hint="Do you have any daily restrictions?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="55dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/alcohol_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/daily_restrictions_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/alcohol"
-                        android:hint="Do you take alcohol?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_below="@+id/daily_restrictions"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/smoke_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/alcohol_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/smoke"
-                        android:hint="Do you smoke?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_below="@id/alcohol"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_5"
-                android:layout_below="@+id/form_4"
+            <TextView android:id="@+id/bmi"
+                android:text="BMI"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
                 android:layout_margin="5dp"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/sexual_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/sexual"
-                        android:hint="Are you sexually active?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="55dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/drugs_wrapper"
-                    android:layout_margin="5dp"
-                    android:layout_below="@+id/sexual_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText android:id="@+id/drugs"
-                        android:hint="Do you take recreational drugs?"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:background="@drawable/input_background_block"
-                        android:layout_below="@+id/sexual"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <View android:layout_height="1dp"
+                android:layout_marginBottom="30dp"
+                android:layout_width="match_parent" />
 
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_6"
-                android:elevation="5dp"
-                android:background="@drawable/background_white"
-                android:layout_margin="8dp"
-                android:padding="8dp"
-                android:layout_below="@+id/form_5"
+            <TextView android:id="@+id/pregnancy"
+                android:text="Are you currently pregnant"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView android:id="@+id/vac_label"
-                    android:text="Add vaccination, if any"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/vac_clear_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView android:id="@+id/vac_clear_btn"
-                    android:text="clear all"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/vaccinations"
-                    android:gravity="start"
-                    android:padding="2dp"
-                    android:layout_below="@+id/vac_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                android:layout_height="55dp" />
 
-                <EditText android:id="@+id/vac_field"
-                    android:inputType="text"
-                    android:imeOptions="actionSend"
-                    android:maxLines="1"
-                    android:hint="Type something here example tetanus injection"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@+id/vaccinations"
-                    android:layout_alignParentBottom="true"
-                    android:paddingEnd="15dp"
-                    android:paddingStart="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp" />
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_7"
-                android:elevation="5dp"
-                android:background="@drawable/background_white"
-                android:layout_margin="8dp"
-                android:padding="8dp"
-                android:layout_below="@+id/form_6"
+            <TextView android:id="@+id/pregnancy_2"
+                android:text="How many times have you been pregnant?"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView android:id="@+id/sym_label"
-                    android:text="Add diagnosed symptoms,"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/sym_clear_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView android:id="@+id/sym_clear_btn"
-                    android:text="clear all"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/symptoms"
-                    android:gravity="start"
-                    android:padding="2dp"
-                    android:layout_below="@+id/sym_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <EditText android:id="@+id/sym_field"
-                    android:inputType="text"
-                    android:imeOptions="actionSend"
-                    android:maxLines="1"
-                    android:hint="Type something here example tetanus injection"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@+id/symptoms"
-                    android:layout_alignParentBottom="true"
-                    android:paddingEnd="15dp"
-                    android:paddingStart="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp" />
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_8"
-                android:elevation="5dp"
-                android:background="@drawable/background_white"
-                android:layout_margin="8dp"
-                android:padding="8dp"
-                android:layout_below="@+id/form_7"
+                android:layout_height="55dp" />
+            <TextView android:id="@+id/pregnancy_3"
+                android:text="How many full term pregnancies?"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView android:id="@+id/allergy_label"
-                    android:text="Add allergies, if any"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/allergy_clear_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView android:id="@+id/allergy_clear_btn"
-                    android:text="clear all"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/allergies"
-                    android:gravity="start"
-                    android:padding="2dp"
-                    android:layout_below="@+id/allergy_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <EditText android:id="@+id/allergy_field"
-                    android:inputType="text"
-                    android:imeOptions="actionSend"
-                    android:maxLines="1"
-                    android:hint="Type something here example tetanus injection"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@+id/allergies"
-                    android:layout_alignParentBottom="true"
-                    android:paddingEnd="15dp"
-                    android:paddingStart="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp" />
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_9"
-                android:elevation="5dp"
-                android:background="@drawable/background_white"
-                android:layout_margin="8dp"
-                android:padding="8dp"
-                android:layout_below="@+id/form_8"
+                android:layout_height="55dp" />
+            <TextView android:id="@+id/pregnancy_4"
+                android:text="How many premature births?"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView android:id="@+id/medication_label"
-                    android:text="Add medications, if any"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/medication_clear_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView android:id="@+id/medication_clear_btn"
-                    android:text="clear all"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/medications"
-                    android:gravity="start"
-                    android:padding="2dp"
-                    android:layout_below="@+id/medication_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                android:layout_height="55dp" />
 
-                <EditText android:id="@+id/medication_field"
-                    android:inputType="text"
-                    android:imeOptions="actionSend"
-                    android:maxLines="1"
-                    android:hint="Type something here example tetanus injection"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@+id/medications"
-                    android:layout_alignParentBottom="true"
-                    android:paddingEnd="15dp"
-                    android:paddingStart="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp" />
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/form_10"
-                android:background="@drawable/background_white"
-                android:layout_margin="8dp"
-                android:elevation="5dp"
-                android:padding="8dp"
-                android:layout_below="@+id/form_9"
+            <TextView android:id="@+id/miscarriages"
+                android:text="How many miscarriages?"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView android:id="@+id/treatment_label"
-                    android:text="Add treatments, if any"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/treatment_clear_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView android:id="@+id/treatment_clear_btn"
-                    android:text="clear all"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/treatments"
-                    android:gravity="start"
-                    android:padding="2dp"
-                    android:layout_below="@+id/treatment_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                android:layout_height="55dp" />
+            <TextView android:id="@+id/living_children"
+                android:text="How many living children?"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" />
 
-                <EditText android:id="@+id/treatment_field"
-                    android:hint="Type something here example tetanus injection"
-                    android:layout_below="@+id/treatments"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="10dp"
-                    android:paddingEnd="15dp"
-                    android:paddingStart="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp" />
-            </RelativeLayout>
+            <View android:layout_height="1dp"
+                android:layout_marginBottom="30dp"
+                android:layout_width="match_parent" />
 
-        </RelativeLayout>
+            <TextView android:id="@+id/daily_restrictions"
+                android:text="Do you have any daily restrictions?"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_background_block"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" />
+
+            <TextView android:id="@+id/alcohol"
+                android:text="Do you take alcohol?"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" />
+
+            <TextView android:id="@+id/smoke"
+                android:text="Do you smoke?"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:layout_below="@id/alcohol"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" />
+
+            <TextView android:id="@+id/sexual"
+                android:text="Are you sexually active?"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+
+            <TextView android:id="@+id/drugs"
+                android:text="Do you take recreational drugs?"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:background="@drawable/input_background_block"
+                android:layout_below="@+id/sexual"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+
+            <View android:layout_height="1dp"
+                android:layout_marginBottom="30dp"
+                android:layout_width="match_parent" />
+
+
+            <org.apmem.tools.layouts.FlowLayout
+                android:id="@+id/symptoms"
+                android:gravity="start"
+                android:padding="2dp"
+                android:layout_below="@+id/sym_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <org.apmem.tools.layouts.FlowLayout
+                android:id="@+id/allergies"
+                android:gravity="start"
+                android:padding="2dp"
+                android:layout_below="@+id/allergy_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <org.apmem.tools.layouts.FlowLayout
+                android:id="@+id/medications"
+                android:gravity="start"
+                android:padding="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <org.apmem.tools.layouts.FlowLayout
+                android:id="@+id/treatments"
+                android:gravity="start"
+                android:padding="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

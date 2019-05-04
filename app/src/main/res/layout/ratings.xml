@@ -11,23 +11,8 @@
         android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-<LinearLayout android:orientation="horizontal"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <ImageView android:src="@drawable/ic_star"
+    <LinearLayout android:id="@+id/rating"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageView android:src="@drawable/ic_star"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageView android:src="@drawable/ic_star"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageView android:src="@drawable/ic_star"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageView android:src="@drawable/ic_star_empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"/>
 </LinearLayout>
