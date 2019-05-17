@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -29,6 +30,7 @@ public class NewNoteDialog extends Dialog {
     private ProgressBar progressBar;
     private String consultationId, patientId;
     private EditText diagField, sympField, treatField;
+    private Button saveBtn;
 
     private boolean isBusy = false;
     private boolean askedBefore = false;
@@ -53,24 +55,19 @@ public class NewNoteDialog extends Dialog {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
+        saveBtn = findViewById(R.id.save_btn);
+        saveBtn.setOnClickListener(btn -> trySaveNote());
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
         toolbar.setNavigationOnClickListener(v -> cancel());
-        toolbar.getMenu().add("Save Note")
-                .setIcon(R.drawable.ic_check_white)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setTitle("Save Note")
-                .setOnMenuItemClickListener(menuItem -> {
-                    trySaveNote();
-                    return false;
-                });
     }
 
     public void setConsultationId(String consultationId) {
         this.consultationId = consultationId;
     }
 
-    public void setPatientId(String patientId) {
+    private void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 

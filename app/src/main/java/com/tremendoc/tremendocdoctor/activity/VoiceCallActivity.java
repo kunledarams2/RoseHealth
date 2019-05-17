@@ -52,8 +52,8 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
     private String mCallId;//, mCallerId;
 
     private Button newNoteBtn;
-    private View incomingView, activeView;
-    private TextView acceptBtn, rejectBtn;
+    private View /*incomingView,*/ activeView;
+    //private TextView acceptBtn, rejectBtn;
     private Button speakerBtn, muteBtn, hideBtn;
     private TextView patientNameView, viewBtn, endBtn, timer;
 
@@ -126,12 +126,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void setViews() {
-        incomingView = findViewById(R.id.incoming);
         activeView = findViewById(R.id.activeView);
-        acceptBtn = findViewById(R.id.accept_btn);
-        rejectBtn = findViewById(R.id.reject_btn);
-        acceptBtn.setOnClickListener(this);
-        rejectBtn.setOnClickListener(this);
 
         speakerBtn = findViewById(R.id.speaker_btn);
         hideBtn = findViewById(R.id.hide_btn);
@@ -151,7 +146,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
         newNoteBtn.setOnClickListener(this);
 
 
-        Bundle bundle = getIntent().getExtras();
+        /*Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("status")) {
             incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
@@ -159,7 +154,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
         } else {
             incomingView.setVisibility(View.VISIBLE);
             activeView.setVisibility(View.GONE);
-        }
+        }*/
 
 
     }
@@ -227,7 +222,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
         if (call != null) {
             Log.d(TAG, "Answering call");
             call.answer();
-            incomingView.setVisibility(View.GONE);
+            //incomingView.setVisibility(View.GONE);
             activeView.setVisibility(View.VISIBLE);
             answered = true;
             initAudio();
@@ -302,11 +297,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (view == acceptBtn) {
-            answer();
-        } else if (view == rejectBtn) {
-            decline();
-        } else if (view == endBtn) {
+        if (view == endBtn) {
             endCall();
         } else if (view == muteBtn) {
             toggleMute();

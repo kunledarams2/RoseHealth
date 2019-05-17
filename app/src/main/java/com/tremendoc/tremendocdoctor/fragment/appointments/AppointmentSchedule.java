@@ -1,5 +1,7 @@
 package com.tremendoc.tremendocdoctor.fragment.appointments;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -8,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.activity.AppointmentActivity;
 import com.tremendoc.tremendocdoctor.activity.ScheduleActivity;
@@ -23,6 +30,7 @@ import com.tremendoc.tremendocdoctor.api.StringCall;
 import com.tremendoc.tremendocdoctor.api.URLS;
 import com.tremendoc.tremendocdoctor.callback.FragmentChanger;
 import com.tremendoc.tremendocdoctor.dialog.ProgressDialog;
+import com.tremendoc.tremendocdoctor.model.Schedule;
 import com.tremendoc.tremendocdoctor.utils.Formatter;
 import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,7 +41,10 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 public class AppointmentSchedule extends Fragment {
@@ -101,6 +112,8 @@ public class AppointmentSchedule extends Fragment {
             }
         });
 
+        calendarView.addDecorator(new Decorator());
+        calendarView.addDecorator(new Decorator2());
     }
 
     private void openSnackbar(String date) {
@@ -181,5 +194,58 @@ public class AppointmentSchedule extends Fragment {
     private void log(String log) {
         Log.d("Appointment CAlendar", "_---_--_--_--_--_--__--_--_--_- " + log);
     }
+
+
+    class Decorator implements DayViewDecorator {
+        private final int color;
+
+        public Decorator() {
+            this.color = Color.parseColor("#bbbbbb");
+            Calendar today = Calendar.getInstance();
+            Calendar tomorrow = (Calendar) today.clone();
+            tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+            Calendar oneWeek = (Calendar) today.clone();
+            oneWeek.add(Calendar.DAY_OF_MONTH, 7);
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            Calendar today = Calendar.getInstance();
+            Calendar tomorrow = (Calendar) today.clone();
+            tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+            Calendar oneWeek = (Calendar) today.clone();
+            oneWeek.add(Calendar.DAY_OF_MONTH, 7);
+            return day.getCalendar().after(today) && day.getCalendar().before(oneWeek);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            //view.addSpan(new DotSpan(15, color));
+            view.addSpan(new DotSpan(15, Color.BLACK));
+        }
+
+    }
+
+    class Decorator2 implements DayViewDecorator {
+
+        public Decorator2() {
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            Calendar today = Calendar.getInstance();
+            Calendar tomorrow = (Calendar) today.clone();
+            tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+            Calendar oneWeek = (Calendar) today.clone();
+            oneWeek.add(Calendar.DAY_OF_MONTH, 7);
+            return day.getCalendar().before(today) || day.getCalendar().after(oneWeek);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.setDaysDisabled(true);
+        }
+    }
+
 
 }

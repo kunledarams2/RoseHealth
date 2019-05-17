@@ -29,7 +29,11 @@
         android:supportsRtl="true"
         android:theme="@style/TremendocTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.IncomingVoiceCallActivity"></activity>
+        <activity android:name=".activity.OutgoingChatActivity"></activity>
+        <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.VideoCallActivity" />
+        <activity android:name=".activity.AudioCallActivity" />
+        <activity android:name=".activity.IncomingCallActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -71,7 +75,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DoctorsChatActivity" />
-        <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.ChatActivityOld" />
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -84,7 +88,7 @@
         <activity android:name=".activity.AuthActivity" />
         <activity android:name=".activity.VoiceCallActivity" />
         <activity
-            android:name=".activity.VideoCallActivity"
+            android:name=".activity.VideoCallActivityOld"
             android:keepScreenOn="true" />
         <activity android:name=".activity.AppointmentActivity" />
         <activity android:name=".activity.RoutingActivity" />

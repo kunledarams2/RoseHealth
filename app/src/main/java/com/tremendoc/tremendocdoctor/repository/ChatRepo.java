@@ -27,10 +27,11 @@ public class ChatRepo {
         return  instance;
     }
 
-    public void sendMessage(String message, String channel, MsgCallback callback) {
+    public void sendMessage(String message, String channel, String eventName, MsgCallback callback) {
         HashMap<String, String> payload = new HashMap<>();
         payload.put("message", message);
         payload.put("channel", channel);
+        payload.put("eventName", eventName);
 
         call.post(URLS.CHAT, payload, response -> {
             try {

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -28,16 +27,11 @@ import com.tremendoc.tremendocdoctor.model.CallLog;
 import com.tremendoc.tremendocdoctor.model.Message;
 import com.tremendoc.tremendocdoctor.repository.ChatRepo;
 import com.tremendoc.tremendocdoctor.service.ChatService;
-import com.tremendoc.tremendocdoctor.service.OneSignalService;
 import com.tremendoc.tremendocdoctor.utils.AudioPlayer;
-import com.tremendoc.tremendocdoctor.utils.CallConstants;
-import com.tremendoc.tremendocdoctor.utils.DeviceName;
-import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.UI;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
-import com.sinch.android.rtc.AudioController;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
@@ -46,7 +40,7 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ChatActivity extends BaseActivity implements View.OnClickListener {
+public class ChatActivityOld extends BaseActivity implements View.OnClickListener {
 
     private View incomingView, activeView;
     private TextView label, endSession;
@@ -76,7 +70,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat_old);
 
         myName = API.getFullName();
         patientId = getIntent().getStringExtra(CallLog.PATIENT_ID);
@@ -159,7 +153,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         acceptBtn = findViewById(R.id.accept_btn);
         rejectBtn = findViewById(R.id.reject_btn);
         viewBtn = findViewById(R.id.view_btn);
-        noteBtn = findViewById(R.id.write_note);
+        //noteBtn = findViewById(R.id.write_note);
         endSession = findViewById(R.id.end_session);
         viewBtn.setOnClickListener(this);
         acceptBtn.setOnClickListener(this);
@@ -252,7 +246,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             answered = true;
         } else if (view == rejectBtn) {
             getChatServiceInterface().endChat(patientToken, "denied");
-            //Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+            //Intent intent = new Intent(ChatActivityOld.this, MainActivity.class);
             //startActivity(intent);
             //finish();
         } else if (view == viewBtn) {
@@ -285,7 +279,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     String patientToken = getIntent().getStringExtra(CallLog.PATIENT_TOKEN);
                     String doctorToken = getIntent().getStringExtra(CallLog.DOCTOR_TOKEN);
 
-                    CallLog callLog = new CallLog(ChatActivity.this);
+                    CallLog callLog = new CallLog(ChatActivityOld.this);
                     callLog.set(CallLog.TIME, time);
                     callLog.set(CallLog.PATIENT_ID, patientId);
                     callLog.set(CallLog.CALL_TYPE, "CHAT");
@@ -306,7 +300,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 if (getIntent() != null && getIntent().getBooleanExtra("incoming", false)) {
                     finish();
                 } else {
-                    Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                    Intent intent = new Intent(ChatActivityOld.this, MainActivity.class);
                     intent.putExtra("fragment", MainActivity.CALL_LOGS);
                     startActivity(intent);
                 }
@@ -315,7 +309,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
         @Override
         public void onChatEstablished() {
-            Log.d("ChatActivity", "Chat established");
+            Log.d("ChatActivityOld", "Chat established");
             answered = true;
             mAudioPlayer.stopRingtone();
             mAudioPlayer.stopProgressTone();
@@ -356,7 +350,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void log(String log) {
-        Log.d("ChatActivity", "--__--_--__-----___-----__-----_--_-----   " + log);
+        Log.d("ChatActivityOld", "--__--_--__-----___-----__-----_--_-----   " + log);
     }
 
     @Override
@@ -371,7 +365,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 .setMessage("Do you want to end this chat session")
                 .setPositiveButton("Yes", (dialog, i) -> {
                     getChatServiceInterface().endChat(patientToken, "hangup");
-                    Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                    Intent intent = new Intent(ChatActivityOld.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 })
@@ -420,7 +414,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             obj.put("message", msg);
             obj.put("sender", myName);
             String channel = consultationId;
-            ChatRepo.getInstance(this).sendMessage(obj.toString(), channel, msgCallback);
+            ChatRepo.getInstance(this).sendMessage(obj.toString(), channel,"test_event", msgCallback);
         } catch (JSONException e) {
 
         }

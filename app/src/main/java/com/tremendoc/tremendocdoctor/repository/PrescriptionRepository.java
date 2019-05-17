@@ -85,6 +85,51 @@ public class PrescriptionRepository {
         return data;
     }
 
+    public LiveData<Result<Prescription>> search(String query) {
+        MutableLiveData<Result<Prescription>> data = new MutableLiveData<>();
+
+        Result<Prescription> result = new Result<>();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("query", query);
+
+        call.get(URLS.PRESCRIPTION_SEARCH , params, response -> {
+            log("RESPONSE  " + response);
+
+            try {
+                JSONObject object = new JSONObject(response);
+                if (object.has("code") && object.getInt("code") == 0) {
+                    JSONArray prescriptions = object.getJSONArray("prescriptionData");
+                    List<Prescription> list = new ArrayList<>();
+                    for (int i = 0; i < prescriptions.length(); i++) {
+                        Prescription prescription = Prescription.parse(prescriptions.getJSONObject(i));
+                        list.add(prescription);
+                    }
+                    result.setDataList(list);
+                    log("SUCCESSFUL");
+                } else {
+                    result.setMessage(object.getString("description"));
+                }
+            } catch (Exception e) {
+                log("getPrescriptions()  " + e.getMessage());
+                result.setMessage(e.getMessage());
+            }
+            data.setValue(result);
+        }, error -> {
+            log("VOLLEY ERROR");
+            log(error.getMessage());
+            if (error.networkResponse == null) {
+                log("Network response is null");
+                result.setMessage("Please check your internet connection");
+            } else {
+                log("DATA: " + Formatter.bytesToString(error.networkResponse.data));
+                result.setMessage(error.getMessage());
+            }
+            data.setValue(result);
+        });
+        return data;
+    }
+
     private static void log(String string){
         Log.d("Prescriptions ", "_--__-_-_-_---_-_-_-_-_-_-_-_-_-_-_-_-_-_-_____-_-_-_-_-_  " + string);
     }

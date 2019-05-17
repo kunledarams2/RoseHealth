@@ -16,8 +16,17 @@ import androidx.annotation.NonNull;
 
 public class Schedule implements WeekViewDisplayable<Schedule> {
     private long id;
+    private Date date;
     private Calendar startTime, endTime;
     private String title;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public Schedule(long id, String title, Calendar startTime, Calendar endTime) {
         this.id = id;
@@ -59,6 +68,7 @@ public class Schedule implements WeekViewDisplayable<Schedule> {
         endDate.set(Calendar.HOUR_OF_DAY, end);
 
         Schedule schedule = new Schedule(id, "Available", startDate, endDate);
+        schedule.setDate(Formatter.stringToDate(dateStr));
         return schedule;
     }
 

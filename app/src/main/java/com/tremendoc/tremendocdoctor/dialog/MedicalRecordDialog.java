@@ -35,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MedicalRecordDialog extends Dialog {
     //private CircleImageView imageView;
-    private View profileView, scrollView;
+    private View /*profileView,*/ scrollView;
     //private TextView patientName, gender, age, bloodGroup;
     private TextView ethnicityField, weightField, heightField, bmiField,
              currPregField, noPregField, noFullPregField, prematureField,
@@ -78,7 +78,7 @@ public class MedicalRecordDialog extends Dialog {
         //age = findViewById(R.id.age);
         //bloodGroup = findViewById(R.id.blood_group);
 
-        profileView = findViewById(R.id.profile);
+        //profileView = findViewById(R.id.profile);
         scrollView = findViewById(R.id.scrollView);
 
         ethnicityField = findViewById(R.id.ethnicity);
@@ -114,7 +114,7 @@ public class MedicalRecordDialog extends Dialog {
 
     private void setLoading() {
         loader.setVisibility(View.VISIBLE);
-        profileView.setVisibility(View.GONE);
+        //profileView.setVisibility(View.GONE);
         scrollView.setVisibility(View.GONE);
         emptyLabel.setVisibility(View.GONE);
         emptyIcon.setVisibility(View.GONE);
@@ -129,7 +129,7 @@ public class MedicalRecordDialog extends Dialog {
             emptyIcon.setImageResource(R.drawable.placeholder_empty);
             emptyLabel.setText("No records found");
         } else if (success && !empty) {
-            profileView.setVisibility(View.VISIBLE);
+            //profileView.setVisibility(View.VISIBLE);
             scrollView.setVisibility(View.VISIBLE);
         } else if (!success) {
             retryBtn.setVisibility(View.VISIBLE);

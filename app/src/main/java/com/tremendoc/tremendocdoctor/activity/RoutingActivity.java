@@ -8,7 +8,6 @@ import com.sinch.android.rtc.calling.Call;
 import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.api.StringCall;
 import com.tremendoc.tremendocdoctor.model.CallLog;
-import com.tremendoc.tremendocdoctor.service.ChatService;
 import com.tremendoc.tremendocdoctor.utils.CallConstants;
 import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 
@@ -110,8 +109,7 @@ public class RoutingActivity extends BaseActivity {
         }
 
         String callId = call.getCallId();
-        Intent callScreen = new Intent(this, VoiceCallActivity.class);
-        callScreen.putExtra("status", "ready");
+        Intent callScreen = new Intent(this, AudioCallActivity.class);
         callScreen.putExtra(CallConstants.CALL_ID, callId);
         callScreen.putExtras(bundle);
         startActivity(callScreen);
@@ -126,9 +124,7 @@ public class RoutingActivity extends BaseActivity {
             return;
         }
         String callId = call.getCallId();
-
         Intent callScreen = new Intent(this, VideoCallActivity.class);
-        callScreen.putExtra("status", "ready");
         callScreen.putExtra(CallConstants.CALL_ID, callId);
         callScreen.putExtras(bundle);
         startActivity(callScreen);
@@ -139,8 +135,7 @@ public class RoutingActivity extends BaseActivity {
         String patientToken = bundle.getString(CallLog.PATIENT_TOKEN);
         String consultationId = bundle.getString(CallLog.CONSULTATION_ID);
         getChatServiceInterface().sendRequest(doctorToken, patientToken, consultationId);
-        Intent callScreen = new Intent(this, ChatActivity.class);
-        callScreen.putExtra("status", "ready");
+        Intent callScreen = new Intent(this, OutgoingChatActivity.class);
         callScreen.putExtras(bundle);
         startActivity(callScreen);
     }

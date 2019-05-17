@@ -254,7 +254,7 @@ public class ChatServiceOld { /*extends Service {
         public void onIncomingChat(Socket socket, Object... args) {
             String msg = (String) args[0];
             //if (!msg.equals("me"))
-            Intent intent = new Intent(ChatServiceOld.this, ChatActivity.class);
+            Intent intent = new Intent(ChatServiceOld.this, ChatActivityOld.class);
             //intent.putExtra("fragment", ContactActivity.CHAT);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

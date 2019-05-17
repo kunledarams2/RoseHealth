@@ -19,6 +19,7 @@ import com.ahamed.multiviewadapter.RecyclerAdapter;
 import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.binder.PrescriptionBinder;
 import com.tremendoc.tremendocdoctor.model.Prescription;
+import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 import com.tremendoc.tremendocdoctor.viewmodel.PrescriptionViewModel;
 
 import androidx.annotation.Nullable;
@@ -73,13 +74,16 @@ public class Prescriptions extends Fragment {
             retry();
         });
 
-
         searchField.setOnEditorActionListener((textView, i, keyEvent) -> {
             boolean handled = false;
             if (i == EditorInfo.IME_ACTION_SEARCH) {
-                String value = searchField.getText().toString();
-                if (!TextUtils.isEmpty(value.trim())) {
+                String query = searchField.getText().toString();
+                if (!TextUtils.isEmpty(query) && query.length() > 2) {
                     handled = true;
+                    Log.d("SEARCH", "_--__--- Search " + query);
+                    search(query);
+                } else {
+                    ToastUtil.showShort(getContext(), "Please enter at least three characters.");
                 }
             }
             return handled;
@@ -154,5 +158,13 @@ public class Prescriptions extends Fragment {
         viewModel.refresh(page);
     }
 
+
+    private void search(String query) {
+        emptyIcon.setVisibility(View.GONE);
+        emptyText.setVisibility(View.GONE);
+        retryBtn.setVisibility(View.GONE);
+        loader.setVisibility(View.VISIBLE);
+        viewModel.search(query);
+    }
 
 }

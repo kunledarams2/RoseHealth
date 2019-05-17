@@ -72,5 +72,9 @@
         <!-- inactive track color (30% transparency) -->
         <item name="android:colorForeground">#42221f1f</item>
     </style>
+    Theme_Holo_Dialog
+    <style name="DatepickerTheme" parent="@android:style/Theme.Holo.Light.Dialog">
+
+    </style>
 
 </resources>

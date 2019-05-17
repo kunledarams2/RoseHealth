@@ -38,4 +38,10 @@ public class PrescriptionViewModel extends AndroidViewModel {
         return mediatorLiveData;
     }
 
+    public void search(String query) {
+        mediatorLiveData.removeSource(prescriptionsResult);
+        prescriptionsResult = PrescriptionRepository.getInstance(application.getApplicationContext()).search( query);
+        mediatorLiveData.addSource(prescriptionsResult, mediatorLiveData::setValue);
+    }
+
 }

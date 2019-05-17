@@ -3,6 +3,7 @@ package com.tremendoc.tremendocdoctor.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -99,7 +100,11 @@ public class Dashboard  extends Fragment {
 
         doctorName.setText(data.get(API.FIRST_NAME) + " " + data.get(API.LAST_NAME));
 
-        Picasso.get().load(API.getCredentials(getContext()).get(API.IMAGE)).into(doctorAvatar);
+        Picasso.get()
+                .load(API.getCredentials(getContext()).get(API.IMAGE))
+                .error(R.drawable.ic_account)
+                .placeholder(R.drawable.ic_account)
+                .into(doctorAvatar);
 
         //Earnings
         earningPlaceholder = view.findViewById(R.id.earnings_placeholder);
@@ -130,9 +135,13 @@ public class Dashboard  extends Fragment {
         tipSummary = view.findViewById(R.id.health_tip_content);
         Button newTipBtn = view.findViewById(R.id.new_tip_btn);
         newTipBtn.setOnClickListener(btn -> {
-            if (tipDialog == null)
-                tipDialog = new NewTipDialog(getActivity());
-            tipDialog.show();
+            //if (tipDialog == null)
+            //    tipDialog = new NewTipDialog(getActivity());
+            //tipDialog.show();
+            new AlertDialog.Builder(getContext())
+                    .setMessage("Coming soon ...")
+                    .setPositiveButton("Ok", (dialog, i) -> dialog.cancel())
+                    .show();
         });
 
         LinearLayout ratingView = view.findViewById(R.id.rating);

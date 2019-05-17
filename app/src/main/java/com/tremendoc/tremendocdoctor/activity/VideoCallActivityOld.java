@@ -3,7 +3,6 @@ package com.tremendoc.tremendocdoctor.activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,13 +17,12 @@ import android.widget.Toast;
 import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.api.StringCall;
 import com.tremendoc.tremendocdoctor.api.URLS;
-import com.tremendoc.tremendocdoctor.databinding.ActivityVideoCallBinding;
+//import com.tremendoc.tremendocdoctor.databinding.ActivityVideoCallBinding;
 import com.tremendoc.tremendocdoctor.dialog.NewNoteDialog;
 import com.tremendoc.tremendocdoctor.model.CallLog;
 import com.tremendoc.tremendocdoctor.utils.AudioPlayer;
 import com.tremendoc.tremendocdoctor.utils.CallConstants;
 import com.tremendoc.tremendocdoctor.utils.Formatter;
-import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 import com.tremendoc.tremendocdoctor.utils.UI;
 import com.sinch.android.rtc.AudioController;
@@ -51,8 +49,8 @@ import java.util.TimerTask;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
-public class VideoCallActivity extends BaseActivity implements View.OnClickListener {
-    static final String TAG = VideoCallActivity.class.getSimpleName();
+public class VideoCallActivityOld extends BaseActivity implements View.OnClickListener {
+    static final String TAG = VideoCallActivityOld.class.getSimpleName();
     static final String ADDED_LISTENER = "addedListener";
     static final String VIEWS_TOGGLED = "viewsToggled";
 
@@ -82,13 +80,13 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
     private boolean answered = false;
 
 
-    ActivityVideoCallBinding activityVideoCallBinding;
+    //ActivityVideoCallBinding activityVideoCallBinding;
 
     private class UpdateCallDurationTask extends TimerTask {
 
         @Override
         public void run() {
-            VideoCallActivity.this.runOnUiThread(() -> updateCallDuration());
+            VideoCallActivityOld.this.runOnUiThread(() -> updateCallDuration());
         }
     }
 
@@ -108,8 +106,8 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_video_call);a
-        activityVideoCallBinding = DataBindingUtil.setContentView(this, R.layout.activity_video_call);
+        //setContentView(R.layout.activity_video_call_old);a
+        //activityVideoCallBinding = DataBindingUtil.setContentView(this, R.layout.activity_video_call_old);
         mAudioPlayer = new AudioPlayer(this);
         setViews();
 
@@ -210,11 +208,12 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         DatePickerDialog pick = new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH));
+        /*
         if (view == activityVideoCallBinding.prescriptionDialog.startDateField){
             pick.getDatePicker().setTag(4);
         } else if (view == activityVideoCallBinding.prescriptionDialog.endDateField) {
             pick.getDatePicker().setTag(5);
-        }
+        } */
 
         pick.show();
     }
@@ -223,27 +222,27 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
         String myFormat = "yyyy/MM/dd"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        if (viewToUpdate.equals("Start")){
+        /*if (viewToUpdate.equals("Start")){
             activityVideoCallBinding.prescriptionDialog.startDateField.setText(sdf.format(myCalendar.getTime()));
         } else if (viewToUpdate.equals("End")) {
             activityVideoCallBinding.prescriptionDialog.endDateField.setText(sdf.format(myCalendar.getTime()));
-        }
+        } */
     }
 
     public void writePrescription(View view){
-        showView(activityVideoCallBinding.prescriptionDialog.getRoot());
+        /*showView(activityVideoCallBinding.prescriptionDialog.getRoot());
         activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationIcon(R.drawable.ic_close_white);
         activityVideoCallBinding.prescriptionDialog.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
-                hideKeyboard(VideoCallActivity.this);
+                hideKeyboard(VideoCallActivityOld.this);
             }
-        });
+        }); */
     }
 
     public void clickSavePrescription(View view){
-        String dosage = activityVideoCallBinding.prescriptionDialog.dosagesField.getText().toString();
+        /*String dosage = activityVideoCallBinding.prescriptionDialog.dosagesField.getText().toString();
         String startDate = activityVideoCallBinding.prescriptionDialog.startDateField.getText().toString();
         String endDate = activityVideoCallBinding.prescriptionDialog.endDateField.getText().toString();
         String medication = activityVideoCallBinding.prescriptionDialog.medicationField.getText().toString();
@@ -259,12 +258,12 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             ToastUtil.showLong(this, "You haven't entered the date this prescription ends");
         } else {
             savePresription(dosage, medication, startDate, endDate, reason, instruction);
-        }
+        }*/
     }
 
     private void savePresription(String dosage, String medication, String startDate, String endDate, String reason, String instruction) {
-        hideKeyboard(VideoCallActivity.this);
-        activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.VISIBLE);
+        hideKeyboard(VideoCallActivityOld.this);
+        //activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.VISIBLE);
         //isBusy = true;
         Context ctx = this;
 
@@ -285,7 +284,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
         StringCall call = new StringCall(ctx);
         call.post(URLS.SAVE_PRESCRIPTION, params, response -> {
-            activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.INVISIBLE);
+            //activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.INVISIBLE);
             //isBusy = false;
 
             try {
@@ -293,7 +292,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
                 if (resObj.has("code") &&  resObj.getInt("code") == 0) {
                     //ToastUtil.showLong(ctx, "Prescription saved successfully");
                     Toast.makeText(ctx, "Prescription saved successfully", Toast.LENGTH_LONG).show();
-                    hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
+                    //hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
                     //cancel();
                 } else if (resObj.has("description")) {
                     ToastUtil.showModal(ctx, resObj.getString("description"));
@@ -303,7 +302,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             }
 
         }, error -> {
-            activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.INVISIBLE);
+            //activityVideoCallBinding.prescriptionDialog.progressBar.setVisibility(View.INVISIBLE);
             //isBusy = false;
             log("VOLLEY ERROR");
             log(error.getMessage());
@@ -409,11 +408,11 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        if (activityVideoCallBinding.prescriptionDialog.getRoot().getVisibility() == View.VISIBLE){
+        /*if (activityVideoCallBinding.prescriptionDialog.getRoot().getVisibility() == View.VISIBLE){
             hideView(activityVideoCallBinding.prescriptionDialog.getRoot());
         } else {
             // User should exit activity by ending call, not by going back.
-        }
+        }  */
     }
 
     private void endCall() {
@@ -597,7 +596,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
                     String patientToken = getIntent().getStringExtra(CallLog.PATIENT_TOKEN);
                     String doctorToken = getIntent().getStringExtra(CallLog.DOCTOR_TOKEN);
 
-                    CallLog callLog = new CallLog(VideoCallActivity.this);
+                    CallLog callLog = new CallLog(VideoCallActivityOld.this);
                     callLog.set(CallLog.TIME, time);
                     callLog.set(CallLog.PATIENT_ID, patientId);
                     callLog.set(CallLog.CALL_TYPE, "VIDEO");
@@ -618,7 +617,7 @@ public class VideoCallActivity extends BaseActivity implements View.OnClickListe
             if (getIntent().getBooleanExtra("incoming", false)) {
                 finish();
             } else {
-                Intent intent = new Intent(VideoCallActivity.this, MainActivity.class);
+                Intent intent = new Intent(VideoCallActivityOld.this, MainActivity.class);
                 intent.putExtra("fragment", MainActivity.CALL_LOGS);
                 startActivity(intent);
             }

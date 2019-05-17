@@ -25,11 +25,10 @@ public class URLS {
     public static final String SAVE_CALENDAR = SERVER + "calendar/add";
     public static final String CALENDAR_RETRIEVE = SERVER + "calendar/retrieve/";
 
-
     public static String UPDATE_CONSULTATION = SERVER + "consultation/update";
 
-
     public static final String PRESCRIPTIONS = SERVER + "prescriptions/doctor/";
+    public static final String PRESCRIPTION_SEARCH = SERVER + "prescriptions/search/";
 
     public static final String MEDICAL_RECORD = SERVER + "customer/profile";
 
@@ -38,7 +37,6 @@ public class URLS {
     public static String APPOINTMENTS = SERVER + "appointments/retrieve/";
     public static String INITIATE_CONSULTATION = SERVER + "consultation/initiate";
     public static final String CHAT = SERVER + "pusher/message/send";
-
     public static final String PUSH_TOKEN = SERVER + "push/pushtoken/add";
 
 }

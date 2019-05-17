@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.squareup.picasso.Picasso;
 import com.tremendoc.tremendocdoctor.api.API;
+import com.tremendoc.tremendocdoctor.callback.MyCallback;
 import com.tremendoc.tremendocdoctor.dialog.StatusDialog;
 import com.tremendoc.tremendocdoctor.fragment.CallLogs;
 import com.tremendoc.tremendocdoctor.fragment.Prescriptions;
@@ -156,8 +157,7 @@ public class MainActivity extends BaseActivity
             this.changeView(Notifications.newInstance());
             this.setTitle("Notifications");
         } else if (id == R.id.nav_signout) {
-            API.logout(this);
-            changeView(AuthActivity.class);
+            API.logout(this, () -> changeView(AuthActivity.class));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

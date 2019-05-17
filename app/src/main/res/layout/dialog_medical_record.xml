@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <RelativeLayout android:id="@+id/profile"
+    <!--RelativeLayout android:id="@+id/profile"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         android:background="@drawable/background_white"
         android:visibility="gone"
@@ -91,7 +91,7 @@
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </RelativeLayout>
+    </RelativeLayout-->
 
     <ScrollView android:id="@+id/scrollView"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"

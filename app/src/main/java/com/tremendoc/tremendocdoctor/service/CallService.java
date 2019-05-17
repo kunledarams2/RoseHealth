@@ -1,18 +1,15 @@
 package com.tremendoc.tremendocdoctor.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.Messenger;
-import android.os.RemoteException;
 import android.util.Log;
 
-import com.tremendoc.tremendocdoctor.activity.VideoCallActivity;
-import com.tremendoc.tremendocdoctor.activity.VoiceCallActivity;
+import com.tremendoc.tremendocdoctor.activity.IncomingCallActivity;
+import com.tremendoc.tremendocdoctor.activity.VideoCallActivityOld;
 import com.tremendoc.tremendocdoctor.api.API;
 import com.tremendoc.tremendocdoctor.api.StringCall;
 import com.tremendoc.tremendocdoctor.api.URLS;
@@ -24,7 +21,6 @@ import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
-import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.NotificationResult;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
@@ -34,6 +30,7 @@ import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 import com.sinch.android.rtc.video.VideoController;
+import com.tremendoc.tremendocdoctor.utils.UI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,38 +115,6 @@ public class CallService extends Service {
                 log("Sinch client failed to start");
             }
         }
-
-        /*try {
-            mSinchClient.checkManifest();
-        } catch (MissingPermissionException e) {
-            log("permission exception " + e.getMessage());
-            permissionGranted = false;
-            if (messenger != null) {
-                log("messanger is not null");
-                Message message = Message.obtain();
-                Bundle bundle = new Bundle();
-                bundle.putString(REQUIRED_PERMISSION, e.getRequiredPermission());
-                message.setData(bundle);
-                message.what = MESSAGE_PERMISSIONS_NEEDED;
-
-                try {
-                    messenger.send(message);
-                } catch (RemoteException re) {
-                    log("messanger.send error " + re.getMessage());
-                    re.printStackTrace();
-                }
-            } else {
-                log("messanger is null");
-            }
-        }
-
-        if (permissionGranted) {
-            Log.d(TAG, "Starting SinchClient");
-            mSinchClient.start();
-            ToastUtil.showLong(this, "CLIENT STARTED");
-        } else {
-            log("Permission not granted");
-        } */
     }
 
     private void stop() {
@@ -323,6 +288,7 @@ public class CallService extends Service {
         @Override
         public void onClientStarted(SinchClient sinchClient) {
             Log.d(TAG, "SinchClient started");
+            UI.createNotification(CallService.this, "Tremendoc Doctor", "You are currently online and can receive calls.");
             if (mListener != null) {
                 mListener.onStarted();
             }
@@ -331,6 +297,8 @@ public class CallService extends Service {
         @Override
         public void onClientStopped(SinchClient sinchClient) {
             Log.d(TAG, "SinchClient stopped");
+            CallService.this.stopForeground(true);
+            //CallService.this.stopForeground(1);
         }
 
         @Override
@@ -364,8 +332,7 @@ public class CallService extends Service {
         @Override
         public void onIncomingCall(CallClient callClient, Call call) {
             log( "onIncomingCall: " + call.getCallId());
-            Intent intent = new Intent(CallService.this, call.getDetails().isVideoOffered() ?
-                    VideoCallActivity.class : VoiceCallActivity.class);
+            Intent intent = new Intent(CallService.this, IncomingCallActivity.class);
 
             Map<String, String> payload = call.getHeaders();
 

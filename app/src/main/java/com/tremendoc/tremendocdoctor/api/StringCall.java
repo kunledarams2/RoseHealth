@@ -5,6 +5,7 @@ import android.util.Log;
 
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
@@ -48,6 +49,33 @@ public class StringCall {
         mApi.getRequestQueue().add(request);
     }
 
+    public void get(String url, Map params, boolean shouldCache, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        String tag = mApi.getTag(url, "get");
+        if (null != params) {
+            url = mApi.buildParams(url, params);
+        }
+        StringRequest request = new StringRequest(Request.Method.GET, url, listener, errorListener){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map map = new HashMap();
+                map.put("Accept", "application/json");
+                if (API.isLoggedIn(mApi.getContext())) {
+                    String token = API.getSessionId(mApi.getContext());
+                    map.put("sessionid", token);
+                    //map.put("Authorization", token);
+                    Log.d("SESSION_ID", token);
+                }
+                //map.put("Content-Type", "application/x-www-form-urlencoded");
+                return map;
+            }
+
+        };
+        request.setTag(tag);
+        request.setShouldCache(shouldCache);
+        mApi.getRequestQueue().add(request);
+    }
+
+
     public void post(String url, final Map params, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         StringRequest request = new StringRequest(Request.Method.POST, url, listener, errorListener){
             @Override
@@ -71,6 +99,13 @@ public class StringCall {
         };
         String tag = mApi.getTag(url, "post");
         request.setTag(tag);
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        500000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                )
+        );
         mApi.getRequestQueue().add(request);
     }
 

@@ -65,6 +65,18 @@
                     android:layout_height="match_parent" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <Button android:id="@+id/save_btn"
+                android:text="Save"
+                android:textAllCaps="false"
+                android:onClick="clickSavePrescription"
+                android:background="@drawable/rounded_btn_background"
+                android:layout_below="@+id/treatments_wrapper"
+                android:layout_marginTop="@dimen/size_40"
+                android:textColor="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </RelativeLayout>
     </ScrollView>
 

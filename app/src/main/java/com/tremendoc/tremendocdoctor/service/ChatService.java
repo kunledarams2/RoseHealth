@@ -11,12 +11,11 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.tremendoc.tremendocdoctor.activity.ChatActivity;
+import com.tremendoc.tremendocdoctor.activity.IncomingCallActivity;
 import com.tremendoc.tremendocdoctor.api.API;
 import com.tremendoc.tremendocdoctor.api.StringCall;
 import com.tremendoc.tremendocdoctor.api.URLS;
 import com.tremendoc.tremendocdoctor.model.CallLog;
-import com.tremendoc.tremendocdoctor.utils.CallConstants;
 import com.tremendoc.tremendocdoctor.utils.DeviceName;
 import com.tremendoc.tremendocdoctor.utils.Formatter;
 import com.tremendoc.tremendocdoctor.utils.IO;
@@ -61,9 +60,9 @@ public class ChatService extends Service {
                 bundle.putString(key, payload.get(key));
             }
             bundle.putBoolean("incoming", true);
+            bundle.putString(CallLog.CALL_TYPE, "CHAT");
 
-            //IO.setData(ChatService.this, CALL_TYPE, IncomingCallActivity.CHAT);
-            Intent intent = new Intent(ChatService.this, ChatActivity.class);
+            Intent intent = new Intent(ChatService.this, IncomingCallActivity.class);
             intent.putExtras(bundle);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

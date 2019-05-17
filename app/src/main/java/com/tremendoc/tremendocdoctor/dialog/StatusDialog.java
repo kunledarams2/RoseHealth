@@ -70,7 +70,7 @@ public class StatusDialog extends Dialog {
         StringCall call = new StringCall(getContext());
         Map<String, String> params = new HashMap<>();
         params.put("mode", status ? "ONLINE" : "OFFLINE");
-        call.get(URLS.ONLINE_STATUS, params, response -> {
+        call.get(URLS.ONLINE_STATUS, params, false, response -> {
             log(response);
             try {
                 JSONObject object = new JSONObject(response);

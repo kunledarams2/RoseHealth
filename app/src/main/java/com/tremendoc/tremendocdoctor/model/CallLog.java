@@ -1,10 +1,10 @@
 package com.tremendoc.tremendocdoctor.model;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.tremendoc.tremendocdoctor.utils.IO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +27,8 @@ public class CallLog {
     public static final String DOCTOR_TOKEN = "doctorToken";
 
     private static final String COUNT = "count";
+
+    private static final String CALL_LOG_STORE = "com.tremendoc.trmendocdoctor.CALL_LOGS";
 
     private int count;
     private Bundle bundle;
@@ -118,7 +120,7 @@ public class CallLog {
     } */
 
     public void save() throws JSONException{
-        String string = IO.getData(context, CALL_LOGS);
+        String string = getData(context);
         if (string.length() < 2)
             string = "[]";
 
@@ -141,7 +143,7 @@ public class CallLog {
                 log.put("count", count);
                 callLogs.remove(i);
                 callLogs.put(log);
-                IO.setData(context, CALL_LOGS, callLogs.toString());
+                saveData(callLogs.toString());
                 return;
             }
         }
@@ -154,11 +156,24 @@ public class CallLog {
         log.put(COUNT, 1);
         callLogs.put(log);
 
-        //if length is more than 15, remove the first call
-        if (callLogs.length() > 15)
+        //if length is more than 40, remove the first call
+        if (callLogs.length() > 40)
             callLogs.remove(0);
 
-        IO.setData(context, CALL_LOGS, callLogs.toString());
+        saveData(callLogs.toString());
+    }
+
+    private void saveData(String value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(CALL_LOG_STORE, Context.MODE_PRIVATE).edit();
+        editor.putString(CALL_LOGS, value);
+        editor.apply();
+    }
+
+    private static String getData(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(CALL_LOG_STORE, Context.MODE_PRIVATE);
+        String string = prefs.getString(CALL_LOGS,"");
+        return string;
+
     }
 
     /*
@@ -213,7 +228,7 @@ public class CallLog {
 
     public static List<CallLog> getCallLogs(Context context) throws JSONException {
         List<CallLog> logs = new ArrayList<>();
-        String string = IO.getData(context, CALL_LOGS);
+        String string = getData(context);
         Log.d("CallLog", "Call logs string " + string);
         if (string.length() < 2)
             string = "[]";

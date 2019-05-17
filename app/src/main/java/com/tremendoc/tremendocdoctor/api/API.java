@@ -14,6 +14,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.tremendoc.tremendocdoctor.callback.MyCallback;
 import com.tremendoc.tremendocdoctor.utils.Formatter;
 import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.ToastUtil;
@@ -53,7 +54,8 @@ public class API {
     private API(Context context) {
         this.context = context;
         this.requestQueue = getRequestQueue();
-        imageLoader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
+
+        /*imageLoader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> cache = new LruCache<>(20);
             @Override
             public Bitmap getBitmap(String url) {
@@ -64,7 +66,7 @@ public class API {
             public void putBitmap(String url, Bitmap bitmap) {
                 cache.put(url, bitmap);
             }
-        });
+        }); */
     }
 
     public static synchronized API getInstance(Context context) {
@@ -254,11 +256,36 @@ public class API {
         return prefs.getString(SESSION_ID, "");
     }
 
-    public static void logout(Context context) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE).edit();
-        editor.clear();
-        editor.commit();
+    public static void logout(Context context, MyCallback callback) {
+        StringCall call = new StringCall(context);
+        Map<String, String> params = new HashMap<>();
+        params.put("mode", "OFFLINE");
+        call.get(URLS.ONLINE_STATUS, params, false, response -> {
+            try {
+                JSONObject object = new JSONObject(response);
+                if (object.has("code") && object.getInt("code") == 0) {
+                    SharedPreferences.Editor editor = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE).edit();
+                    editor.clear();
+                    editor.commit();
+                    callback.onCalled();
+                } else {
+                    ToastUtil.showLong(context, object.getString("description"));
+                }
+            }catch (JSONException e) {
+            }
+        }, error -> {
+            if (error.networkResponse == null) {
+                ToastUtil.showModal(context, "Please check your internet connection");
+            } else {
+                Log.d("Logout Error", "DATA: " + Formatter.bytesToString(error.networkResponse.data));
+            }
+        });
     }
+
+    private void setOnline(boolean status) {
+    }
+
+
 
     public static String getDoctorId(Context ctx) {
         SharedPreferences prefs = ctx.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE);
