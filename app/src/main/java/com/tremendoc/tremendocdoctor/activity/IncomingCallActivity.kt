@@ -62,6 +62,10 @@ class IncomingCallActivity : BaseActivity() {
 
             call.addCallListener(SinchCallListener())
             label.text = "Incoming ${mCallType?.toLowerCase()} call from $mPatientName"
+
+            val consultationId= intent.getStringExtra(CallLog.CONSULTATION_ID)
+            sinchServiceInterface.setOngoing(consultationId,"DOCTOR_RANG")
+
         } else if (mCallType == "CHAT") {
             chatListener = MyChatListener()
             chatServiceInterface?.setChatListener(chatListener)
@@ -92,7 +96,7 @@ class IncomingCallActivity : BaseActivity() {
             val call: Call? = sinchServiceInterface.getCall(mCallId)
             if (call != null) {
                 call.answer()
-                sinchServiceInterface.setOngoing(consultationId)
+                sinchServiceInterface.setOngoing(consultationId,"ONGOING")
 
                 var callScreen: Intent? = null
                 when (mCallType) {
@@ -129,6 +133,7 @@ class IncomingCallActivity : BaseActivity() {
         if (mCallType == "VIDEO" || mCallType == "AUDIO") {
             val call = sinchServiceInterface.getCall(mCallId)
             call?.hangup()
+            sinchServiceInterface.setOngoing(consultationId,"DOCTOR_REJECTED")
         } else if (mCallType == "CHAT") {
             chatServiceInterface.endChat(mPatientToken, "rejected")
         }
@@ -170,6 +175,7 @@ class IncomingCallActivity : BaseActivity() {
             val cause = call?.details?.endCause
             Log.d("IncomingCallActivity", "Call ended cause: ${cause?.toString()}")
             mAudioPlayer?.stopRingtone()
+//            sinchServiceInterface.updateConsultation(consultationId,call)
 
             logCall()
 
@@ -185,6 +191,8 @@ class IncomingCallActivity : BaseActivity() {
 
         override fun onCallProgressing(call: Call?) {
             Log.d("IncomingCallActivity", "Call progressing")
+
+
         }
 
         override fun onShouldSendPushNotification(p0: Call?, p1: MutableList<PushPair>?) {
@@ -219,4 +227,10 @@ class IncomingCallActivity : BaseActivity() {
 
         }
     }
+    private fun updateConsultiation(){
+
+        val params:Map<String, String>
+
+    }
+
 }

@@ -639,7 +639,7 @@ public class VideoCallActivityOld extends BaseActivity implements View.OnClickLi
                 setVideoViewsVisibility(true, true);
             }
             Log.d(TAG, "Call offered video: " + call.getDetails().isVideoOffered());
-            getSinchServiceInterface().setOngoing(consultationId);
+            getSinchServiceInterface().setOngoing(consultationId,"ONGOING");
         }
 
         @Override

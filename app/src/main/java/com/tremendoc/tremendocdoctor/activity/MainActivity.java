@@ -205,6 +205,7 @@ public class MainActivity extends BaseActivity
                 setTitle("Notifications");
                 break;*/
             case CALL_LOGS:
+//                changeView(CallLogs.class);
                 fragment = CallLogs.newInstance();
                 setTitle("Call Logs");
                 break;

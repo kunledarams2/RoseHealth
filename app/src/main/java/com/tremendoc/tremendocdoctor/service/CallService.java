@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.os.Messenger;
 import android.util.Log;
 
+import com.sinch.android.rtc.calling.CallEndCause;
 import com.tremendoc.tremendocdoctor.activity.IncomingCallActivity;
 import com.tremendoc.tremendocdoctor.activity.VideoCallActivityOld;
 import com.tremendoc.tremendocdoctor.api.API;
@@ -32,6 +33,7 @@ import com.sinch.android.rtc.calling.CallClientListener;
 import com.sinch.android.rtc.video.VideoController;
 import com.tremendoc.tremendocdoctor.utils.UI;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -245,10 +247,10 @@ public class CallService extends Service {
             return mSinchClient.relayRemotePushNotificationPayload(payload);
         }
 
-        public void setOngoing(String consultationId) {
+        public void setOngoing(String consultationId ,String currentStatus) {
             Map<String, String> params = new HashMap<>();
             params.put("consultationId", consultationId);
-            params.put("status", "ONGOING");
+            params.put("status", currentStatus);
 
             StringCall apiCall = new StringCall(CallService.this);
             apiCall.post(URLS.UPDATE_CONSULTATION, params, response -> {
@@ -263,6 +265,50 @@ public class CallService extends Service {
                     Log.d("updateConsultation err", Formatter.bytesToString(error.networkResponse.data));
                 }
             });
+
+        }
+
+        public void updateConsultation(String consultationId, Call call){
+
+            CallEndCause cause= call.getDetails().getEndCause();
+            ConsultationStatus status = null;
+            if(cause==CallEndCause.NO_ANSWER){
+                status=ConsultationStatus.CUSTOMER_MISSED_CALL;
+
+            }
+            else if(cause==CallEndCause.CANCELED){
+                status =ConsultationStatus.DOCTOR_REJECTED;
+            }
+           else if(cause==CallEndCause.DENIED){
+                status = ConsultationStatus.CUSTOMER_REJECTED;
+            }
+
+            else if(cause==CallEndCause.HUNG_UP){
+                status=ConsultationStatus.DOCTOR_END_CALL; // factor based on doctor submitted doctor note of prescription
+            }
+            else {
+                status=ConsultationStatus.TERMINATED;
+            }
+
+            Map<String, String> params = new HashMap<>();
+            params.put("consultationId",consultationId);
+            params.put("status", String.valueOf(status));
+
+            StringCall apiCall = new StringCall(CallService.this);
+            apiCall.post(URLS.UPDATE_CONSULTATION,params,response -> {
+                log("Consultation Update----___" + response);
+            },  error -> {
+                if(error.getMessage()!=null){
+                    log("Error from consultation update" + error.getMessage());
+
+                }
+                if (error.networkResponse == null) {
+                    Log.d("updateConsulation error", "Network response is null. No network connection");
+                } else {
+                    Log.d("updateConsultation err", Formatter.bytesToString(error.networkResponse.data));
+                }
+            });
+
 
         }
 

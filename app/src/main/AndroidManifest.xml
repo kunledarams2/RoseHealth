@@ -29,7 +29,8 @@
         android:supportsRtl="true"
         android:theme="@style/TremendocTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.OutgoingChatActivity"></activity>
+        <!--<activity android:name=".activity.CallLog"></activity>-->
+        <activity android:name=".activity.OutgoingChatActivity" />
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.VideoCallActivity" />
         <activity android:name=".activity.AudioCallActivity" />
@@ -93,6 +94,8 @@
         <activity android:name=".activity.AppointmentActivity" />
         <activity android:name=".activity.RoutingActivity" />
         <activity android:name=".activity.ScheduleActivity" />
+
+
     </application>
 
 </manifest>

@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.sinch.android.rtc.AudioController
 import com.sinch.android.rtc.PushPair
 import com.sinch.android.rtc.calling.Call
@@ -16,6 +18,7 @@ import com.tremendoc.tremendocdoctor.dialog.MedicalRecordDialog
 import com.tremendoc.tremendocdoctor.dialog.NewNoteDialog
 import com.tremendoc.tremendocdoctor.dialog.NoteDialog
 import com.tremendoc.tremendocdoctor.dialog.PrescriptionDialog
+import com.tremendoc.tremendocdoctor.fragment.CallLogs
 import com.tremendoc.tremendocdoctor.model.CallLog
 import com.tremendoc.tremendocdoctor.utils.AudioPlayer
 import com.tremendoc.tremendocdoctor.utils.CallConstants
@@ -36,6 +39,7 @@ class AudioCallActivity : BaseActivity() {
 
     private var mTimer: Timer? = null
     private var mDurationTask: UpdateCallDurationTask? = null
+    private var currentFragment:Fragment?= null
 
 
     private inner class UpdateCallDurationTask : TimerTask() {
@@ -143,12 +147,22 @@ class AudioCallActivity : BaseActivity() {
         mAudioPlayer?.stopProgressTone()
         val call: Call? = sinchServiceInterface.getCall(mCallId)
         call?.hangup()
+        sinchServiceInterface.updateConsultation(mConsultationId,call)
+
 
         val v = Intent(this@AudioCallActivity, MainActivity::class.java)
         v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(v)
         finish()
     }
+
+    private fun changeView(fragment: Fragment){
+        currentFragment= fragment
+        val fragmentTransitionSupport= supportFragmentManager.beginTransaction()
+        fragmentTransitionSupport.replace(R.id.activeView,fragment)
+        fragmentTransitionSupport.commit()
+    }
+
 
     private fun toggleMute(mAudioPlayer: AudioPlayer?) {
         if (mAudioPlayer != null) {
@@ -228,6 +242,7 @@ class AudioCallActivity : BaseActivity() {
         override fun onCallEstablished(p0: Call?) {
             log("Call established")
             mAudioPlayer?.stopProgressTone()
+            call_status.text="Connected"
             volumeControlStream = AudioManager.STREAM_VOICE_CALL
             val audioController: AudioController = sinchServiceInterface.audioController
             audioController.disableSpeaker()
@@ -235,6 +250,7 @@ class AudioCallActivity : BaseActivity() {
 
         override fun onCallProgressing(p0: Call?) {
             mAudioPlayer?.playProgressTone()
+            call_status?.text="Ringing"
         }
 
         override fun onShouldSendPushNotification(p0: Call?, p1: MutableList<PushPair>?) {

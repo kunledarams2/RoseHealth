@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 public abstract class FragmentActivity  extends BaseActivity implements FragmentChanger {
-    public enum FragmentType { Login,  ForgotPassword, ResetPassword}
+    public enum FragmentType { Login,  ForgotPassword, ResetPassword, CallLogs}
 
     private void changeView(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

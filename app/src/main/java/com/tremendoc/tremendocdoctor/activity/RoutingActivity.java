@@ -113,6 +113,9 @@ public class RoutingActivity extends BaseActivity {
         callScreen.putExtra(CallConstants.CALL_ID, callId);
         callScreen.putExtras(bundle);
         startActivity(callScreen);
+        getSinchServiceInterface().setOngoing(CallLog.CONSULTATION_ID,"DOCTOR_RETURNED_CALL");
+
+//        getSinchServiceInterface().updateConsultation();
     }
 
     public void placeVideoCall(Bundle bundle) {

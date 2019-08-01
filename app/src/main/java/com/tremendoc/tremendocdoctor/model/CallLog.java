@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CallLog {
 
-    private static final String CALL_LOGS = "CallLogs";
+    private static final String CALL_LOGS = "CallLog";
 
     public static final String PATIENT_ID = "patientId";
     public static final String PATIENT_NAME = "patientName";

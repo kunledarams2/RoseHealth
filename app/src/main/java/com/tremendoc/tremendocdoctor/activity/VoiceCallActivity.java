@@ -460,6 +460,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             Log.d(TAG, "Call ended, cause: " + cause.toString());
             mAudioPlayer.stopRingtone();
             mAudioPlayer.stopProgressTone();
+//            getSinchServiceInterface().updateConsultation(consultationId,call);
 
             if (!answered && !createdLog && getIntent() != null && getIntent().getBooleanExtra("incoming", false)) {
                 log("CREATE CALL LOG");
@@ -505,7 +506,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
             controller.unmute();
             mAudioPlayer.stopRingtone();
             mAudioPlayer.stopProgressTone();
-            getSinchServiceInterface().setOngoing(consultationId);
+            getSinchServiceInterface().setOngoing(consultationId , "ONGOING");
         }
 
         @Override
