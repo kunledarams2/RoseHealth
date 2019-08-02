@@ -284,7 +284,7 @@ public class CallService extends Service {
             }
 
             else if(cause==CallEndCause.HUNG_UP){
-                status=ConsultationStatus.DOCTOR_END_CALL; // factor based on doctor submitted doctor note of prescription
+                status=ConsultationStatus.END_CALL; // factor based on doctor submitted doctor note of prescription
             }
             else {
                 status=ConsultationStatus.TERMINATED;
