@@ -81,8 +81,11 @@ public class Appointment {
         String time = "";
         if (hour > 12 ) {
             time += hour - 12;
+        } else {
+            time += hour;
         }
-        time += hour + ":" + (minute.length() == 1 ? "0" + minute : minute);
+
+        time += ":" + (minute.length() == 1 ? "0" + minute : minute);
         if (hour > 11) {
             time += " pm";
         } else {

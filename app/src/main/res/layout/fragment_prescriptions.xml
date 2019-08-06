@@ -11,10 +11,21 @@
         android:layout_margin="10dp"
         android:hint="@string/search_patient_s_username"
         android:paddingStart="15dp"
-        android:lines="1"
+        android:maxLines="1"
         android:textSize="@dimen/font_14"
         android:paddingEnd="15dp"
-        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_search"
+        android:layout_width="0dp"
+        android:layout_height="50dp" />
+
+    <ImageButton android:id="@+id/btn_search"
+        android:src="@drawable/ic_search_black"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:layout_width="50dp"
         android:layout_height="50dp" />
 
     <include layout="@layout/placeholder_layout"

@@ -464,7 +464,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
 
             if (!answered && !createdLog && getIntent() != null && getIntent().getBooleanExtra("incoming", false)) {
                 log("CREATE CALL LOG");
-                UI.createNotification(getApplicationContext(), patientName);
+                UI.notifyMissedCall(getApplicationContext(), patientName);
                 try {
                     String time = DateTime.now().toString();
                     String uuid =  getIntent().getExtras().getString(CallLog.PATIENT_UUID);

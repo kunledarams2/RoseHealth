@@ -3,11 +3,9 @@ package com.tremendoc.tremendocdoctor.api;
 import com.tremendoc.tremendocdoctor.BuildConfig;
 
 public class URLS {
-//    private static final String IP = BuildConfig.DEBUG ? "138.68.159.246" : "178.128.8.26";
 
-    private static final String IP = BuildConfig.DEBUG ? "188.166.14.154" : "188.166.14.154";
-//    private static final String IP = BuildConfig.DEBUG ? "192.168.88.30" : "192.168.88.30";
-
+    private static final String IP = BuildConfig.DEBUG ? "188.166.14.154" : "178.128.8.26";
+    //private static final String IP = /*BuildConfig.DEBUG ?  "188.166.14.154" /*"138.68.159.246"* :*/ "178.128.8.26";
     public static final String SERVER = "http://" + IP + ":9000/tremendoc/api/";
 
     public static String USER_LOGIN = SERVER + "doctor/authenticate";

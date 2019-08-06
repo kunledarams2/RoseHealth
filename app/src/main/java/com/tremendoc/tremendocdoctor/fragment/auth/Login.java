@@ -29,6 +29,7 @@ import com.tremendoc.tremendocdoctor.callback.FragmentChanger;
 import com.tremendoc.tremendocdoctor.dialog.ProgressDialog;
 import com.tremendoc.tremendocdoctor.utils.DeviceName;
 import com.tremendoc.tremendocdoctor.utils.Formatter;
+import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.Permission;
 import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 import com.google.android.material.textfield.TextInputEditText;
@@ -124,7 +125,8 @@ public class Login extends Fragment implements View.OnClickListener {
             params.put("password", _password);
             params.put("brand", Build.BRAND);
             params.put("operatingSystem", "ANDROID");
-            params.put("uuid", DeviceName.getUUID(getContext()));
+            String myUUID = API.getUUID(getContext());
+            params.put("uuid", myUUID);
 
             StringCall call = new StringCall(getContext());
             call.post(URLS.USER_LOGIN, params, response -> {

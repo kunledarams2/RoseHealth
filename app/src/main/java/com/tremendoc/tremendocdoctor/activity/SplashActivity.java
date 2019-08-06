@@ -1,16 +1,24 @@
 package com.tremendoc.tremendocdoctor.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 
 import com.tremendoc.tremendocdoctor.api.API;
+import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.Permission;
+
+import java.util.UUID;
 
 public class SplashActivity extends AppCompatActivity {
     private boolean askedBefore = false;
@@ -60,8 +68,11 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void gotoNext() {
+
         Intent intent = new Intent(this, API.isLoggedIn(this) ? MainActivity.class : AuthActivity.class);
         startActivity(intent);
         finish();
     }
+
+
 }

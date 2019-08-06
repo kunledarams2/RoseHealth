@@ -1,6 +1,9 @@
 package com.tremendoc.tremendocdoctor.activity;
 
 import android.app.Activity;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,11 +13,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.squareup.picasso.Picasso;
 import com.tremendoc.tremendocdoctor.api.API;
+import com.tremendoc.tremendocdoctor.api.StringCall;
+import com.tremendoc.tremendocdoctor.api.URLS;
 import com.tremendoc.tremendocdoctor.callback.MyCallback;
 import com.tremendoc.tremendocdoctor.dialog.StatusDialog;
 import com.tremendoc.tremendocdoctor.fragment.CallLogs;
 import com.tremendoc.tremendocdoctor.fragment.Prescriptions;
 import com.tremendoc.tremendocdoctor.fragment.appointments.AppointmentSchedule;
+import com.tremendoc.tremendocdoctor.service.StayAliveWorker;
 import com.tremendoc.tremendocdoctor.utils.CallConstants;
 import com.tremendoc.tremendocdoctor.utils.IO;
 import com.google.android.material.navigation.NavigationView;
@@ -22,6 +28,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.util.Log;
@@ -35,10 +44,13 @@ import com.tremendoc.tremendocdoctor.fragment.Dashboard;
 import com.tremendoc.tremendocdoctor.fragment.Notes;
 import com.tremendoc.tremendocdoctor.fragment.Notifications;
 import com.tremendoc.tremendocdoctor.fragment.Tips;
+import com.tremendoc.tremendocdoctor.utils.UI;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.tremendoc.tremendocdoctor.utils.IO.REQUEST_GALLERY;
 
@@ -64,6 +76,13 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!API.isLoggedIn(this)) {
+            Intent intent = new Intent(this,  AuthActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,7 +105,6 @@ public class MainActivity extends BaseActivity
             changeView(DASHBOARD);
         }
 
-
         statusDialog = new StatusDialog(this);
         profileImage = findViewById(R.id.profile_image);
         statusIndicator = findViewById(R.id.online_status_indicator);
@@ -100,8 +118,9 @@ public class MainActivity extends BaseActivity
                 .placeholder(R.drawable.ic_account)
                 .into(profileImage);
 
-
         API.setPushToken(this);
+        startWorker();
+        resetStatus();
     }
 
     @Override
@@ -157,7 +176,8 @@ public class MainActivity extends BaseActivity
             this.changeView(Notifications.newInstance());
             this.setTitle("Notifications");
         } else if (id == R.id.nav_signout) {
-            API.logout(this, () -> changeView(AuthActivity.class));
+            API.logout(this);
+            changeView(AuthActivity.class);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -233,6 +253,13 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    private void startWorker() {
+        PeriodicWorkRequest request = new PeriodicWorkRequest
+                .Builder(StayAliveWorker.class, 15, TimeUnit.MINUTES)
+                .build();
+        WorkManager.getInstance().enqueue(request);
+    }
+
     public void setOnline() {
         getSinchServiceInterface().startClient();
         //getChatServiceInterface().connect();
@@ -243,6 +270,15 @@ public class MainActivity extends BaseActivity
         getSinchServiceInterface().stopClient();
         //getChatServiceInterface().disconnect();
         statusIndicator.setBackgroundResource( R.drawable.circle_red);
+        UI.clearOnlineNotification(this);
+    }
+
+    private void resetStatus() {
+        StringCall call = new StringCall(this);
+        Map<String, String> params = new HashMap<>();
+        boolean isSetOnline = IO.getData(this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
+        params.put("mode", isSetOnline ?  "ONLINE" : "OFFLINE");
+        call.get(URLS.ONLINE_STATUS, params, false, response -> {}, error -> {});
     }
 
     public  void galleryIntent() {
