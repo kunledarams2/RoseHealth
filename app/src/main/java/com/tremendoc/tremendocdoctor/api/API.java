@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -50,6 +51,8 @@ public class API {
 
     public static final String SERVER_KEY = "SERVER_KEY";
     public static final String PUSH_TOKEN_SET = "PUSH_TOKEN_SET";
+
+    private static final String MY_UUID = "MY_UUID";
 
     private API(Context context) {
         this.context = context;
@@ -232,6 +235,19 @@ public class API {
         return firstName + " " + lastName;
     }
 
+    public static String getTitledName() {
+        return "Dr. " + getFullName();
+    }
+
+    public static String getUUID(Context ctx) {
+        String uuid = IO.getData(ctx, API.MY_UUID);
+        if (uuid.isEmpty()) {
+            uuid = UUID.randomUUID().toString();
+            IO.setData(ctx, API.MY_UUID, uuid);
+        }
+        return uuid;
+    }
+
     public static void setUserData(Context context, JSONObject data){
         SharedPreferences.Editor editor = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE).edit();
         editor.putString(API.USER_DATA, data.toString());
@@ -256,7 +272,10 @@ public class API {
         return prefs.getString(SESSION_ID, "");
     }
 
-    public static void logout(Context context, MyCallback callback) {
+    public static void logout(Context context) {
+        context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE)
+                .edit().clear().commit();
+
         StringCall call = new StringCall(context);
         Map<String, String> params = new HashMap<>();
         params.put("mode", "OFFLINE");
@@ -264,10 +283,6 @@ public class API {
             try {
                 JSONObject object = new JSONObject(response);
                 if (object.has("code") && object.getInt("code") == 0) {
-                    SharedPreferences.Editor editor = context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE).edit();
-                    editor.clear();
-                    editor.commit();
-                    callback.onCalled();
                 } else {
                     ToastUtil.showLong(context, object.getString("description"));
                 }
@@ -284,8 +299,6 @@ public class API {
 
     private void setOnline(boolean status) {
     }
-
-
 
     public static String getDoctorId(Context ctx) {
         SharedPreferences prefs = ctx.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE);

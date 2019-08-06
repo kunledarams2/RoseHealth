@@ -46,7 +46,7 @@ class ChatActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-        myName = API.getFullName()
+        myName = API.getTitledName()
         mCallId = intent?.getStringExtra(CallConstants.CALL_ID)
         mPatientId = intent.getStringExtra(CallLog.PATIENT_ID)
         mPatientName = intent.getStringExtra(CallLog.PATIENT_NAME)
@@ -58,10 +58,29 @@ class ChatActivity : BaseActivity() {
         setViews(binder)
         initPusher(binder)
 
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
         val timerTask = object: TimerTask() {
             override fun run() {
-                chatServiceInterface.endChat(mPatientToken, "completed")
-                chatListener?.onChatEnded("completed")
+                chatServiceInterface.endChat(mPatientToken, "hangup")
+                fun close () {
+                    val intent = Intent(this@ChatActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                val builder = AlertDialog.Builder(this@ChatActivity)
+                builder.setTitle("Consultation time elapsed.")
+                        .setMessage("The 10 minutes allocated to each consultation has elapsed.")
+                        .setPositiveButton("Ok") { dialog, _ ->
+                            dialog.cancel()
+                            close()
+                        }
+                        .setOnCancelListener { close() }
+                        .setOnDismissListener { close() }
+                        .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+                        .show()
             }
         }
         val interval:Long = 1000 * 60 * 10 //10 minute
@@ -174,7 +193,7 @@ class ChatActivity : BaseActivity() {
     private fun endSession() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Chat Cancellation")
-                .setMessage("Do you want to end this chat session")
+                .setMessage("Do you want to end this chat session?")
                 .setPositiveButton("Yes") { dialog, _ ->
                     dialog.cancel()
                     chatServiceInterface.endChat(mPatientToken, "hangup")
@@ -187,11 +206,11 @@ class ChatActivity : BaseActivity() {
     }
 
     private fun sendMessage(msg: String) {
-            val obj = JSONObject()
-            obj.put("message", msg)
-            obj.put("sender", myName)
-            val channel = mConsultationId
-            ChatRepo.getInstance(this).sendMessage(obj.toString(), channel, "test_event", msgCallback)
+        val obj = JSONObject()
+        obj.put("message", msg)
+        obj.put("sender", myName)
+        val channel = mConsultationId
+        ChatRepo.getInstance(this).sendMessage(obj.toString(), channel, "test_event", msgCallback)
     }
 
     private fun isTyping() {
@@ -204,10 +223,12 @@ class ChatActivity : BaseActivity() {
     private fun startClearTimer() {
         val timerTask = object: TimerTask() {
             override fun run() {
+                Log.d("startClearTimer()", "Reset subtitle")
                 runOnUiThread { toolbar.subtitle = "" }
             }
         }
         val interval:Long = 900 //0.9 seconds
+        clearTimer = Timer()
         clearTimer?.schedule(timerTask, interval)
     }
 
@@ -223,6 +244,8 @@ class ChatActivity : BaseActivity() {
 
     private inner class MyChatListener : ChatService.ChatListener {
         override fun onChatEnded(reason: String) {
+            IncomingCallActivity.setOnCall(this@ChatActivity, false)
+
             runOnUiThread {
                 if (intent != null && intent.getBooleanExtra("incoming", false)) {
 
@@ -250,15 +273,6 @@ class ChatActivity : BaseActivity() {
         }
 
         override fun onIncomingChat() {
-        }
-
-        override fun onTyping(typing: Boolean) {
-            runOnUiThread {
-                //if (typing)
-                //    toolbar.setSubtitle("typing...");
-                //else
-                //    toolbar.setSubtitle("");
-            }
         }
 
     }

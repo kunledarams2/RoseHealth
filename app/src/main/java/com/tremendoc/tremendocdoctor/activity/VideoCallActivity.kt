@@ -102,6 +102,7 @@ class VideoCallActivity : BaseActivity() {
             PrescriptionDialog(this, mPatientId, mConsultationId).show()
         }
         remote_video_view.setOnClickListener { showButtons() }
+        call_status.text = "Connecting ..."
     }
 
     private fun showButtons() {
@@ -154,7 +155,7 @@ class VideoCallActivity : BaseActivity() {
             mAddedListener = true
         }
 
-        updateUI()
+        //updateU()
     }
 
     private fun updateUI() {
@@ -191,6 +192,8 @@ class VideoCallActivity : BaseActivity() {
     }
 
     private fun endCall () {
+
+        IncomingCallActivity.setOnCall(this@VideoCallActivity, false)
         mAudioPlayer?.stopProgressTone()
         val call: Call? = sinchServiceInterface.getCall(mCallId)
         call?.hangup()
@@ -291,10 +294,11 @@ class VideoCallActivity : BaseActivity() {
 
     private fun showVideoViews(local: Boolean, remote: Boolean) {
         if (sinchServiceInterface == null) return
+
         if (!mRemoteVideoViewAdded) {
             addRemoteView()
         }
-        if (mLocalVideoViewAdded) {
+        if (!mLocalVideoViewAdded) {
             addLocalView()
         }
 
@@ -324,10 +328,13 @@ class VideoCallActivity : BaseActivity() {
             if (call != null && call.details.isVideoOffered) {
                 showVideoViews(true, true)
             }
+            call_status.text = "Ongoing ..."
         }
 
         override fun onCallProgressing(p0: Call?) {
             mAudioPlayer?.playProgressTone()
+            showVideoViews(true, false)
+            call_status.text = "Connecting ..."
         }
 
         override fun onShouldSendPushNotification(p0: Call?, p1: MutableList<PushPair>?) {
@@ -345,5 +352,9 @@ class VideoCallActivity : BaseActivity() {
         override fun onVideoTrackResumed(p0: Call?) {
 
         }
+    }
+
+    private fun log(log: String){
+        Log.d("VideoCallActivity ", "log -> $log")
     }
 }

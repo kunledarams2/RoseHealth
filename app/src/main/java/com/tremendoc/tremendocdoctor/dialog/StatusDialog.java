@@ -84,6 +84,7 @@ public class StatusDialog extends Dialog {
                 } else {
                     ToastUtil.showLong(getContext(), object.getString("description"));
                 }
+                log("STATUS DIALOG -> " + object.getString("description"));
             }catch (JSONException e) {
                 log(e.getLocalizedMessage());
             }

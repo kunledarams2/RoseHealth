@@ -23,6 +23,8 @@ class OutgoingChatActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_outgoing_chat)
 
+        IncomingCallActivity.setOnCall(this, true)
+
         mAudioPlayer = AudioPlayer(this)
         mAudioPlayer?.playProgressTone()
 
@@ -45,6 +47,7 @@ class OutgoingChatActivity : BaseActivity() {
 
         end_btn.setOnClickListener {
             chatServiceInterface.endChat(patientToken, "cancelled")
+            IncomingCallActivity.setOnCall(this, false)
             chatListener?.onChatEnded("cancelled")
         }
 
@@ -59,6 +62,7 @@ class OutgoingChatActivity : BaseActivity() {
 
     private inner class MyChatListener: ChatService.ChatListener {
         override fun onChatEnded(reason: String?) {
+            IncomingCallActivity.setOnCall(this@OutgoingChatActivity, false)
             mAudioPlayer?.stopProgressTone()
 
             val v = Intent(this@OutgoingChatActivity, MainActivity::class.java)
@@ -85,10 +89,6 @@ class OutgoingChatActivity : BaseActivity() {
         }
 
         override fun onIncomingChat() {
-
-        }
-
-        override fun onTyping(isTyping: Boolean) {
 
         }
     }

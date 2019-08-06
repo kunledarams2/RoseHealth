@@ -51,6 +51,9 @@ public class ChatService extends Service {
 
         private void handleIncomingRequest(Map<String, String> payload) {
             log("HANDLE INCOMING REQUEST");
+            if (IncomingCallActivity.Tracker.getCallStatus(ChatService.this)) {
+                return;
+            }
             String serverKey = payload.get("serverKey");
 
             IO.setData(ChatService.this, API.SERVER_KEY, serverKey);
@@ -79,6 +82,9 @@ public class ChatService extends Service {
 
         private void handleChatEnd(String reason) {
             log("HANDLE CHAT ENDED");
+            if (IncomingCallActivity.Tracker.getCallStatus(ChatService.this)) {
+                return;
+            }
             if (chatListener != null)
                 chatListener.onChatEnded(reason);
         }
@@ -102,11 +108,11 @@ public class ChatService extends Service {
                 JSONObject data = new JSONObject();
                 data.put("request-type", ACCEPT_CHAT);
 
-                JSONObject notification = new JSONObject();
-                notification.put("title", ACCEPT_CHAT);
-                notification.put("tag", callerToken);
-                notification.put("priority", "high");
-                notification.put("body", "Accept chat from ");
+                //JSONObject notification = new JSONObject();
+                //notification.put("title", ACCEPT_CHAT);
+                //notification.put("tag", callerToken);
+                //notification.put("priority", "high");
+                //notification.put("body", "Accept chat from ");
 
                 JSONObject payload = new JSONObject();
                 payload.put("data", data);
@@ -139,19 +145,19 @@ public class ChatService extends Service {
 
                 data.put(CallLog.CONSULTATION_ID, consultationId);
                 data.put("doctorId", API.getDoctorId(ChatService.this));
-                Map<String, String> myData = API.getCredentials(ChatService.this);
-                data.put("doctorName", myData.get(API.FIRST_NAME) + " " + myData.get(API.LAST_NAME));
-                data.put("doctorUuid", DeviceName.getUUID(ChatService.this));
+                data.put("doctorName", API.getTitledName());
+                String myUUID = API.getUUID(ChatService.this);
+                data.put("doctorUuid", myUUID);
                 data.put("request-type", INCOMING_CHAT);
                 data.put(CallLog.PATIENT_TOKEN, patientToken);
                 data.put(CallLog.DOCTOR_TOKEN, doctorToken);
                 data.put("serverKey", serverKey);
 
-                JSONObject notification = new JSONObject();
-                notification.put("title", INCOMING_CHAT);
-                notification.put("tag", patientToken);
-                notification.put("priority", "high");
-                notification.put("body", "Incoming chat from ");
+                //JSONObject notification = new JSONObject();
+                //notification.put("title", INCOMING_CHAT);
+                //notification.put("tag", patientToken);
+                //notification.put("priority", "high");
+                //notification.put("body", "Incoming chat from ");
 
                 JSONObject payload = new JSONObject();
                 payload.put("data", data);
@@ -193,11 +199,11 @@ public class ChatService extends Service {
                 data.put("request-type", END_CHAT);
                 data.put("reason", reason);
 
-                JSONObject notification = new JSONObject();
-                notification.put("title", END_CHAT);
-                notification.put("tag", token);
-                notification.put("priority", "high");
-                notification.put("body", "End chat from ");
+                //JSONObject notification = new JSONObject();
+                //notification.put("title", END_CHAT);
+                //notification.put("tag", token);
+                //notification.put("priority", "high");
+                //notification.put("body", "End chat from ");
 
                 JSONObject payload = new JSONObject();
                 payload.put("data", data);
@@ -257,8 +263,6 @@ public class ChatService extends Service {
         void onChatEstablished();
         void onChatProgressing();
         void onIncomingChat();
-        //void onNewMessage(String message, String sender);
-        void onTyping(boolean isTyping);
     }
 
     class Client {

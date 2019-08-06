@@ -53,7 +53,7 @@ public class AppointmentSchedule extends Fragment {
     private FragmentChanger fragmentChanger;
     private TextView yearView, monthView;
     private CoordinatorLayout coordinatorLayout;
-    private ProgressDialog progressDialog;
+    private Button doneBtn;
 
 
     public AppointmentSchedule() {
@@ -125,7 +125,7 @@ public class AppointmentSchedule extends Fragment {
         layout.addView(view, 0);
         TextView cancelBtn = view.findViewById(R.id.cancel_btn);
         TextView dateView = view.findViewById(R.id.date);
-        Button doneBtn = view.findViewById(R.id.done_btn);
+        doneBtn = view.findViewById(R.id.done_btn);
         TimePicker startTimePicker = view.findViewById(R.id.start_time_picker);
         TimePicker endTimePicker = view.findViewById(R.id.end_time_picker);
         try {
@@ -151,8 +151,10 @@ public class AppointmentSchedule extends Fragment {
     }
 
     private void saveSchedule(String date, int startTime, int endTime)  throws ParseException {
-        progressDialog = new ProgressDialog(getContext());
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
+
+        doneBtn.setEnabled(false);
 
         StringCall call = new StringCall(getContext());
         Map<String, String> params = new HashMap<>();
@@ -162,6 +164,7 @@ public class AppointmentSchedule extends Fragment {
 
         call.post(URLS.SAVE_CALENDAR, params, response -> {
             progressDialog.hide();
+            doneBtn.setEnabled(true);
 
             try {
                 JSONObject resObj = new JSONObject(response);
@@ -177,6 +180,7 @@ public class AppointmentSchedule extends Fragment {
 
         }, error -> {
             progressDialog.hide();
+            doneBtn.setEnabled(true);
 
             log("VOLLEY ERROR");
             log(error.getMessage());

@@ -90,10 +90,7 @@ public class PrescriptionRepository {
 
         Result<Prescription> result = new Result<>();
 
-        Map<String, String> params = new HashMap<>();
-        params.put("query", query);
-
-        call.get(URLS.PRESCRIPTION_SEARCH , params, response -> {
+        call.get(URLS.PRESCRIPTION_SEARCH + query , null, response -> {
             log("RESPONSE  " + response);
 
             try {

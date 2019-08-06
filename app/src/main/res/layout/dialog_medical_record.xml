@@ -15,6 +15,7 @@
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
     <include layout="@layout/placeholder_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -104,165 +105,417 @@
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView android:id="@+id/ethnicity"
-                android:text="Ethnicity"
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
                 android:paddingStart="15dp"
                 android:layout_margin="5dp"
                 android:paddingEnd="15dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="55dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Ethnicity"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/ethnicity"
+                    android:text="Ethnicity"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView android:id="@+id/weight"
-                android:text="Weight"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
                 android:paddingStart="15dp"
                 android:layout_margin="5dp"
-                android:gravity="center_vertical"
                 android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="55dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Blood group"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/bloodGroup"
+                    android:text="Blood group"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView android:id="@+id/height"
-                android:text="Height"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
                 android:paddingStart="15dp"
-                android:paddingEnd="15dp"
                 android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/input_background_block"
+                android:paddingEnd="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="55dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Weight"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/weight"
+                    android:text="Weight"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView android:id="@+id/bmi"
-                android:text="BMI"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
                 android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
                 android:layout_margin="5dp"
-                android:gravity="center_vertical"
+                android:paddingEnd="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="55dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Height"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/height"
+                    android:text="Height"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <View android:layout_height="1dp"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="BMI"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/bmi"
+                    android:text="BMI"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <Space android:layout_height="1dp"
                 android:layout_marginBottom="30dp"
                 android:layout_width="match_parent" />
 
-            <TextView android:id="@+id/pregnancy"
-                android:text="Are you currently pregnant"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
+            <LinearLayout
+                android:orientation="vertical"
                 android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="55dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Are you currently pregnant?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/pregnancy"
+                    android:text="Are you currently pregnant"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView android:id="@+id/pregnancy_2"
-                android:text="How many times have you been pregnant?"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/input_background_block"
-                android:layout_width="match_parent"
-                android:layout_height="55dp" />
-            <TextView android:id="@+id/pregnancy_3"
-                android:text="How many full term pregnancies?"
-                android:paddingStart="15dp"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
-                android:layout_width="match_parent"
-                android:layout_height="55dp" />
-            <TextView android:id="@+id/pregnancy_4"
-                android:text="How many premature births?"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/input_background_block"
-                android:layout_width="match_parent"
-                android:layout_height="55dp" />
 
-            <TextView android:id="@+id/miscarriages"
-                android:text="How many miscarriages?"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
                 android:paddingStart="15dp"
                 android:layout_margin="5dp"
-                android:gravity="center_vertical"
                 android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="55dp" />
-            <TextView android:id="@+id/living_children"
-                android:text="How many living children?"
-                android:paddingStart="15dp"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
-                android:layout_width="match_parent"
-                android:layout_height="55dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="How many times have you been pregnant?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/pregnancy_2"
+                    android:text="How many times have you been pregnant?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <View android:layout_height="1dp"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="How many full term pregnancies?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/pregnancy_3"
+                    android:text="How many full term pregnancies?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="How many premature births?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/pregnancy_4"
+                    android:text="How many premature births?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="How many miscarriages?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/miscarriages"
+                    android:text="How many miscarriages?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="How many living children?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/living_children"
+                    android:text="How many living children?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <Space android:layout_height="1dp"
                 android:layout_marginBottom="30dp"
                 android:layout_width="match_parent" />
 
-            <TextView android:id="@+id/daily_restrictions"
-                android:text="Do you have any daily restrictions?"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/input_background_block"
-                android:layout_width="match_parent"
-                android:layout_height="55dp" />
 
-            <TextView android:id="@+id/alcohol"
-                android:text="Do you take alcohol?"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="55dp" />
 
-            <TextView android:id="@+id/smoke"
-                android:text="Do you smoke?"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+            <LinearLayout
+                android:orientation="vertical"
                 android:background="@drawable/input_background_block"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:layout_below="@id/alcohol"
-                android:layout_width="match_parent"
-                android:layout_height="55dp" />
-
-            <TextView android:id="@+id/sexual"
-                android:text="Are you sexually active?"
                 android:paddingStart="15dp"
                 android:layout_margin="5dp"
-                android:gravity="center_vertical"
                 android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
                 android:layout_width="match_parent"
-                android:layout_height="60dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Do you have any daily restrictions?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/daily_restrictions"
+                    android:text="Do you have any daily restrictions?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView android:id="@+id/drugs"
-                android:text="Do you take recreational drugs?"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
                 android:paddingStart="15dp"
+                android:layout_margin="5dp"
                 android:paddingEnd="15dp"
-                android:background="@drawable/input_background_block"
-                android:layout_below="@+id/sexual"
                 android:layout_width="match_parent"
-                android:layout_height="60dp" />
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Do you take alcohol?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/alcohol"
+                    android:text="Do you take alcohol?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <View android:layout_height="1dp"
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Do you smoke?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/smoke"
+                    android:text="Do you smoke?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Are you sexually active?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/sexual"
+                    android:text="Are you sexually active?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/input_background_block"
+                android:paddingStart="15dp"
+                android:layout_margin="5dp"
+                android:paddingEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+                <TextView
+                    android:text="Do you take recreational drugs?"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView android:id="@+id/drugs"
+                    android:text="Do you take recreational drugs?"
+                    android:textSize="@dimen/font_16"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <Space android:layout_height="1dp"
                 android:layout_marginBottom="30dp"
                 android:layout_width="match_parent" />
 
+            <TextView
+                android:text="Symptoms"
+                android:textSize="@dimen/font_12"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/size_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <org.apmem.tools.layouts.FlowLayout
                 android:id="@+id/symptoms"
@@ -272,6 +525,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <TextView
+                android:text="Allergies"
+                android:textSize="@dimen/font_12"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/size_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <org.apmem.tools.layouts.FlowLayout
                 android:id="@+id/allergies"
                 android:gravity="start"
@@ -280,6 +541,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <TextView
+                android:text="Medications"
+                android:textSize="@dimen/font_12"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/size_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <org.apmem.tools.layouts.FlowLayout
                 android:id="@+id/medications"
                 android:gravity="start"
@@ -287,6 +555,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <TextView
+                android:text="Treatments"
+                android:textSize="@dimen/font_12"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/size_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <org.apmem.tools.layouts.FlowLayout
                 android:id="@+id/treatments"
                 android:gravity="start"

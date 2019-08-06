@@ -68,7 +68,7 @@ public class CallService extends Service {
     }
 
     private void attemptAutoStart(){
-        String userName = DeviceName.getUUID(this);
+        String userName = API.getUUID(this);
         if (!userName.isEmpty() && messenger != null) {
             start(userName);
         }
@@ -84,6 +84,7 @@ public class CallService extends Service {
 
         mSinchClient.setSupportCalling(true);
         mSinchClient.setSupportManagedPush(true);
+        mSinchClient.setSupportActiveConnectionInBackground(true);
         mSinchClient.startListeningOnActiveConnection();
         mSinchClient.addSinchClientListener(new MySinchClientListener());
         mSinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
@@ -98,9 +99,8 @@ public class CallService extends Service {
     }
 
     private void start(String username) {
-        boolean permissionGranted = true;
         boolean isSetOnline = IO.getData(this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
-        if (mSinchClient == null) {
+        if (mSinchClient == null && username != null && !username.isEmpty()) {
             //mSettings.setUsername(username);
             log("mSinchClient is null, trying to create another with username = " +username);
             createClient(username);
@@ -149,7 +149,7 @@ public class CallService extends Service {
             Map<String, String> payload = new HashMap<>();
             payload.put("doctorId", API.getDoctorId(CallService.this));
             Map<String, String> data = API.getCredentials(CallService.this);
-            payload.put("doctorName", data.get(API.FIRST_NAME) + " " + data.get(API.LAST_NAME));
+            payload.put("doctorName", API.getTitledName());
             payload.put("doctorAvatar", data.get(API.IMAGE));
 
             for (String key : keys) {
@@ -202,7 +202,7 @@ public class CallService extends Service {
 
         public void startClient() {
             if (!isStarted()) {
-                String username = DeviceName.getUUID(CallService.this);
+                String username = API.getUUID(CallService.this);
                 start(username);
             }
         }
@@ -235,7 +235,7 @@ public class CallService extends Service {
 
         public NotificationResult relayRemotePushNotificationPayload(final Map payload) {
             log("relayRemotePayload");
-            String myCallId = DeviceName.getUUID(CallService.this);
+            String myCallId = API.getUUID(CallService.this);
             if (mSinchClient == null && !myCallId.isEmpty()) {
                 createClient(myCallId);
             } else if (mSinchClient == null && myCallId.isEmpty()) {
@@ -288,7 +288,7 @@ public class CallService extends Service {
         @Override
         public void onClientStarted(SinchClient sinchClient) {
             Log.d(TAG, "SinchClient started");
-            UI.createNotification(CallService.this, "Tremendoc Doctor", "You are currently online and can receive calls.");
+            UI.notifyOnline(CallService.this); //, "Tremendoc Doctor", "You are currently online and can receive calls.");
             if (mListener != null) {
                 mListener.onStarted();
             }

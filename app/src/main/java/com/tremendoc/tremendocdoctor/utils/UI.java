@@ -36,13 +36,14 @@ public class UI {
         view.setLayoutParams(params);
     }
 
-    private static void createNotificationChannel(Context context) {
+    private static void createNotificationChannel(Context context, int importance) {
         //Create the notification channel, but only on API 26+
         //because the NotificationChannel class id new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Tremendoc";
             String description = "Tremendoc Notifications.";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            //int importance = channelId.equals(MISSED_CALLED_CHANNEL_ID)
+            //        ? NotificationManager.IMPORTANCE_LOW : NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
             //Register the channel with the system; you can't change the importance
@@ -52,8 +53,8 @@ public class UI {
         }
     }
 
-    public static void createNotification(Context appContext, String userId) {
-        createNotificationChannel(appContext);
+    public static void notifyMissedCall(Context appContext, String userId) {
+        createNotificationChannel(appContext, NotificationManager.IMPORTANCE_LOW);
 
         Intent intent = new Intent(appContext, MainActivity.class);
         intent.putExtra("fragment", MainActivity.CALL_LOGS);
@@ -69,11 +70,34 @@ public class UI {
         NotificationManager manager =
                 (NotificationManager) appContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(2, builder.build());
+    }
+
+    public static void notifyOnline(Context appContext) {
+        createNotificationChannel(appContext, NotificationManager.IMPORTANCE_HIGH);
+
+        Intent intent = new Intent(appContext, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0,
+                intent, 0);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.logo)
+                .setContentTitle("Tremendoc Doctor")
+                .setContentText("You are currently online and can receive calls.")
+                .setOngoing(true)
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true);
+        NotificationManager manager = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(1, builder.build());
     }
 
-    public static void createNotification(Service service, String title, String content) {
-        createNotificationChannel(service);
+    public static void clearOnlineNotification(Context mContext) {
+        NotificationManager notificationManager = (NotificationManager) mContext
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(1);
+    }
+
+    private static void createNotification(Service service, String title, String content) {
+        createNotificationChannel(service, NotificationManager.IMPORTANCE_LOW);
 
         PendingIntent contentIntent = PendingIntent.getActivity(service, 0,
                 new Intent(service, AuthActivity.class), 0);

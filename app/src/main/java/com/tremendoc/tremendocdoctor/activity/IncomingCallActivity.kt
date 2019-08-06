@@ -1,5 +1,6 @@
 package com.tremendoc.tremendocdoctor.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import com.sinch.android.rtc.PushPair
 import com.sinch.android.rtc.calling.Call
 import com.sinch.android.rtc.calling.CallListener
 import com.tremendoc.tremendocdoctor.R
+import com.tremendoc.tremendocdoctor.api.API
 import com.tremendoc.tremendocdoctor.model.CallLog
 import com.tremendoc.tremendocdoctor.service.ChatService
 import com.tremendoc.tremendocdoctor.utils.AudioPlayer
@@ -36,6 +38,8 @@ class IncomingCallActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_incoming_call)
         setupViews()
+
+        setOnCall(this@IncomingCallActivity, true)
 
         mAudioPlayer = AudioPlayer(this)
         mAudioPlayer?.playRingtone()
@@ -125,6 +129,8 @@ class IncomingCallActivity : BaseActivity() {
     }
 
     private fun decline() {
+        setOnCall(this@IncomingCallActivity, false)
+
         mAudioPlayer?.stopRingtone()
         if (mCallType == "VIDEO" || mCallType == "AUDIO") {
             val call = sinchServiceInterface.getCall(mCallId)
@@ -138,7 +144,7 @@ class IncomingCallActivity : BaseActivity() {
     }
 
     private fun logCall() {
-        UI.createNotification(applicationContext, mPatientName)
+        UI.notifyMissedCall(applicationContext, mPatientName)
         try {
             val time = DateTime.now().toString()
             val uuid = intent?.getStringExtra(CallLog.PATIENT_UUID)
@@ -167,6 +173,8 @@ class IncomingCallActivity : BaseActivity() {
     private inner class SinchCallListener: CallListener {
 
         override fun onCallEnded(call: Call?) {
+            setOnCall(this@IncomingCallActivity, false)
+
             val cause = call?.details?.endCause
             Log.d("IncomingCallActivity", "Call ended cause: ${cause?.toString()}")
             mAudioPlayer?.stopRingtone()
@@ -193,6 +201,8 @@ class IncomingCallActivity : BaseActivity() {
 
     private inner class MyChatListener: ChatService.ChatListener {
         override fun onChatEnded(reason: String?) {
+
+            setOnCall(this@IncomingCallActivity, false)
             mAudioPlayer?.stopRingtone()
 
             logCall()
@@ -214,9 +224,21 @@ class IncomingCallActivity : BaseActivity() {
         override fun onIncomingChat() {
 
         }
+    }
 
-        override fun onTyping(isTyping: Boolean) {
+    companion object Tracker{
+        const val ON_CALL_STATUS = "ON_CALL_STATUS"
 
+        fun setOnCall(context: Context, status: Boolean) {
+            context.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE)
+                    .edit()
+                    .putBoolean(ON_CALL_STATUS, status)
+                    .apply()
+        }
+
+        fun getCallStatus(ctx: Context): Boolean {
+            val prefs = ctx.getSharedPreferences(API.SHARED_PREFERENCES, Context.MODE_PRIVATE)
+            return prefs.getBoolean(ON_CALL_STATUS, false)
         }
     }
 }

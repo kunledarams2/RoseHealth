@@ -32,10 +32,9 @@ public class NewNoteDialog extends Dialog {
     private EditText diagField, sympField, treatField;
     private Button saveBtn;
 
-    private boolean isBusy = false;
-    private boolean askedBefore = false;
+    //private boolean askedBefore = false;
 
-    public static final int NEW_NOTE_PERMISSION_REQUEST = 120;
+    //public static final int NEW_NOTE_PERMISSION_REQUEST = 120;
 
 
     public NewNoteDialog(Context context, String conId, String patId){
@@ -72,7 +71,6 @@ public class NewNoteDialog extends Dialog {
     }
 
     private void trySaveNote() {
-        if (isBusy) return;
 
         Context ctx = getContext();
         String diagnoses = diagField.getText().toString();
@@ -96,27 +94,11 @@ public class NewNoteDialog extends Dialog {
 
         saveNote(diagnoses, symptoms, treatments);
 
-        /*if (Permission.permissionIsGranted(ctx, Manifest.permission.INTERNET)) {
-            saveNote(diagnoses, symptoms, treatments);
-        } else {
-            if (!askedBefore) {
-                ActivityCompat.requestPermissions(activity, new String[] {
-                        Manifest.permission.INTERNET} ,  NEW_NOTE_PERMISSION_REQUEST);
-                askedBefore = true;
-            } else {
-                Permission.showModal(activity,"Tremendoc needs to access the internet to continue",
-                        (dialog, i) -> {
-                            askedBefore = false;
-                            trySaveNote();
-                            dialog.cancel();
-                        });
-            }
-        }*/
     }
 
     private void saveNote(String diagnoses, String symptoms, String treatments) {
         progressBar.setVisibility(View.VISIBLE);
-        isBusy = true;
+        saveBtn.setEnabled(false);
         Context ctx = getContext();
 
         Map<String, String> params = new HashMap<>();
@@ -129,7 +111,7 @@ public class NewNoteDialog extends Dialog {
         StringCall call = new StringCall(ctx);
         call.post(URLS.SAVE_NOTE, params, response -> {
             progressBar.setVisibility(View.INVISIBLE);
-            isBusy = false;
+            saveBtn.setEnabled(true);
 
             try {
                 JSONObject resObj = new JSONObject(response);
@@ -148,7 +130,7 @@ public class NewNoteDialog extends Dialog {
 
         }, error -> {
             progressBar.setVisibility(View.INVISIBLE);
-            isBusy = false;
+            saveBtn.setEnabled(true);
             log("VOLLEY ERROR");
             log(error.getMessage());
             if (error.networkResponse == null) {

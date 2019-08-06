@@ -272,7 +272,7 @@ public class ChatActivityOld extends BaseActivity implements View.OnClickListene
 
             if (!answered && !createdLog && getIntent() != null && getIntent().getBooleanExtra("incoming", false)) {
                 log("CREATE CALL LOG");
-                UI.createNotification(getApplicationContext(), patientName);
+                UI.notifyMissedCall(getApplicationContext(), patientName);
                 try {
                     String time = DateTime.now().toString();
                     String uuid =  getIntent().getExtras().getString(CallLog.PATIENT_UUID);
@@ -335,16 +335,6 @@ public class ChatActivityOld extends BaseActivity implements View.OnClickListene
         @Override
         public void onIncomingChat() {
             mAudioPlayer.playRingtone();
-        }
-
-        @Override
-        public void onTyping(boolean typing) {
-            runOnUiThread(()-> {
-                //if (typing)
-                //    toolbar.setSubtitle("typing...");
-                //else
-                //    toolbar.setSubtitle("");
-            });
         }
 
     }
