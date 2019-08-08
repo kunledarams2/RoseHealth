@@ -128,7 +128,7 @@ class PrescriptionDialog(val ctx: AppCompatActivity, val patientId: String?, val
 
     private fun openDatepicker(editText: EditText) {
         val now = Calendar.getInstance()
-        val dialog = DatePickerDialog(context, R.style.DatepickerTheme, { datePicker, year, month, day ->
+        val dialog = DatePickerDialog(context, R.style.DatepickerTheme, { _, year, month, day ->
             val strDay = if (day.toString().length == 1) "0$day" else day.toString() + ""
             val strMonth = if ((month + 1).toString().length == 1) "0$month" else month.toString() + ""
             val date = "$year-$strMonth-$strDay"
@@ -136,8 +136,8 @@ class PrescriptionDialog(val ctx: AppCompatActivity, val patientId: String?, val
         }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE))
 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setOnCancelListener { d -> dialogOpen = false }
-        dialog.setOnDismissListener { d -> dialogOpen = false }
+        dialog.setOnCancelListener {  dialogOpen = false }
+        dialog.setOnDismissListener {  dialogOpen = false }
         dialog.show()
         dialogOpen = true
     }

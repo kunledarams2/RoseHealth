@@ -55,6 +55,8 @@ class AudioCallActivity : BaseActivity() {
 
         mAudioPlayer = AudioPlayer(this)
 
+        //val op = ImageOperation()
+
         mCallId = intent?.getStringExtra(CallConstants.CALL_ID)
         mPatientId = intent?.getStringExtra(CallLog.PATIENT_ID)
         mPatientName = intent?.getStringExtra(CallLog.PATIENT_NAME)
@@ -87,6 +89,8 @@ class AudioCallActivity : BaseActivity() {
         new_prescription_btn.setOnClickListener {
             PrescriptionDialog(this, mPatientId, mConsultationId).show()
         }
+
+        call_status.text = "Connecting ..."
     }
 
     private fun initAudio(mAudioPlayer: AudioPlayer?) {
@@ -144,6 +148,9 @@ class AudioCallActivity : BaseActivity() {
     }
 
     private fun endCall () {
+
+        IncomingCallActivity.setOnCall(this@AudioCallActivity, false)
+
         mAudioPlayer?.stopProgressTone()
         val call: Call? = sinchServiceInterface.getCall(mCallId)
         call?.hangup()
@@ -247,11 +254,12 @@ class AudioCallActivity : BaseActivity() {
             volumeControlStream = AudioManager.STREAM_VOICE_CALL
             val audioController: AudioController = sinchServiceInterface.audioController
             audioController.disableSpeaker()
+            call_status.text = "Ongoing ..."
         }
 
         override fun onCallProgressing(p0: Call?) {
             mAudioPlayer?.playProgressTone()
-            call_status?.text="Ringing"
+            call_status?.text="Ringing..."
         }
 
         override fun onShouldSendPushNotification(p0: Call?, p1: MutableList<PushPair>?) {

@@ -11,7 +11,7 @@ public class DeviceName {
         return  "";
     }
 
-    public static String getUUID(Context context) {
+    private static String getUUID(Context context) {
         TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String uuid = "";
         if (Build.VERSION.SDK_INT >= 26) {

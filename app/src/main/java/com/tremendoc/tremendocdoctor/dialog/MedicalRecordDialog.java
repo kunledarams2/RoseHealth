@@ -21,6 +21,7 @@ import com.tremendoc.tremendocdoctor.ui.Chip;
 import com.tremendoc.tremendocdoctor.utils.Formatter;
 
 import org.apmem.tools.layouts.FlowLayout;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +38,7 @@ public class MedicalRecordDialog extends Dialog {
     //private CircleImageView imageView;
     private View /*profileView,*/ scrollView;
     //private TextView patientName, gender, age, bloodGroup;
-    private TextView ethnicityField, weightField, heightField, bmiField,
+    private TextView ethnicityField, weightField, heightField, bmiField, bloodGroup,
              currPregField, noPregField, noFullPregField, prematureField,
              miscarriageField, childrenField,
              restrictionField, alcoholField, smokeField,
@@ -76,7 +77,7 @@ public class MedicalRecordDialog extends Dialog {
         //patientName = findViewById(R.id.patient_name);
         //gender = findViewById(R.id.gender);
         //age = findViewById(R.id.age);
-        //bloodGroup = findViewById(R.id.blood_group);
+        bloodGroup = findViewById(R.id.bloodGroup);
 
         //profileView = findViewById(R.id.profile);
         scrollView = findViewById(R.id.scrollView);
@@ -162,9 +163,9 @@ public class MedicalRecordDialog extends Dialog {
                         }
                     }
                     if (object.has("medicationProfile") && !object.isNull("medicationProfile")) {
-                        String meds = object.getJSONArray("medicationProfile").toString().replace("[", "");
-                        String[] medsArray = meds.split(",");
-                        for (String med: medsArray) {
+                        JSONArray meds = object.getJSONArray("medicationProfile"); //.toString().replace("[", "");
+                        for (int i = 0; i < meds.length(); i++) {
+                            String med = meds.getString(i);
                             if (!med.trim().isEmpty()) {
                                 Chip chip = new Chip(getContext());
                                 chip.setLabel(med);
@@ -222,6 +223,16 @@ public class MedicalRecordDialog extends Dialog {
                                 allergiesView.addView(chip);
                             }
                         }
+                    }
+
+
+                    if (object.has("medicalProfile") && !object.isNull("medicalProfile")) {
+                        JSONObject profile = object.getJSONObject("medicalProfile");
+                        bloodGroup.setText(profile.getString("bloodGroup"));
+                        ethnicityField.setText(profile.getString("ethnicity"));
+                        weightField.setText(profile.getString("weight"));
+                        heightField.setText(profile.getString("height"));
+                        bmiField.setText(profile.getString("bmi"));
                     }
 
                     stopLoading(true, false, null);

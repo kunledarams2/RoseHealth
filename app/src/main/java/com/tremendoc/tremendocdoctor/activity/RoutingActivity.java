@@ -35,52 +35,9 @@ public class RoutingActivity extends BaseActivity {
     protected void onServiceConnected() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && getChatServiceInterface() != null) {
+            IncomingCallActivity.Tracker.setOnCall(this, true);
             placeCall(bundle);
         }
-    }
-
-    private void initiateConsultationOld() {
-        /*Map<String, String> params = new HashMap<>();
-        String specialtyId = IO.getData(this, API.SPECIALTY_ID);
-        log("Specialty ID id " + specialtyId);
-        params.put("consultationType", action); //CHAT, VIDEO, AUDIO
-        params.put("doctorId", API.getDoctorId(this));
-        params.put("patientId", String.valueOf(callerId));
-        params.put("specialtyId", specialtyId);
-
-        call = new StringCall(this);
-        call.post(URLS.INITIATE_CONSULTATION, params, response -> {
-            Log.d("TalkToADoctor", "initiateConsultation() " + response);
-            //log( "My Device UUID: " + DeviceName.getUUID(getContext()));
-            try {
-                JSONObject jsonObj = new JSONObject(response);
-
-                if (jsonObj.has("code") && jsonObj.getInt("code") == 0) {
-                    //String docConnId = jsonObj.getString("doctorConnectionId");
-                    String custConnId = jsonObj.getString("customerConnectionId");
-                    String consultationId = jsonObj.getString("consultationId");
-                    //placeCall(custConnId, consultationId);  //"353377098659514");
-                } else {
-                    log(jsonObj.getString("description"));
-                    showErrorDialog(jsonObj.getString("description"), Errors.Unknown);
-                }
-            } catch (JSONException e) {
-                log("JSONException " + e.getMessage());
-                showErrorDialog(e.getMessage(), Errors.Unknown);
-            }
-
-        }, error -> {
-            log("VOLLEY ERROR");
-            log(error.getMessage());
-            if (error.networkResponse == null) {
-                log("Network response is null");
-                showErrorDialog("Please check your internet connection", Errors.NetworkError);
-            } else {
-                String errMsg = Formatter.bytesToString(error.networkResponse.data);
-                showErrorDialog(errMsg, Errors.Unknown);
-                log("DATA: " + errMsg);
-            }
-        }); */
     }
 
 
@@ -104,6 +61,7 @@ public class RoutingActivity extends BaseActivity {
         //String consultationId = bundle.getString(CallLog.CONSULTATION_ID);
         Call call = getSinchServiceInterface().callUser(connId, bundle);
         if (call == null) {
+            IncomingCallActivity.Tracker.setOnCall(this, false);
             ToastUtil.showModal(this, "Sorry. can not process call at the moment please try again later");
             return;
         }
@@ -123,6 +81,7 @@ public class RoutingActivity extends BaseActivity {
         //String consultationId = bundle.getString(CallLog.CONSULTATION_ID);
         Call call = getSinchServiceInterface().videoCallUser(connId, bundle);
         if (call == null) {
+            IncomingCallActivity.Tracker.setOnCall(this, false);
             ToastUtil.showModal(this, "Sorry. can not process call at the moment please try again later");
             return;
         }

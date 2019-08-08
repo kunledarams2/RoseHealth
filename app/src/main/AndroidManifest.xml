@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.BIND_JOB_SERVICE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -29,10 +28,11 @@
         android:supportsRtl="true"
         android:theme="@style/TremendocTheme"
         android:usesCleartextTraffic="true">
-        <!--<activity android:name=".activity.CallLog"></activity>-->
+
         <activity android:name=".activity.OutgoingChatActivity" />
         <activity android:name=".activity.ChatActivity" />
-        <activity android:name=".activity.VideoCallActivity" />
+        <activity android:name=".activity.VideoCallActivity"
+            android:keepScreenOn="true" />
         <activity android:name=".activity.AudioCallActivity" />
         <activity android:name=".activity.IncomingCallActivity" />
 
@@ -76,21 +76,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DoctorsChatActivity" />
-        <activity android:name=".activity.ChatActivityOld" />
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.AuthActivity" />
         <activity android:name=".activity.VoiceCallActivity" />
-        <activity
-            android:name=".activity.VideoCallActivityOld"
-            android:keepScreenOn="true" />
         <activity android:name=".activity.AppointmentActivity" />
         <activity android:name=".activity.RoutingActivity" />
         <activity android:name=".activity.ScheduleActivity" />

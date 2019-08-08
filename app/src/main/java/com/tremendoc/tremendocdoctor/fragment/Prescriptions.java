@@ -2,7 +2,9 @@ package com.tremendoc.tremendocdoctor.fragment;
 
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,6 +76,16 @@ public class Prescriptions extends Fragment {
         retryBtn.setOnClickListener(btn -> {
             retry();
         });
+        ImageButton searchBtn = view.findViewById(R.id.btn_search);
+        searchBtn.setOnClickListener(v -> {
+            String query = searchField.getText().toString();
+            if (!TextUtils.isEmpty(query) && query.length() > 2) {
+                Log.d("SEARCH", "_--__--- Search " + query);
+                search(query);
+            } else {
+                ToastUtil.showShort(getContext(), "Please enter at least three characters.");
+            }
+        });
 
         searchField.setOnEditorActionListener((textView, i, keyEvent) -> {
             boolean handled = false;
@@ -90,6 +103,25 @@ public class Prescriptions extends Fragment {
         });
 
         //searchField.setImeActionLabel("Search", );
+
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().isEmpty()) {
+                    retry();
+                }
+            }
+        });
     }
 
     private void setupAdapter() {
