@@ -139,6 +139,9 @@ class ChatActivity : BaseActivity() {
     }
 
     private fun initPusher(binder: ChatBinder?) {
+
+        Log.d("ChatActivity", "Pusher got initializer---ggggg")
+
         val options = PusherOptions()
         options.setCluster("eu")
         val pusher = Pusher("09e2351b4321af759a47", options)
@@ -206,6 +209,8 @@ class ChatActivity : BaseActivity() {
     }
 
     private fun sendMessage(msg: String) {
+        Log.d("ChatActivity", "Pusher:" + msg)
+
         val obj = JSONObject()
         obj.put("message", msg)
         obj.put("sender", myName)
