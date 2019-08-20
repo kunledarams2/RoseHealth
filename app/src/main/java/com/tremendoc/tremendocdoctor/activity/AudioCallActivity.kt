@@ -154,7 +154,8 @@ class AudioCallActivity : BaseActivity() {
         mAudioPlayer?.stopProgressTone()
         val call: Call? = sinchServiceInterface.getCall(mCallId)
         call?.hangup()
-        sinchServiceInterface.updateConsultation(mConsultationId,call)
+//        sinchServiceInterface.setOngoing(mConsultationId,"DOCTOR_END_CALL")
+//        sinchServiceInterface.updateConsultation(mConsultationId,call)
 
 
         val v = Intent(this@AudioCallActivity, MainActivity::class.java)

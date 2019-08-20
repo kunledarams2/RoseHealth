@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
                 <EditText android:id="@+id/treatment_field"
-                    android:hint="Treatment"
+                    android:hint="Investigation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </com.google.android.material.textfield.TextInputLayout>

@@ -7,5 +7,5 @@ public enum ConsultationStatus {
 //    IGNORED,
     CUSTOMER_MISSED_CALL,
     TERMINATED,
-    DOCTOR_END_CALL
+    END_CALL
 }
