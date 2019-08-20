@@ -6,6 +6,7 @@ import android.app.job.JobService
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import com.tremendoc.tremendocdoctor.activity.BaseActivity
 import com.tremendoc.tremendocdoctor.activity.IncomingCallActivity
 import com.tremendoc.tremendocdoctor.api.API
 import com.tremendoc.tremendocdoctor.api.StringCall
@@ -18,7 +19,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
 
-class StatusJobService : JobService() {
+class  StatusJobService : JobService() {
 
 
     override fun onStartJob(params: JobParameters?): Boolean {

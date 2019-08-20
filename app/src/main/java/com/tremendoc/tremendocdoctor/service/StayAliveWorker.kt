@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.tremendoc.tremendocdoctor.activity.BaseActivity
 import com.tremendoc.tremendocdoctor.activity.MainActivity
 import com.tremendoc.tremendocdoctor.api.API
 import com.tremendoc.tremendocdoctor.api.StringCall
@@ -21,13 +22,22 @@ import java.util.HashMap
 class StayAliveWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        setOnline()
+        try{
+            setOnline()
+            return Result.success()
+        } catch (e:Exception){
 
-        return Result.success()
+            log(e.toString())
+            log(Result.failure().toString())
+
+            return Result.failure()
+        }
+
     }
 
     private fun setOnline() {
         log("StayAliveWorker is running: setOnline() $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
         val call = StringCall(applicationContext)
         val params = HashMap<String, String>()
 
@@ -40,6 +50,7 @@ class StayAliveWorker(context: Context, workerParams: WorkerParameters) : Worker
                     log("Worker request is successful")
                     if (params["mode"] == "ONLINE") {
                         UI.notifyOnline(applicationContext)
+
                     } else {
                         UI.clearOnlineNotification(applicationContext)
                     }

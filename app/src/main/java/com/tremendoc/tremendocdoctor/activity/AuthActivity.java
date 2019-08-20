@@ -19,6 +19,7 @@ public class AuthActivity extends FragmentActivity {
         if (API.isLoggedIn(this)) {
             Intent intent = new Intent(this,  MainActivity.class);
             startActivity(intent);
+//            getSinchServiceInterface().startClient();
             finish();
         }
 
