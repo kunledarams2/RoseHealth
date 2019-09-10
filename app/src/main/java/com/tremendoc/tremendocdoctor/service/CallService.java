@@ -149,14 +149,18 @@ public class CallService extends Service {
 
         public Call callUser(String userId, Bundle bundle) {
             Map<String, String> payload = new HashMap<>();
-            payload.put("doctorId", API.getDoctorId(CallService.this));
-            Map<String, String> data = API.getCredentials(CallService.this);
-            payload.put("doctorName", API.getTitledName());
-            payload.put("doctorAvatar", data.get(API.IMAGE));
+            if(bundle!=null){
+                payload.put("doctorId", API.getDoctorId(CallService.this));
+                Map<String, String> data = API.getCredentials(CallService.this);
+                payload.put("doctorName", API.getTitledName());
+                payload.put("doctorAvatar", data.get(API.IMAGE));
 
-            for (String key : keys) {
-                payload.put(key, bundle.getString(key));
             }
+
+
+//            for (String key : keys) {
+//                payload.put(key, bundle.getString(key));
+//            }
 
             //log("DOCTOR NAME: " + data.get(API.FIRST_NAME) + " " + data.get(API.LAST_NAME));
             return mSinchClient.getCallClient().callUser(userId, payload);
@@ -168,9 +172,9 @@ public class CallService extends Service {
             Map<String, String> data = API.getCredentials(CallService.this);
             payload.put("doctorName", data.get(API.FIRST_NAME) + " " + data.get(API.LAST_NAME));
 
-            for (String key : keys) {
-                payload.put(key, bundle.getString(key));
-            }
+//            for (String key : keys) {
+//                payload.put(key, bundle.getString(key));
+//            }
 
             CallClient client = mSinchClient.getCallClient();
             if (client == null || !isStarted()) {
@@ -272,23 +276,23 @@ public class CallService extends Service {
 
             CallEndCause cause= call.getDetails().getEndCause();
             ConsultationStatus status = null;
-            if(cause==CallEndCause.NO_ANSWER){
-                status=ConsultationStatus.CUSTOMER_MISSED_CALL;
+            if(cause==CallEndCause.CANCELED){
+                status=ConsultationStatus.MISSED_CALL;
 
             }
-            else if(cause==CallEndCause.CANCELED){
-                status =ConsultationStatus.DOCTOR_REJECTED;
-            }
-           else if(cause==CallEndCause.DENIED){
-                status = ConsultationStatus.CUSTOMER_REJECTED;
-            }
-
-            else if(cause==CallEndCause.HUNG_UP){
-                status=ConsultationStatus.END_CALL; // factor based on doctor submitted doctor note of prescription
-            }
-            else {
-                status=ConsultationStatus.TERMINATED;
-            }
+//            else if(cause==CallEndCause.CANCELED){
+//                status =ConsultationStatus.DOCTOR_REJECTED;
+//            }
+//           else if(cause==CallEndCause.DENIED){
+//                status = ConsultationStatus.CUSTOMER_REJECTED;
+//            }
+//
+//            else if(cause==CallEndCause.HUNG_UP){
+//                status=ConsultationStatus.END_CALL; // factor based on doctor submitted doctor note of prescription
+//            }
+//            else {
+//                status=ConsultationStatus.TERMINATED;
+//            }
 
             Map<String, String> params = new HashMap<>();
             params.put("consultationId",consultationId);

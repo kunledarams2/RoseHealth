@@ -13,20 +13,20 @@ import androidx.lifecycle.LiveData;
 public class CallLogViewModel extends AndroidViewModel {
 
     private Application application;
-    private final LiveData<Result<CallLog>> liveData;
+//    private final LiveData<Result<CallLog>> liveData;
 
     //@Inject
     public CallLogViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
         //liveData = new MutableLiveData<>();
-        liveData = CallLogRepository.getInstance(application.getApplicationContext()).getCallLogs();
+//        liveData = CallLogRepository.getInstance(application.getApplicationContext()).getCallLogs();
     }
 
 
-    public LiveData<Result<CallLog>> getCallLogs() {
-        return liveData;
-    }
+//    public LiveData<Result<CallLog>> getCallLogs() {
+//        return liveData;
+//    }
 
 
 }

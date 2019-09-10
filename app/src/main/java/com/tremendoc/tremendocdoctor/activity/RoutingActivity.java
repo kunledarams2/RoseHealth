@@ -3,6 +3,7 @@ package com.tremendoc.tremendocdoctor.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.sinch.android.rtc.calling.Call;
 import com.tremendoc.tremendocdoctor.R;
@@ -58,20 +59,41 @@ public class RoutingActivity extends BaseActivity {
 
     public void placeVoiceCall(Bundle bundle) {
         String connId = bundle.getString(CallLog.PATIENT_UUID);
-        //String consultationId = bundle.getString(CallLog.CONSULTATION_ID);
-        Call call = getSinchServiceInterface().callUser(connId, bundle);
-        if (call == null) {
-            IncomingCallActivity.Tracker.setOnCall(this, false);
-            ToastUtil.showModal(this, "Sorry. can not process call at the moment please try again later");
+        String consultationId = bundle.getString(CallLog.CONSULTATION_ID);
+//        Toast.makeText(this,connId,Toast.LENGTH_LONG).show();
+
+        if(connId==null){
+
             return;
         }
+        else {
 
-        String callId = call.getCallId();
-        Intent callScreen = new Intent(this, AudioCallActivity.class);
-        callScreen.putExtra(CallConstants.CALL_ID, callId);
-        callScreen.putExtras(bundle);
-        startActivity(callScreen);
-        getSinchServiceInterface().setOngoing(CallLog.CONSULTATION_ID,"DOCTOR_RETURNED_CALL");
+        }
+
+        try {
+            Call call = getSinchServiceInterface().callUser(connId, bundle);
+            if (call == null) {
+                IncomingCallActivity.Tracker.setOnCall(this, false);
+                ToastUtil.showModal(this, "Sorry. can not process call at the moment please try again later");
+                return;
+            }
+
+            String callId = call.getCallId();
+            Intent callScreen = new Intent(this, AudioCallActivity.class);
+            callScreen.putExtra(CallConstants.CALL_ID, callId);
+            callScreen.putExtras(bundle);
+            startActivity(callScreen);
+            getSinchServiceInterface().setOngoing(CallLog.CONSULTATION_ID,"DOCTOR_RETURNED_CALL");
+
+
+
+        }catch (Exception e){
+            log(e.getMessage());
+            Toast.makeText(this, "Patient cannot be reached",Toast.LENGTH_LONG).show();
+        }
+
+
+
 
 //        getSinchServiceInterface().updateConsultation();
     }
@@ -79,17 +101,24 @@ public class RoutingActivity extends BaseActivity {
     public void placeVideoCall(Bundle bundle) {
         String connId = bundle.getString(CallLog.PATIENT_UUID);
         //String consultationId = bundle.getString(CallLog.CONSULTATION_ID);
-        Call call = getSinchServiceInterface().videoCallUser(connId, bundle);
-        if (call == null) {
-            IncomingCallActivity.Tracker.setOnCall(this, false);
-            ToastUtil.showModal(this, "Sorry. can not process call at the moment please try again later");
-            return;
+        try{
+            Call call = getSinchServiceInterface().videoCallUser(connId, bundle);
+            if (call == null) {
+                IncomingCallActivity.Tracker.setOnCall(this, false);
+                ToastUtil.showModal(this, "Sorry. can not process call at the moment please try again later");
+                return;
+            }
+            String callId = call.getCallId();
+            Intent callScreen = new Intent(this, VideoCallActivity.class);
+            callScreen.putExtra(CallConstants.CALL_ID, callId);
+            callScreen.putExtras(bundle);
+            startActivity(callScreen);
+        }catch (Exception e){
+            log(e.getMessage());
+            Toast.makeText(this, "Patient cannot be reached",Toast.LENGTH_LONG).show();
+
         }
-        String callId = call.getCallId();
-        Intent callScreen = new Intent(this, VideoCallActivity.class);
-        callScreen.putExtra(CallConstants.CALL_ID, callId);
-        callScreen.putExtras(bundle);
-        startActivity(callScreen);
+
     }
 
     public void chatUp(Bundle bundle) {

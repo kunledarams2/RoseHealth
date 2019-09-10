@@ -119,62 +119,62 @@ public class CallLog {
         return callerToken;
     } */
 
-    public void save() throws JSONException{
-        String string = getData(context);
-        if (string.length() < 2)
-            string = "[]";
-
-        JSONArray callLogs = new JSONArray(string);
-
-        if (!bundle.containsKey(PATIENT_ID) || !bundle.containsKey(PATIENT_NAME)) {
-            return;
-        }
-
-        // check if the caller has called before
-        for (int i = 0; i < callLogs.length(); i++) {
-            JSONObject log = callLogs.getJSONObject(i);
-            if (log.getString(PATIENT_ID).equals(get(PATIENT_ID))) {
-                for (String key: bundle.keySet()) {
-                    if (bundle.containsKey(key))
-                    log.put(key, get(key));
-                }
-                int count = log.has("count") ? log.getInt("count") + 1 : 1;
-
-                log.put("count", count);
-                callLogs.remove(i);
-                callLogs.put(log);
-                saveData(callLogs.toString());
-                return;
-            }
-        }
-
-        //if the caller hasnt called before
-        JSONObject log = new JSONObject();
-        for (String key: bundle.keySet()) {
-            log.put(key, get(key));
-        }
-        log.put(COUNT, 1);
-        callLogs.put(log);
-
-        //if length is more than 40, remove the first call
-        if (callLogs.length() > 40)
-            callLogs.remove(0);
-
-        saveData(callLogs.toString());
-    }
-
-    private void saveData(String value) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(CALL_LOG_STORE, Context.MODE_PRIVATE).edit();
-        editor.putString(CALL_LOGS, value);
-        editor.apply();
-    }
-
-    private static String getData(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(CALL_LOG_STORE, Context.MODE_PRIVATE);
-        String string = prefs.getString(CALL_LOGS,"");
-        return string;
-
-    }
+//    public void save() throws JSONException{
+//        String string = getData(context);
+//        if (string.length() < 2)
+//            string = "[]";
+//
+//        JSONArray callLogs = new JSONArray(string);
+//
+//        if (!bundle.containsKey(PATIENT_ID) || !bundle.containsKey(PATIENT_NAME)) {
+//            return;
+//        }
+//
+//        // check if the caller has called before
+//        for (int i = 0; i < callLogs.length(); i++) {
+//            JSONObject log = callLogs.getJSONObject(i);
+//            if (log.getString(PATIENT_ID).equals(get(PATIENT_ID))) {
+//                for (String key: bundle.keySet()) {
+//                    if (bundle.containsKey(key))
+//                    log.put(key, get(key));
+//                }
+//                int count = log.has("count") ? log.getInt("count") + 1 : 1;
+//
+//                log.put("count", count);
+//                callLogs.remove(i);
+//                callLogs.put(log);
+//                saveData(callLogs.toString());
+//                return;
+//            }
+//        }
+//
+//        //if the caller hasnt called before
+//        JSONObject log = new JSONObject();
+//        for (String key: bundle.keySet()) {
+//            log.put(key, get(key));
+//        }
+//        log.put(COUNT, 1);
+//        callLogs.put(log);
+//
+//        //if length is more than 40, remove the first call
+//        if (callLogs.length() > 40)
+//            callLogs.remove(0);
+//
+//        saveData(callLogs.toString());
+//    }
+//
+//    private void saveData(String value) {
+//        SharedPreferences.Editor editor = context.getSharedPreferences(CALL_LOG_STORE, Context.MODE_PRIVATE).edit();
+//        editor.putString(CALL_LOGS, value);
+//        editor.apply();
+//    }
+//
+//    private static String getData(Context context) {
+//        SharedPreferences prefs = context.getSharedPreferences(CALL_LOG_STORE, Context.MODE_PRIVATE);
+//        String string = prefs.getString(CALL_LOGS,"");
+//        return string;
+//
+//    }
 
     /*
     public static void createCallLog(Context context, String consultationId, String callerName,
@@ -226,35 +226,35 @@ public class CallLog {
         IO.setData(context, CALL_LOGS, callLogs.toString());
     } */
 
-    public static List<CallLog> getCallLogs(Context context) throws JSONException {
-        List<CallLog> logs = new ArrayList<>();
-        String string = getData(context);
-        Log.d("CallLog", "Call logs string " + string);
-        if (string.length() < 2)
-            string = "[]";
-
-        JSONArray callLogs = new JSONArray(string);
-        for (int i = 0; i < callLogs.length(); i++) {
-            JSONObject log =  callLogs.getJSONObject(i);
-            logs.add(parse(context, log));
-        }
-        return logs;
-    }
-
-    public static CallLog parse(Context ctx, JSONObject object) throws JSONException{
-        CallLog log = new CallLog(ctx);
-        log.set(TIME, object.getString(TIME));
-        log.set(PATIENT_ID, object.getString(PATIENT_ID));
-        log.set(CALL_TYPE, object.getString(CALL_TYPE));
-        log.set(PATIENT_NAME, object.getString(PATIENT_NAME));
-        log.set(PATIENT_UUID, object.getString(PATIENT_UUID));
-        log.set(CONSULTATION_ID, object.getString(CONSULTATION_ID));
-        log.set(PATIENT_TOKEN, object.getString(PATIENT_TOKEN));
-        log.set(DOCTOR_TOKEN, object.getString(DOCTOR_TOKEN));
-        if (object.has("count") && !object.isNull("count"))
-            log.setCount(object.getInt("count"));
-        else
-            log.setCount(1);
-        return log;
-    }
+//    public static List<CallLog> getCallLogs(Context context) throws JSONException {
+//        List<CallLog> logs = new ArrayList<>();
+//        String string = getData(context);
+//        Log.d("CallLog", "Call logs string " + string);
+//        if (string.length() < 2)
+//            string = "[]";
+//
+//        JSONArray callLogs = new JSONArray(string);
+//        for (int i = 0; i < callLogs.length(); i++) {
+//            JSONObject log =  callLogs.getJSONObject(i);
+//            logs.add(parse(context, log));
+//        }
+//        return logs;
+//    }
+//
+//    public static CallLog parse(Context ctx, JSONObject object) throws JSONException{
+//        CallLog log = new CallLog(ctx);
+//        log.set(TIME, object.getString(TIME));
+//        log.set(PATIENT_ID, object.getString(PATIENT_ID));
+//        log.set(CALL_TYPE, object.getString(CALL_TYPE));
+//        log.set(PATIENT_NAME, object.getString(PATIENT_NAME));
+//        log.set(PATIENT_UUID, object.getString(PATIENT_UUID));
+//        log.set(CONSULTATION_ID, object.getString(CONSULTATION_ID));
+//        log.set(PATIENT_TOKEN, object.getString(PATIENT_TOKEN));
+//        log.set(DOCTOR_TOKEN, object.getString(DOCTOR_TOKEN));
+//        if (object.has("count") && !object.isNull("count"))
+//            log.setCount(object.getInt("count"));
+//        else
+//            log.setCount(1);
+//        return log;
+//    }
 }

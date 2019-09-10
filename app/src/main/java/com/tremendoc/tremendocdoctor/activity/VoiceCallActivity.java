@@ -480,7 +480,7 @@ public class VoiceCallActivity extends BaseActivity implements View.OnClickListe
                     callLog.set(CallLog.DOCTOR_TOKEN, doctorToken);
                     callLog.set(CallLog.PATIENT_TOKEN, patientToken);
                     callLog.set(CallLog.CONSULTATION_ID, consultationId);
-                    callLog.save();
+//                    callLog.save();
                     createdLog = true;
                 } catch (Exception e) {
                     log("ERROR CREATING CALL LOG "+ e.getMessage());
