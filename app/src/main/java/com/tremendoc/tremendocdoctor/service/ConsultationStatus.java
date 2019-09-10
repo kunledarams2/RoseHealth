@@ -3,9 +3,11 @@ package com.tremendoc.tremendocdoctor.service;
 public enum ConsultationStatus {
     COMPLETED,
     DOCTOR_REJECTED,
+    ONGOING,
+    DOCTOR_RANG,
     CUSTOMER_REJECTED,
 //    IGNORED,
-    CUSTOMER_MISSED_CALL,
+    MISSED_CALL,
     TERMINATED,
     END_CALL
 }

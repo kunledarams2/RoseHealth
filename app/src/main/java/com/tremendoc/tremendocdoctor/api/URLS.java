@@ -3,10 +3,12 @@ package com.tremendoc.tremendocdoctor.api;
 import com.tremendoc.tremendocdoctor.BuildConfig;
 
 public class URLS {
-//    private static final String IP = BuildConfig.DEBUG ? "138.68.159.246" : "178.128.8.26";
+//    private static final String IP = BuildConfig.DEBUG ? "178.128.8.26" : "178.128.8.26";
 
     private static final String IP = BuildConfig.DEBUG ? "188.166.14.154" : "188.166.14.154";
 //    private static final String IP = BuildConfig.DEBUG ? "192.168.88.23" : "192.168.88.23";
+//private static final String IP = BuildConfig.DEBUG ? "192.168.88.28" : "192.168.88.28";
+
 
     public static final String SERVER = "http://" + IP + ":9000/tremendoc/api/";
 
@@ -42,5 +44,7 @@ public class URLS {
     public static String INITIATE_CONSULTATION = SERVER + "consultation/initiate";
     public static final String CHAT = SERVER + "pusher/message/send";
     public static final String PUSH_TOKEN = SERVER + "push/pushtoken/add";
+
+    public static String CALL_LOG_STATUS= SERVER + "doctor/consultation-call-log/";
 
 }
