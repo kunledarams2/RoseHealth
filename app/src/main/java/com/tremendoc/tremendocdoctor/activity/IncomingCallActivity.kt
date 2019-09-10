@@ -11,6 +11,7 @@ import com.tremendoc.tremendocdoctor.R
 import com.tremendoc.tremendocdoctor.api.API
 import com.tremendoc.tremendocdoctor.model.CallLog
 import com.tremendoc.tremendocdoctor.service.ChatService
+import com.tremendoc.tremendocdoctor.service.ConsultationStatus
 import com.tremendoc.tremendocdoctor.utils.AudioPlayer
 import com.tremendoc.tremendocdoctor.utils.CallConstants
 import com.tremendoc.tremendocdoctor.utils.Timer
@@ -68,7 +69,7 @@ class IncomingCallActivity : BaseActivity() {
             label.text = "Incoming ${mCallType?.toLowerCase()} call from $mPatientName"
 
             val consultationId= intent.getStringExtra(CallLog.CONSULTATION_ID)
-            sinchServiceInterface.setOngoing(consultationId,"DOCTOR_RANG")
+            sinchServiceInterface.setOngoing(consultationId,ConsultationStatus.DOCTOR_RANG.name)
 
         } else if (mCallType == "CHAT") {
             chatListener = MyChatListener()
@@ -100,7 +101,9 @@ class IncomingCallActivity : BaseActivity() {
             val call: Call? = sinchServiceInterface.getCall(mCallId)
             if (call != null) {
                 call.answer()
-                sinchServiceInterface.setOngoing(consultationId,"ONGOING")
+                sinchServiceInterface.setOngoing(consultationId,ConsultationStatus.ONGOING.name)
+                Log.d("IncomingCallActivity", ConsultationStatus.ONGOING.name)
+
 
                 var callScreen: Intent? = null
                 when (mCallType) {
@@ -139,7 +142,9 @@ class IncomingCallActivity : BaseActivity() {
         if (mCallType == "VIDEO" || mCallType == "AUDIO") {
             val call = sinchServiceInterface.getCall(mCallId)
             call?.hangup()
-            sinchServiceInterface.setOngoing(consultationId,"DOCTOR_REJECTED")
+            sinchServiceInterface.setOngoing(consultationId,ConsultationStatus.DOCTOR_REJECTED.name)
+            Log.d("IncomingCallActivity", ConsultationStatus.DOCTOR_REJECTED.name)
+
         } else if (mCallType == "CHAT") {
             chatServiceInterface.endChat(mPatientToken, "rejected")
         }
@@ -167,7 +172,7 @@ class IncomingCallActivity : BaseActivity() {
             callLog.set(CallLog.DOCTOR_TOKEN, doctorToken)
             callLog.set(CallLog.PATIENT_TOKEN, patientToken)
             callLog.set(CallLog.CONSULTATION_ID, consultationId)
-            callLog.save()
+//            callLog.save()
         } catch (e: Exception) {
             Log.d("IncomingCallActivity","ERROR CREATING CALL LOG " + e.message)
         }
@@ -183,7 +188,7 @@ class IncomingCallActivity : BaseActivity() {
             val cause = call?.details?.endCause
             Log.d("IncomingCallActivity", "Call ended cause: ${cause?.toString()}")
             mAudioPlayer?.stopRingtone()
-//            sinchServiceInterface.updateConsultation(consultationId,call)
+            sinchServiceInterface.updateConsultation(consultationId,call)
 
             logCall()
 

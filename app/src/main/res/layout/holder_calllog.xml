@@ -1,77 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="5dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp"
     android:background="@drawable/background_white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView android:id="@+id/img"
-        android:background="@drawable/circle_black"
+    android:layout_height="wrap_content"
+    >
+
+    <TextView
+        android:id="@+id/img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/circle_black"
+        android:gravity="center"
+        android:src="@drawable/ic_call_black"
         android:text="W"
         android:textColor="@color/colorWhite"
-        android:gravity="center"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_margin="10dp"
-        android:src="@drawable/ic_call_black"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
-    <TextView android:id="@+id/caller_id"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="6dp" />
+
+    <TextView
+        android:id="@+id/caller_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="1dp"
+
+        android:layout_toEndOf="@+id/img"
         android:text="Sample Caller id"
-        android:padding="5dp"
+
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_toEndOf="@+id/img"
-        android:layout_alignParentTop="true"
+        app:layout_constraintStart_toEndOf="@+id/img"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/call_counts"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView android:id="@+id/call_counts"
-        android:text="3 Missed Calls"
-        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/caller_id"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toEndOf="@+id/img"
+        android:padding="0dp"
+        android:text=" 3 "
+        android:textColor="#EE0C0C"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:layout_toEndOf="@+id/img"
-        android:layout_below="@+id/caller_id"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/consultationStatus"
+        app:layout_constraintStart_toEndOf="@+id/img"
+        app:layout_constraintTop_toBottomOf="@+id/caller_id" />
+
+    <TextView
+        android:id="@+id/consultationStatus"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView android:id="@+id/call_time"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:text="Missed Calls"
+        app:layout_constraintStart_toEndOf="@+id/call_counts"
+        app:layout_constraintTop_toBottomOf="@+id/caller_id" />
+
+    <TextView
+        android:id="@+id/call_time"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@+id/call_counts"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/img"
+        android:padding="2dp"
         android:text="12 min. ago"
-        android:padding="5dp"
         android:textSize="12sp"
         android:textStyle="bold"
-        android:layout_toEndOf="@+id/img"
-        android:layout_below="@+id/call_counts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintStart_toEndOf="@+id/consultationStatus"
+        app:layout_constraintTop_toBottomOf="@+id/caller_id" />
 
-    <ImageButton android:id="@+id/video_call_btn"
-        android:src="@drawable/ic_video_black"
-        android:background="@android:color/transparent"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:padding="5dp"
-        android:layout_margin="5dp"
-        android:layout_toStartOf="@+id/voice_call_btn"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageButton android:id="@+id/voice_call_btn"
-        android:src="@drawable/ic_call_black"
-        android:background="@android:color/transparent"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-        android:layout_toStartOf="@+id/chat_btn"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/video_call_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
 
-    <ImageButton android:id="@+id/chat_btn"
-        android:src="@drawable/ic_chat_black"
-        android:background="@android:color/transparent"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            android:layout_marginEnd="20dp"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:src="@drawable/ic_video_black"
+            app:layout_constraintEnd_toStartOf="@+id/voice_call_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/voice_call_btn"
+            android:layout_width="39dp"
+            android:layout_height="40dp"
+
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:src="@drawable/ic_call_black"
+            app:layout_constraintEnd_toStartOf="@+id/chat_btn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/chat_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:src="@drawable/ic_chat_black"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

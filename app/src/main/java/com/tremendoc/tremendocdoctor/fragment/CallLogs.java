@@ -20,15 +20,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.activity.RoutingActivity;
 import com.tremendoc.tremendocdoctor.adapter.CallLogAdapter;
 import com.tremendoc.tremendocdoctor.model.CallLog;
+import com.tremendoc.tremendocdoctor.model.NewCallLog;
 import com.tremendoc.tremendocdoctor.service.CallService;
 import com.tremendoc.tremendocdoctor.ui.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import com.tremendoc.tremendocdoctor.utils.CallConstants;
+import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 import com.tremendoc.tremendocdoctor.viewmodel.CallLogViewModel;
+import com.tremendoc.tremendocdoctor.viewmodel.NewCallLogViewModel;
 import com.tremendoc.tremendocdoctor.viewmodel.NoteViewModel;
 
 public class CallLogs extends Fragment {
@@ -40,7 +44,7 @@ public class CallLogs extends Fragment {
     private TextView emptyText;
     private Button retryBtn;
     private ProgressBar loader;
-    private CallLogViewModel viewModel;
+    private NewCallLogViewModel viewModel;
 
 
     public CallLogs() {
@@ -75,10 +79,11 @@ public class CallLogs extends Fragment {
     private void setupRecyclerView(){
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CallLogAdapter();
+        adapter = new CallLogAdapter(getContext());
         adapter.setClickListener(new CallLogAdapter.ClickListener() {
             @Override
             public void onVideoClicked(CallLog log) {
+
                 route(log);
             }
 
@@ -88,27 +93,35 @@ public class CallLogs extends Fragment {
             }
 
             @Override
-            public void onChatClicked(CallLog log) {
-                route(log);
+            public void onChatClicked() {
+
             }
         });
+
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL)
         );
     }
 
-    private void route(CallLog callLog) {
-        Intent intent = new Intent(getContext(), RoutingActivity.class);
-        intent.putExtras(callLog.getBundle());
-        intent.putExtra("incoming", false);
-        getContext().startActivity(intent);
+    private void route(CallLog log) {
+        if(log.get(CallLog.PATIENT_UUID)!=null){
+            Intent intent = new Intent(getContext(), RoutingActivity.class);
+            intent.putExtras(log.getBundle());
+            intent.putExtra("incoming", false);
+            getContext().startActivity(intent);
+        }else {
+            Toast.makeText(getContext(),"Patient cannot be reached",Toast.LENGTH_LONG).show();
+        }
+
     }
 
-    @Override
+
+        @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(CallLogViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(NewCallLogViewModel.class);
+
         viewModel.getCallLogs().observe(this, result -> {
             loader.setVisibility(View.GONE);
             if (result.isSuccessful() && !result.getDataList().isEmpty()) {
@@ -122,7 +135,7 @@ public class CallLogs extends Fragment {
                 emptyText.setVisibility(View.VISIBLE);
             }
             else if (!result.isSuccessful()){
-                Log.d("CallLOgs", "IS NOT SUCCESSFUL");
+                Log.d("Call Logs", "IS NOT SUCCESSFUL");
                 emptyIcon.setImageResource(R.drawable.placeholder_error);
                 emptyText.setText(result.getMessage());
                 emptyIcon.setVisibility(View.VISIBLE);
