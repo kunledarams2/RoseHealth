@@ -1,0 +1,7 @@
+configurations.maybeCreate("default")
+//
+//dependencies {
+//    implementation project(path: ':sinch-android-rtc-3.13.0')
+//    implementation project(path: ':app')
+//}
+artifacts.add("default", file('sinch-android-rtc-3.15.0.aar'))

@@ -276,23 +276,23 @@ public class CallService extends Service {
 
             CallEndCause cause= call.getDetails().getEndCause();
             ConsultationStatus status = null;
-            if(cause==CallEndCause.CANCELED){
+            if(cause==CallEndCause.NO_ANSWER ){
                 status=ConsultationStatus.MISSED_CALL;
 
             }
-//            else if(cause==CallEndCause.CANCELED){
-//                status =ConsultationStatus.DOCTOR_REJECTED;
-//            }
-//           else if(cause==CallEndCause.DENIED){
-//                status = ConsultationStatus.CUSTOMER_REJECTED;
-//            }
-//
-//            else if(cause==CallEndCause.HUNG_UP){
-//                status=ConsultationStatus.END_CALL; // factor based on doctor submitted doctor note of prescription
-//            }
-//            else {
-//                status=ConsultationStatus.TERMINATED;
-//            }
+            else if(cause==CallEndCause.CANCELED){
+                status =ConsultationStatus.MISSED_CALL;
+            }
+           else if(cause==CallEndCause.DENIED){
+                status = ConsultationStatus.DOCTOR_REJECTED;
+            }
+
+            else if(cause==CallEndCause.HUNG_UP){
+                status=ConsultationStatus.END_CALL; // factor based on doctor submitted doctor note of prescription
+            }
+            else {
+                status=ConsultationStatus.TERMINATED;
+            }
 
             Map<String, String> params = new HashMap<>();
             params.put("consultationId",consultationId);
