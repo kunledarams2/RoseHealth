@@ -86,7 +86,7 @@ public class CallService extends Service {
 
         mSinchClient.setSupportCalling(true);
         mSinchClient.setSupportManagedPush(true);
-        mSinchClient.setSupportActiveConnectionInBackground(true);
+//        mSinchClient.setSupportActiveConnectionInBackground(true);
         mSinchClient.startListeningOnActiveConnection();
         mSinchClient.addSinchClientListener(new MySinchClientListener());
         mSinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());

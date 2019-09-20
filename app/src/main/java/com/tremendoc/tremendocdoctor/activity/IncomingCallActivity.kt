@@ -4,21 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.sinch.android.rtc.PushPair
 import com.sinch.android.rtc.calling.Call
+import com.sinch.android.rtc.calling.CallEndCause
 import com.sinch.android.rtc.calling.CallListener
 import com.tremendoc.tremendocdoctor.R
 import com.tremendoc.tremendocdoctor.api.API
+import com.tremendoc.tremendocdoctor.dialog.NoteDialog
 import com.tremendoc.tremendocdoctor.model.CallLog
 import com.tremendoc.tremendocdoctor.service.ChatService
 import com.tremendoc.tremendocdoctor.service.ConsultationStatus
-import com.tremendoc.tremendocdoctor.utils.AudioPlayer
-import com.tremendoc.tremendocdoctor.utils.CallConstants
-import com.tremendoc.tremendocdoctor.utils.Timer
+import com.tremendoc.tremendocdoctor.utils.*
 import kotlinx.android.synthetic.main.activity_incoming_call.*
 import org.joda.time.DateTime
-import com.tremendoc.tremendocdoctor.utils.UI
-
 
 
 class IncomingCallActivity : BaseActivity() {
@@ -32,6 +32,7 @@ class IncomingCallActivity : BaseActivity() {
     private var mPatientName: String? = null
     private var consultationId: String? = null
     private var mPatientToken: String? = null
+    private var mCustomerType:String?=null
 
     private var answered = false
 
@@ -49,6 +50,7 @@ class IncomingCallActivity : BaseActivity() {
         mPatientName = intent?.getStringExtra(CallLog.PATIENT_NAME)
         consultationId = intent?.getStringExtra(CallLog.CONSULTATION_ID)
         mPatientToken = intent?.getStringExtra(CallLog.PATIENT_TOKEN)
+        mCustomerType=intent?.getStringExtra(CallLog.CUSTOMER_TYPE)
     }
 
     override fun onResume() {
@@ -59,17 +61,17 @@ class IncomingCallActivity : BaseActivity() {
 
     override fun onServiceConnected() {
         if (mCallType == "VIDEO" || mCallType == "AUDIO") {
-            val call : Call? = sinchServiceInterface.getCall(mCallId)
+            val call: Call? = sinchServiceInterface.getCall(mCallId)
             if (call == null) {
                 finish()
                 return
             }
 
             call.addCallListener(SinchCallListener())
-            label.text = "Incoming ${mCallType?.toLowerCase()} call from $mPatientName"
+            label.text = "Incoming ${mCallType?.toLowerCase()} call from $mPatientName \nPlan:  ${mCustomerType}"
 
-            val consultationId= intent.getStringExtra(CallLog.CONSULTATION_ID)
-            sinchServiceInterface.setOngoing(consultationId,ConsultationStatus.DOCTOR_RANG.name)
+            val consultationId = intent.getStringExtra(CallLog.CONSULTATION_ID)
+            sinchServiceInterface.setOngoing(consultationId, ConsultationStatus.DOCTOR_RANG.name)
 
         } else if (mCallType == "CHAT") {
             chatListener = MyChatListener()
@@ -90,7 +92,7 @@ class IncomingCallActivity : BaseActivity() {
     }
 
     private fun setupViews() {
-        accept_btn.setOnClickListener { pickup()  }
+        accept_btn.setOnClickListener { pickup() }
         reject_btn.setOnClickListener { decline() }
     }
 
@@ -101,14 +103,20 @@ class IncomingCallActivity : BaseActivity() {
             val call: Call? = sinchServiceInterface.getCall(mCallId)
             if (call != null) {
                 call.answer()
-                sinchServiceInterface.setOngoing(consultationId,ConsultationStatus.ONGOING.name)
+                sinchServiceInterface.setOngoing(consultationId, ConsultationStatus.ONGOING.name)
                 Log.d("IncomingCallActivity", ConsultationStatus.ONGOING.name)
 
 
                 var callScreen: Intent? = null
                 when (mCallType) {
-                    "AUDIO" -> callScreen = Intent(this, AudioCallActivity::class.java)
-                    "VIDEO" -> callScreen = Intent(this, VideoCallActivity::class.java)
+                    "AUDIO" -> {
+                        callScreen = Intent(this, AudioCallActivity::class.java)
+
+                    }
+                    "VIDEO" ->{
+                        callScreen = Intent(this, VideoCallActivity::class.java)
+                    }
+
                 }
                 if (intent?.extras != null) {
                     val bundle = intent?.extras
@@ -117,7 +125,9 @@ class IncomingCallActivity : BaseActivity() {
                         callScreen?.putExtras(bundle)
                     }
                 }
+                callScreen?.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP; Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(callScreen)
+                finish()
             } else {
                 finish()
             }
@@ -142,14 +152,14 @@ class IncomingCallActivity : BaseActivity() {
         if (mCallType == "VIDEO" || mCallType == "AUDIO") {
             val call = sinchServiceInterface.getCall(mCallId)
             call?.hangup()
-            sinchServiceInterface.setOngoing(consultationId,ConsultationStatus.DOCTOR_REJECTED.name)
+            sinchServiceInterface.setOngoing(consultationId, ConsultationStatus.DOCTOR_REJECTED.name)
             Log.d("IncomingCallActivity", ConsultationStatus.DOCTOR_REJECTED.name)
 
         } else if (mCallType == "CHAT") {
             chatServiceInterface.endChat(mPatientToken, "rejected")
         }
 
-        logCall()
+//        logCall()
         finish()
     }
 
@@ -174,13 +184,13 @@ class IncomingCallActivity : BaseActivity() {
             callLog.set(CallLog.CONSULTATION_ID, consultationId)
 //            callLog.save()
         } catch (e: Exception) {
-            Log.d("IncomingCallActivity","ERROR CREATING CALL LOG " + e.message)
+            Log.d("IncomingCallActivity", "ERROR CREATING CALL LOG " + e.message)
         }
 
 
     }
 
-    private inner class SinchCallListener: CallListener {
+    private inner class SinchCallListener : CallListener {
 
         override fun onCallEnded(call: Call?) {
             setOnCall(this@IncomingCallActivity, false)
@@ -188,14 +198,17 @@ class IncomingCallActivity : BaseActivity() {
             val cause = call?.details?.endCause
             Log.d("IncomingCallActivity", "Call ended cause: ${cause?.toString()}")
             mAudioPlayer?.stopRingtone()
-            sinchServiceInterface.updateConsultation(consultationId,call)
+            sinchServiceInterface.updateConsultation(consultationId, call)
 
-            logCall()
+            if(cause!!.equals(CallEndCause.CANCELED)){
 
-            val v = Intent(this@IncomingCallActivity, MainActivity::class.java)
-            v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(v)
-            finish()
+                val v = Intent(this@IncomingCallActivity, MainActivity::class.java)
+                v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(v)
+                finish()
+
+            }
+
         }
 
         override fun onCallEstablished(call: Call?) {
@@ -212,13 +225,14 @@ class IncomingCallActivity : BaseActivity() {
         }
     }
 
-    private inner class MyChatListener: ChatService.ChatListener {
+    private inner class MyChatListener : ChatService.ChatListener {
         override fun onChatEnded(reason: String?) {
 
             setOnCall(this@IncomingCallActivity, false)
             mAudioPlayer?.stopRingtone()
 
             logCall()
+
 
             val v = Intent(this@IncomingCallActivity, MainActivity::class.java)
             v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -239,7 +253,7 @@ class IncomingCallActivity : BaseActivity() {
         }
     }
 
-    companion object Tracker{
+    companion object Tracker {
         const val ON_CALL_STATUS = "ON_CALL_STATUS"
 
         fun setOnCall(context: Context, status: Boolean) {
@@ -254,9 +268,26 @@ class IncomingCallActivity : BaseActivity() {
             return prefs.getBoolean(ON_CALL_STATUS, false)
         }
     }
-    private fun updateConsultiation(){
 
-        val params:Map<String, String>
+    private fun updateConsultiation() {
+
+        val params: Map<String, String>
+
+    }
+
+    private fun writeNote(){
+
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setMessage("Please drop your note")
+        alertDialog.setPositiveButton("Write"){
+            dialogInterface, i ->
+
+            val intent= Intent(this@IncomingCallActivity, NoteDialog::class.java)
+            startActivity(intent)
+            finish()
+        }
+        alertDialog.create().show()
+
 
     }
 
