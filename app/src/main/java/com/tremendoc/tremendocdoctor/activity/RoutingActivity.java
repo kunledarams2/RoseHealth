@@ -62,14 +62,6 @@ public class RoutingActivity extends BaseActivity {
         String consultationId = bundle.getString(CallLog.CONSULTATION_ID);
 //        Toast.makeText(this,connId,Toast.LENGTH_LONG).show();
 
-        if(connId==null){
-
-            return;
-        }
-        else {
-
-        }
-
         try {
             Call call = getSinchServiceInterface().callUser(connId, bundle);
             if (call == null) {
