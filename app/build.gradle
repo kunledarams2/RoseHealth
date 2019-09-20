@@ -61,7 +61,9 @@ dependencies {
     //implementation 'com.amazonaws:aws-android-sdk-s3:2.6.9'
     //implementation 'com.amazonaws:aws-android-sdk-s3:2.12.6'
     //implementation 'com.amazonaws:aws-android-sdk-ddb:2.3.3'
-    implementation(name: 'sinch-android-rtc', version: '+', ext: 'aar')
+//    implementation(name: 'sinch-android-rtc', version: '+', ext: 'aar')
+    implementation project(path: ':sinch-android-rtc-3.15.0')
+
 
     implementation 'com.google.firebase:firebase-core:16.0.9'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'

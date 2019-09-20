@@ -25,6 +25,7 @@ public class CallLog {
     public static final String PATIENT_UUID = "patientUuid";
     public static final String PATIENT_TOKEN = "patientToken";
     public static final String DOCTOR_TOKEN = "doctorToken";
+    public static final String CUSTOMER_TYPE="customerType";
 
     private static final String COUNT = "count";
 
