@@ -16,7 +16,6 @@ class OutgoingChatActivity : BaseActivity() {
     private var mAudioPlayer: AudioPlayer?  = null
     private var pickupTimer: Timer? = null
     private var chatListener: MyChatListener? = null
-
     private var answered = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

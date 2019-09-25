@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_video_call.*
 import java.util.*
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.sinch.android.rtc.PushPair
 import com.sinch.android.rtc.video.VideoCallListener
@@ -39,6 +40,7 @@ class VideoCallActivity : BaseActivity() {
     private var mConsultationId: String? = null
 
     private var mAddedListener: Boolean = false
+    private  var writeNote:Boolean=false
     private var mRemoteVideoViewAdded = false
     private var mLocalVideoViewAdded = false
     var mToggleVideoViewPositions = false
@@ -80,7 +82,7 @@ class VideoCallActivity : BaseActivity() {
 
         val timerTask = object: TimerTask() {
             override fun run() {
-                endCall()
+                endCall(true)
             }
         }
         val interval:Long = 1000 * 60 * 10 //10 minute
@@ -89,11 +91,12 @@ class VideoCallActivity : BaseActivity() {
     }
 
     private fun setViews() {
-        end_btn.setOnClickListener{ endCall() }
+        end_btn.setOnClickListener{ endCall(true) }
         mute_btn.setOnClickListener { toggleMute(mAudioPlayer) }
         speaker_btn.setOnClickListener { toggleSpeaker(mAudioPlayer) }
         new_note_btn.setOnClickListener {
             NewNoteDialog(this, mConsultationId, mPatientId).show()
+            writeNote=true
         }
         med_record_btn.setOnClickListener {
             MedicalRecordDialog(this, mPatientId).show()
@@ -191,17 +194,28 @@ class VideoCallActivity : BaseActivity() {
         //super.onBackPressed()
     }
 
-    private fun endCall () {
-
+    private fun endCall (closeScreen:Boolean) {
         IncomingCallActivity.setOnCall(this@VideoCallActivity, false)
         mAudioPlayer?.stopProgressTone()
         val call: Call? = sinchServiceInterface.getCall(mCallId)
         call?.hangup()
+        if(closeScreen){
+            if(writeNote){
 
-        val v = Intent(this@VideoCallActivity, MainActivity::class.java)
-        v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(v)
-        finish()
+                val v = Intent(this@VideoCallActivity, MainActivity::class.java)
+                v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(v)
+                finish()
+
+            }
+            else{
+                Toast.makeText(this@VideoCallActivity,"Please write doctor note to exit", Toast.LENGTH_LONG).show()
+            }
+        }
+
+
+
+
     }
 
     private fun toggleMute(mAudioPlayer: AudioPlayer?) {
@@ -317,7 +331,7 @@ class VideoCallActivity : BaseActivity() {
             mAudioPlayer?.stopProgressTone()
             volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
 
-            endCall()
+            endCall(true)
         }
 
         override fun onCallEstablished(call: Call?) {

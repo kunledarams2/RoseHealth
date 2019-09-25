@@ -58,6 +58,7 @@ public class NewNoteDialog extends Dialog {
         saveBtn.setOnClickListener(btn -> trySaveNote());
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.GONE);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
         toolbar.setNavigationOnClickListener(v -> cancel());
     }
