@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -28,11 +29,11 @@ import com.tremendoc.tremendocdoctor.fragment.CallLogs
 import com.tremendoc.tremendocdoctor.model.CallLog
 import com.tremendoc.tremendocdoctor.utils.AudioPlayer
 import com.tremendoc.tremendocdoctor.utils.CallConstants
+import com.tremendoc.tremendocdoctor.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_audio_call.*
 import kotlinx.android.synthetic.main.notedialog_note.*
 import kotlinx.android.synthetic.main.notedialog_note.view.*
 import java.util.*
-
 
 
 class AudioCallActivity : BaseActivity() {
@@ -41,17 +42,17 @@ class AudioCallActivity : BaseActivity() {
 
     private var mCallId: String? = null
     private var mPatientName: String? = null
-    private var mPatientId: String?  = null
+    private var mPatientId: String? = null
     private var mConsultationId: String? = null
-    private var mCustomerType:String?=null
-    private var mWritenNote =false
+    private var mCustomerType: String? = null
+    private var mWritenNote = false
     private var callEnded = false
     val ONE_MINUTE = 60
     val TEN_MINUTES = ONE_MINUTE * 10
 
     private var mTimer: Timer? = null
     private var mDurationTask: UpdateCallDurationTask? = null
-    private var currentFragment:Fragment?= null
+    private var currentFragment: Fragment? = null
 
 
     private inner class UpdateCallDurationTask : TimerTask() {
@@ -73,32 +74,34 @@ class AudioCallActivity : BaseActivity() {
         mPatientId = intent?.getStringExtra(CallLog.PATIENT_ID)
         mPatientName = intent?.getStringExtra(CallLog.PATIENT_NAME)
         mConsultationId = intent?.getStringExtra(CallLog.CONSULTATION_ID)
-        mCustomerType= intent?.getStringExtra(CallLog.CUSTOMER_TYPE)
+        mCustomerType = intent?.getStringExtra(CallLog.CUSTOMER_TYPE)
 
         initAudio(mAudioPlayer)
         initViews()
 
-        val timerTask = object: TimerTask() {
+        val timerTask = object : TimerTask() {
             override fun run() {
                 //Log.d("AudioCallActivity", " ---------------- WE ARE DONE HERE")
-//                endCall()
-                closeScreen()
+                endCall(true)
+//                closeScreen()
             }
         }
-        val interval:Long = 1000 * 60 * 10 //10 minute
+        val interval: Long = 1000 * 60 * 10 //10 minute
         val timer = Timer()
         timer.schedule(timerTask, interval)
     }
 
     private fun initViews() {
-        end_btn.setOnClickListener { closeScreen() }
+        end_btn.setOnClickListener { endCall(true) }
         mute_btn.setOnClickListener { toggleMute(mAudioPlayer) }
         speaker_btn.setOnClickListener { toggleSpeaker(mAudioPlayer) }
         new_note_btn.setOnClickListener {
             NewNoteDialog(this, mConsultationId, mPatientId).show()
+            mWritenNote=true
         }
         med_record_btn.setOnClickListener {
             MedicalRecordDialog(this, mPatientId).show()
+
         }
         new_prescription_btn.setOnClickListener {
             PrescriptionDialog(this, mPatientId, mConsultationId).show()
@@ -140,7 +143,7 @@ class AudioCallActivity : BaseActivity() {
 
         call.addCallListener(SinchCallListener())
         patient_name.text = mPatientName
-        customerType.text= "Plan: $mCustomerType"
+        customerType.text = "Plan: $mCustomerType"
     }
 
     override fun onPause() {
@@ -153,7 +156,7 @@ class AudioCallActivity : BaseActivity() {
         super.onResume()
         mCallId = intent?.getStringExtra(CallConstants.CALL_ID)
 
-        mTimer =  Timer()
+        mTimer = Timer()
         mDurationTask = UpdateCallDurationTask()
         mTimer?.schedule(mDurationTask, 0, 500)
     }
@@ -163,6 +166,7 @@ class AudioCallActivity : BaseActivity() {
         mAudioPlayer?.stopRingtone()
         mAudioPlayer?.stopProgressTone()
     }
+
     override fun onBackPressed() {
         //super.onBackPressed()
     }
@@ -180,7 +184,8 @@ class AudioCallActivity : BaseActivity() {
 //        }
 //    }
 
-    fun closeScreen(){
+
+    fun closeScreen() {
 
         IncomingCallActivity.setOnCall(this@AudioCallActivity, false)
 
@@ -188,8 +193,8 @@ class AudioCallActivity : BaseActivity() {
         val call: Call? = sinchServiceInterface.getCall(mCallId)
         call?.hangup()
 
-        val intent = Intent(this@AudioCallActivity,MainActivity::class.java)
-        intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
+        val intent = Intent(this@AudioCallActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
     }
@@ -205,44 +210,46 @@ class AudioCallActivity : BaseActivity() {
         if (closeScreen) {
             //if (call.getDetails().getDuration() >= ONE_MINUTE ) {
             if (mWritenNote) {
-                writeNote()
+//                writeNote(closeScreen)
+                closeScreen()
             } else {
 //                sinchServiceInterface.updateConsultation(call, consultationId)
-//                closeScreen()
+
+               Toast.makeText(this, "Please add doctor note to exit the screen",Toast.LENGTH_LONG).show()
             }
         } else {
-            writeNote()
+//            writeNote(closeScreen)
         }
         callEnded = true
     }
 
-    private fun endCall () {
-
-        writeNote()
-        mAudioPlayer?.stopProgressTone()
-        val call: Call? = sinchServiceInterface.getCall(mCallId)
-        call?.hangup()
-
-        writeNote()
+    fun writeNoteDoctor(mNote:Boolean){
 
 
+    }
 
-
-
+//    private fun endCall(closeScreen: Boolean) {
+//
+//        writeNote(closeScreen)
+//        mAudioPlayer?.stopProgressTone()
+//        val call: Call? = sinchServiceInterface.getCall(mCallId)
+//        call?.hangup()
+//
+//
 //        sinchServiceInterface.setOngoing(mConsultationId,"DOCTOR_END_CALL")
 //        sinchServiceInterface.updateConsultation(mConsultationId,call)
-
-
+//
+//
 //        val v = Intent(this@AudioCallActivity, MainActivity::class.java)
 //        v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 //        startActivity(v)
 //        finish()
-    }
+//    }
 
-    private fun changeView(fragment: Fragment){
-        currentFragment= fragment
-        val fragmentTransitionSupport= supportFragmentManager.beginTransaction()
-        fragmentTransitionSupport.replace(R.id.activeView,fragment)
+    private fun changeView(fragment: Fragment) {
+        currentFragment = fragment
+        val fragmentTransitionSupport = supportFragmentManager.beginTransaction()
+        fragmentTransitionSupport.replace(R.id.activeView, fragment)
         fragmentTransitionSupport.commit()
     }
 
@@ -294,7 +301,7 @@ class AudioCallActivity : BaseActivity() {
     private fun createTimer() {
         val tenMinutes: Long = 1000 * 60 * 10
 
-        val mConsultationTimer = object: com.tremendoc.tremendocdoctor.utils.Timer(1000, tenMinutes, true) {
+        val mConsultationTimer = object : com.tremendoc.tremendocdoctor.utils.Timer(1000, tenMinutes, true) {
 
             override fun onTick(millisUntilFinished: Long) {
 
@@ -302,6 +309,7 @@ class AudioCallActivity : BaseActivity() {
                 val mins = ellapsed / 6000.0
                 Log.d("CALL TIMER", "Ellpsed minite $mins")
             }
+
             override fun onFinish() {
                 Log.d("CALL TIMER", "onFinished()")
 //                endCall()
@@ -310,7 +318,7 @@ class AudioCallActivity : BaseActivity() {
         mConsultationTimer.resume()
     }
 
-    private inner class SinchCallListener : CallListener{
+    private inner class SinchCallListener : CallListener {
 
         override fun onCallEnded(call: Call?) {
             val cause: CallEndCause? = call?.details?.endCause
@@ -319,8 +327,8 @@ class AudioCallActivity : BaseActivity() {
             mAudioPlayer?.stopProgressTone()
             volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
 
-            if(!callEnded){
-                val showCallbackModal:Boolean = call!!.getDetails()!!.duration < TEN_MINUTES - 5000
+            if (!callEnded) {
+                val showCallbackModal: Boolean = call!!.getDetails()!!.duration < TEN_MINUTES - 5000
 //                endCall(call, !showCallbackModal)
 //                endCall(true)
 
@@ -332,8 +340,8 @@ class AudioCallActivity : BaseActivity() {
         override fun onCallEstablished(p0: Call?) {
             log("Call established")
             mAudioPlayer?.stopProgressTone()
-            callEnded=false
-            call_status.text="Connected"
+            callEnded = false
+            call_status.text = "Connected"
             volumeControlStream = AudioManager.STREAM_VOICE_CALL
             val audioController: AudioController = sinchServiceInterface.audioController
             audioController.disableSpeaker()
@@ -342,7 +350,7 @@ class AudioCallActivity : BaseActivity() {
 
         override fun onCallProgressing(p0: Call?) {
             mAudioPlayer?.playProgressTone()
-            call_status?.text="Ringing..."
+            call_status?.text = "Ringing..."
         }
 
         override fun onShouldSendPushNotification(p0: Call?, p1: MutableList<PushPair>?) {
@@ -353,24 +361,51 @@ class AudioCallActivity : BaseActivity() {
     private fun log(log: String?) {
         Log.e("VoiceCallActivity", "--__--_--__-----___-----__-----_--_-----   $log")
     }
-    private fun writeNote(){
 
-        val dialog= Dialog(this)
-         val view= dialog.layoutInflater.inflate(R.layout.notedialog_note,null)
+    private fun writeNote(closeScreen: Boolean) {
+
+        val dialog = Dialog(this)
+        val view = dialog.layoutInflater.inflate(R.layout.notedialog_note, null)
         dialog.setTitle("Note")
+        view.doneButton.isEnabled=false
+
+        if(closeScreen){
+            view.writeNote.setOnClickListener { view ->
+                NewNoteDialog(this, mConsultationId, mPatientId).show()
+                view.doneButton.isEnabled=true
+            }
+
+        }
+
+
+
+        view.doneButton.setOnClickListener {
+            val mintent = Intent(this, MainActivity::class.java)
+            mintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(mintent)
+        }
+
+//        if (mWritenNote) {
+//            ToastUtil.showLong(this, "Please write Doctor Note")
+//
+//
+//
+//        } else if(mWritenNote==true) {
+//            view.doneButton.setOnClickListener {
+//                val mintent = Intent(this, MainActivity::class.java)
+//                mintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                startActivity(mintent)
+//            }
+//
+//
+//        }
         view.writePrescription.setOnClickListener { view ->
-            PrescriptionDialog(this,mPatientId,mConsultationId).show()
+            PrescriptionDialog(this, mPatientId, mConsultationId).show()
         }
 
-        view.writeNote.setOnClickListener { view ->
-            NewNoteDialog(this, mConsultationId, mPatientId).show()
-
-        }
 
         dialog.setContentView(view)
         dialog.show()
-
-
 
 
     }
