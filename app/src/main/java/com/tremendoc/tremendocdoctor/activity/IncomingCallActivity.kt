@@ -201,7 +201,7 @@ class IncomingCallActivity : BaseActivity() {
             sinchServiceInterface.updateConsultation(consultationId, call)
 
             if(cause!!.equals(CallEndCause.CANCELED)){
-
+                UI.notifyMissedCall(applicationContext, mPatientName)
                 val v = Intent(this@IncomingCallActivity, MainActivity::class.java)
                 v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(v)
