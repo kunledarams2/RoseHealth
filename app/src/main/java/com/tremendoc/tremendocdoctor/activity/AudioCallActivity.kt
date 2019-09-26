@@ -97,7 +97,7 @@ class AudioCallActivity : BaseActivity() {
         speaker_btn.setOnClickListener { toggleSpeaker(mAudioPlayer) }
         new_note_btn.setOnClickListener {
             NewNoteDialog(this, mConsultationId, mPatientId).show()
-            mWritenNote=true
+            mWritenNote = true
         }
         med_record_btn.setOnClickListener {
             MedicalRecordDialog(this, mPatientId).show()
@@ -187,12 +187,6 @@ class AudioCallActivity : BaseActivity() {
 
     fun closeScreen() {
 
-        IncomingCallActivity.setOnCall(this@AudioCallActivity, false)
-
-        mAudioPlayer?.stopProgressTone()
-        val call: Call? = sinchServiceInterface.getCall(mCallId)
-        call?.hangup()
-
         val intent = Intent(this@AudioCallActivity, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
@@ -210,12 +204,10 @@ class AudioCallActivity : BaseActivity() {
         if (closeScreen) {
             //if (call.getDetails().getDuration() >= ONE_MINUTE ) {
             if (mWritenNote) {
-//                writeNote(closeScreen)
                 closeScreen()
             } else {
 //                sinchServiceInterface.updateConsultation(call, consultationId)
-
-               Toast.makeText(this, "Please add doctor note to exit the screen",Toast.LENGTH_LONG).show()
+                doctorNoteLog()
             }
         } else {
 //            writeNote(closeScreen)
@@ -223,28 +215,6 @@ class AudioCallActivity : BaseActivity() {
         callEnded = true
     }
 
-    fun writeNoteDoctor(mNote:Boolean){
-
-
-    }
-
-//    private fun endCall(closeScreen: Boolean) {
-//
-//        writeNote(closeScreen)
-//        mAudioPlayer?.stopProgressTone()
-//        val call: Call? = sinchServiceInterface.getCall(mCallId)
-//        call?.hangup()
-//
-//
-//        sinchServiceInterface.setOngoing(mConsultationId,"DOCTOR_END_CALL")
-//        sinchServiceInterface.updateConsultation(mConsultationId,call)
-//
-//
-//        val v = Intent(this@AudioCallActivity, MainActivity::class.java)
-//        v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-//        startActivity(v)
-//        finish()
-//    }
 
     private fun changeView(fragment: Fragment) {
         currentFragment = fragment
@@ -362,17 +332,37 @@ class AudioCallActivity : BaseActivity() {
         Log.e("VoiceCallActivity", "--__--_--__-----___-----__-----_--_-----   $log")
     }
 
+
+    private fun doctorNoteLog() {
+
+        val alertDialog = AlertDialog.Builder(this@AudioCallActivity)
+
+        alertDialog.setMessage("Please add doctor note to exit the screen")
+        alertDialog.setPositiveButton("Write") { dialogInterface, i ->
+            dialogInterface.dismiss()
+            closeScreen()
+
+        }
+        alertDialog.setNegativeButton("Cancel") { dialog, i ->
+
+            mWritenNote = true
+            dialog.cancel()
+        }
+        alertDialog.create()
+        alertDialog.show()
+    }
+
     private fun writeNote(closeScreen: Boolean) {
 
         val dialog = Dialog(this)
         val view = dialog.layoutInflater.inflate(R.layout.notedialog_note, null)
         dialog.setTitle("Note")
-        view.doneButton.isEnabled=false
+        view.doneButton.isEnabled = false
 
-        if(closeScreen){
+        if (closeScreen) {
             view.writeNote.setOnClickListener { view ->
                 NewNoteDialog(this, mConsultationId, mPatientId).show()
-                view.doneButton.isEnabled=true
+                view.doneButton.isEnabled = true
             }
 
         }
