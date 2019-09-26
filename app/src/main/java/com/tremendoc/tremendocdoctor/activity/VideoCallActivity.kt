@@ -16,6 +16,7 @@ import java.util.*
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.sinch.android.rtc.PushPair
 import com.sinch.android.rtc.video.VideoCallListener
@@ -209,13 +210,28 @@ class VideoCallActivity : BaseActivity() {
 
             }
             else{
-                Toast.makeText(this@VideoCallActivity,"Please write doctor note to exit", Toast.LENGTH_LONG).show()
+                doctorNoteLog()
+//                Toast.makeText(this@VideoCallActivity,"Please write doctor note to exit", Toast.LENGTH_LONG).show()
             }
         }
+    }
 
+    private fun doctorNoteLog() {
 
+        val alertDialog = AlertDialog.Builder(this@VideoCallActivity)
 
+        alertDialog.setMessage("Please add doctor note to exit the screen")
+        alertDialog.setPositiveButton("Write") { dialogInterface, i ->
+//            closeScreen()
+            dialogInterface.cancel()
+        }
+        alertDialog.setNegativeButton("Cancel") { dialog, i ->
 
+            writeNote = true
+            dialog.cancel()
+        }
+        alertDialog.create()
+        alertDialog.show()
     }
 
     private fun toggleMute(mAudioPlayer: AudioPlayer?) {
