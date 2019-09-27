@@ -202,12 +202,10 @@ class VideoCallActivity : BaseActivity() {
         call?.hangup()
         if(closeScreen){
             if(writeNote){
-
                 val v = Intent(this@VideoCallActivity, MainActivity::class.java)
                 v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(v)
                 finish()
-
             }
             else{
                 doctorNoteLog()
@@ -222,13 +220,18 @@ class VideoCallActivity : BaseActivity() {
 
         alertDialog.setMessage("Please add doctor note to exit the screen")
         alertDialog.setPositiveButton("Write") { dialogInterface, i ->
-//            closeScreen()
             dialogInterface.cancel()
         }
         alertDialog.setNegativeButton("Cancel") { dialog, i ->
 
             writeNote = true
-            dialog.cancel()
+            dialog.dismiss()
+
+            val v = Intent(this@VideoCallActivity, MainActivity::class.java)
+            v.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(v)
+            finish()
+
         }
         alertDialog.create()
         alertDialog.show()

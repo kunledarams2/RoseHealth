@@ -171,18 +171,24 @@ class AudioCallActivity : BaseActivity() {
         //super.onBackPressed()
     }
 
-//    fun endCall(closeScreen:Boolean){
-//        mAudioPlayer?.stopProgressTone()
-////        val call:Call?=sinchServiceInterface.getCall(mCallId)
-////        call?.hangup()
-//        if(closeScreen){
-//            if(mWriteNote){
-//                writeNote()
-//            }else{
-////                closeScreen()
-//            }
-//        }
-//    }
+
+
+
+    private fun endCall (closeScreen:Boolean) {
+        IncomingCallActivity.setOnCall(this@AudioCallActivity, false)
+        mAudioPlayer?.stopProgressTone()
+        val call: Call? = sinchServiceInterface.getCall(mCallId)
+        call?.hangup()
+        if(closeScreen){
+            if(mWritenNote){
+
+                closeScreen()
+            }
+            else{
+                doctorNoteLog()
+            }
+        }
+    }
 
 
     fun closeScreen() {
@@ -191,28 +197,6 @@ class AudioCallActivity : BaseActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
-    }
-
-    fun endCall(closeScreen: Boolean) {
-        val call = sinchServiceInterface.getCall(mCallId)
-        endCall(call, closeScreen)
-    }
-
-    fun endCall(call: Call?, closeScreen: Boolean) {
-        mAudioPlayer?.stopProgressTone()
-        call?.hangup()
-        if (closeScreen) {
-            //if (call.getDetails().getDuration() >= ONE_MINUTE ) {
-            if (mWritenNote) {
-                closeScreen()
-            } else {
-//                sinchServiceInterface.updateConsultation(call, consultationId)
-                doctorNoteLog()
-            }
-        } else {
-//            writeNote(closeScreen)
-        }
-        callEnded = true
     }
 
 
@@ -340,12 +324,12 @@ class AudioCallActivity : BaseActivity() {
         alertDialog.setMessage("Please add doctor note to exit the screen")
         alertDialog.setPositiveButton("Write") { dialogInterface, i ->
             dialogInterface.dismiss()
-            closeScreen()
 
         }
         alertDialog.setNegativeButton("Cancel") { dialog, i ->
 
             mWritenNote = true
+            closeScreen()
             dialog.cancel()
         }
         alertDialog.create()
