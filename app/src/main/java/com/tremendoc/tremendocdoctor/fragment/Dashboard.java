@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.tremendoc.tremendocdoctor.R;
@@ -27,8 +30,11 @@ import com.tremendoc.tremendocdoctor.api.API;
 import com.tremendoc.tremendocdoctor.api.StringCall;
 import com.tremendoc.tremendocdoctor.api.URLS;
 import com.tremendoc.tremendocdoctor.binder.CircleAppBinder;
+import com.tremendoc.tremendocdoctor.callback.DoctorScheduleListener;
 import com.tremendoc.tremendocdoctor.dialog.NewTipDialog;
+import com.tremendoc.tremendocdoctor.model.DoctorClocking;
 import com.tremendoc.tremendocdoctor.model.Tip;
+import com.tremendoc.tremendocdoctor.utils.DoctorScheduleContants;
 import com.tremendoc.tremendocdoctor.utils.Formatter;
 import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.viewmodel.ProfileViewModel;
@@ -38,11 +44,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-public class Dashboard  extends Fragment {
+public class Dashboard extends Fragment {
 
     private LinearLayoutManager manager;
     private RecyclerView appointmentsRecyclerView;
@@ -71,6 +79,10 @@ public class Dashboard  extends Fragment {
     private ImageButton appointmentRetryBtn;
     private TextView appointmentText;
 
+    // Doctor Schedule
+    private TextView nextClockInCounter;
+    DoctorClocking doctorClocking;
+
 
     public static Dashboard newInstance() {
         Dashboard fragment = new Dashboard();
@@ -86,6 +98,9 @@ public class Dashboard  extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         appointmentsRecyclerView = view.findViewById(R.id.appointments_recycler_view);
+
+        doctorClocking = new DoctorClocking(getActivity());
+
         setupViews(view);
         setupAdapter();
         return view;
@@ -146,6 +161,14 @@ public class Dashboard  extends Fragment {
 
         LinearLayout ratingView = view.findViewById(R.id.rating);
         setRating(ratingView);
+
+        // Doctor Schedule
+
+        nextClockInCounter = view.findViewById(R.id.timerCounter);
+        nextScheduleCounter();
+
+
+//        nextClockInCounter.setText(IO.getData(getActivity(),DoctorScheduleContants.NEXTCLOCKIN));
     }
 
     private void setupAdapter() {
@@ -182,7 +205,7 @@ public class Dashboard  extends Fragment {
                 img.setImageResource(R.drawable.ic_star_empty);
                 view.addView(img);
             }
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Log.d("Rating", e.getMessage());
         }
     }
@@ -204,7 +227,7 @@ public class Dashboard  extends Fragment {
             try {
                 JSONObject data = new JSONObject(response);
                 if (data.has("code") && data.getInt("code") == 0) {
-                    currentEarning.setText( "₦" + data.getString("earnedToday"));
+                    currentEarning.setText("₦" + data.getString("earnedToday"));
                     totalEarning.setText("₦" + data.getString("totalEarned"));
                     noConsultation.setText(data.getString("completeConsultationsToday"));
                     totalConsultation.setText(data.getString("totalConsultations"));
@@ -227,7 +250,7 @@ public class Dashboard  extends Fragment {
                 earningText.setVisibility(View.VISIBLE);
             }
         }, error -> {
-            Log.d("Dashboard Earnings Err", "Error "  + error.getMessage());
+            Log.d("Dashboard Earnings Err", "Error " + error.getMessage());
             earningLoader.setVisibility(View.GONE);
             earningRetryBtn.setVisibility(View.VISIBLE);
             earningText.setVisibility(View.VISIBLE);
@@ -251,7 +274,7 @@ public class Dashboard  extends Fragment {
 
         StringCall call = new StringCall(getContext());
         call.get(URLS.APPOINTMENTS + "PENDING", null, response -> {
-            log( "APPOINTMENT RESPONSE " + response);
+            log("APPOINTMENT RESPONSE " + response);
             try {
                 JSONObject object = new JSONObject(response);
                 if (object.has("code") && object.getInt("code") == 0) {
@@ -290,7 +313,7 @@ public class Dashboard  extends Fragment {
                 //result.setMessage(e.getMessage());
             }
         }, error -> {
-            Log.d("Dashboard Earnings Err", "Error "  + error.getMessage());
+            Log.d("Dashboard Earnings Err", "Error " + error.getMessage());
             if (error.networkResponse != null) {
                 String string = Formatter.bytesToString(error.networkResponse.data);
                 Log.d("Dashboard Earnings Err", "SERver Error:   " + string);
@@ -302,6 +325,32 @@ public class Dashboard  extends Fragment {
             appointmentLoader.setVisibility(View.GONE);
             appointmentRetryBtn.setVisibility(View.VISIBLE);
         });
+    }
+
+    private void nextScheduleCounter() {
+
+        if (!IO.getData(getActivity(), DoctorScheduleContants.NEXTCLOCKIN).isEmpty()) {
+
+            int futureTime = Integer.parseInt(IO.getData(getActivity(), DoctorScheduleContants.NEXTCLOCKIN)) * 60 * 1000;
+            new CountDownTimer(futureTime, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    long millis = millisUntilFinished;
+                    //Convert milliseconds into hour,minute and seconds
+                    String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                    nextClockInCounter.setText(hms);//set text
+                }
+
+                @Override
+                public void onFinish() {
+
+                    IO.deleteData(getActivity(), DoctorScheduleContants.NEXTCLOCKIN);
+//                    IO.setData(getActivity(),DoctorScheduleContants.NEXTCLOCKIN, null);
+                    nextClockInCounter.setText("Finish");
+                }
+            }.start();
+        }
+
     }
 
 
@@ -360,5 +409,6 @@ public class Dashboard  extends Fragment {
     private static void log(String string) {
         Log.d("Dashboard", " __-_-_-_---_-_-_-_-_-_-_-_-_-_-_-_-_-_-_____-_-_-_-_-_  " + string);
     }
+
 
 }

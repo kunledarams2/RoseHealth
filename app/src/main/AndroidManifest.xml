@@ -29,10 +29,11 @@
         android:supportsRtl="true"
         android:theme="@style/TremendocTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".dialog.ClockingDialog"></activity>
         <activity android:name=".activity.OutgoingChatActivity" />
         <activity android:name=".activity.ChatActivity" />
-        <activity android:name=".activity.VideoCallActivity"
+        <activity
+            android:name=".activity.VideoCallActivity"
             android:keepScreenOn="true" />
         <activity android:name=".activity.AudioCallActivity" />
         <activity android:name=".activity.IncomingCallActivity" />
@@ -52,7 +53,9 @@
         </provider>
 
         <service android:name=".service.CallService" />
-        <service android:name=".service.ChatService" />
+        <service android:name=".service.ChatService" /> <!-- <service android:name=".service.fcm.FcmListenerService"> -->
+        <!--  -->
+        <!-- </service> -->
         <service android:name=".service.FcmListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -82,6 +85,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -90,8 +94,6 @@
         <activity android:name=".activity.AppointmentActivity" />
         <activity android:name=".activity.RoutingActivity" />
         <activity android:name=".activity.ScheduleActivity" />
-
-
     </application>
 
 </manifest>

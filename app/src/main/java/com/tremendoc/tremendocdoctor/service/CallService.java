@@ -8,6 +8,9 @@ import android.os.IBinder;
 import android.os.Messenger;
 import android.util.Log;
 
+import com.sinch.android.rtc.Beta;
+import com.sinch.android.rtc.ManagedPush;
+import com.sinch.android.rtc.PushTokenRegistrationCallback;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.tremendoc.tremendocdoctor.activity.IncomingCallActivity;
 import com.tremendoc.tremendocdoctor.activity.VideoCallActivityOld;
@@ -104,7 +107,7 @@ public class CallService extends Service {
         boolean isSetOnline = IO.getData(this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
         if (mSinchClient == null && username != null && !username.isEmpty()) {
             //mSettings.setUsername(username);
-            log("mSinchClient is null, trying to create another with username = " +username);
+            log("mSinchClient is null, trying to create another with username = " + username);
             createClient(username);
         }
 
@@ -249,6 +252,23 @@ public class CallService extends Service {
                 return null;
             }
             return mSinchClient.relayRemotePushNotificationPayload(payload);
+        }
+
+        public void registerPushToken(PushTokenRegistrationCallback callback) {
+            getManagedPush().registerPushToken(callback);
+        }
+
+        public void unregisterPushToken() {
+//            getManagedPush().unregisterPushToken();
+        }
+
+        private ManagedPush getManagedPush() {
+            if (mSinchClient != null)  {
+                return Beta.createManagedPush(mSinchClient);
+            }
+
+//            createClientIfNecessary();
+            return Beta.createManagedPush(mSinchClient);
         }
 
         public void setOngoing(String consultationId ,String currentStatus) {

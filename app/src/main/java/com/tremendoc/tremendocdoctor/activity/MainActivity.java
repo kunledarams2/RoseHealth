@@ -11,19 +11,30 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.Response;
+import com.sinch.android.rtc.PushTokenRegistrationCallback;
+import com.sinch.android.rtc.SinchError;
 import com.squareup.picasso.Picasso;
+import com.tremendoc.tremendocdoctor.EndPointAPI.DoctorSchedule;
 import com.tremendoc.tremendocdoctor.api.API;
 import com.tremendoc.tremendocdoctor.api.StringCall;
 import com.tremendoc.tremendocdoctor.api.URLS;
+import com.tremendoc.tremendocdoctor.callback.DoctorScheduleListener;
 import com.tremendoc.tremendocdoctor.callback.MyCallback;
+import com.tremendoc.tremendocdoctor.dialog.ClockingDialog;
+import com.tremendoc.tremendocdoctor.dialog.DoctorScheduleDialog;
 import com.tremendoc.tremendocdoctor.dialog.StatusDialog;
 import com.tremendoc.tremendocdoctor.fragment.CallLogs;
 import com.tremendoc.tremendocdoctor.fragment.Prescriptions;
 import com.tremendoc.tremendocdoctor.fragment.appointments.AppointmentSchedule;
+import com.tremendoc.tremendocdoctor.model.DoctorClocking;
+import com.tremendoc.tremendocdoctor.service.CallService;
 import com.tremendoc.tremendocdoctor.service.StayAliveWorker;
 import com.tremendoc.tremendocdoctor.utils.CallConstants;
+import com.tremendoc.tremendocdoctor.utils.DoctorScheduleContants;
 import com.tremendoc.tremendocdoctor.utils.IO;
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -39,6 +50,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.fragment.Chatroom;
@@ -46,41 +58,58 @@ import com.tremendoc.tremendocdoctor.fragment.Dashboard;
 import com.tremendoc.tremendocdoctor.fragment.Notes;
 import com.tremendoc.tremendocdoctor.fragment.Notifications;
 import com.tremendoc.tremendocdoctor.fragment.Tips;
+import com.tremendoc.tremendocdoctor.utils.ToastUtil;
 import com.tremendoc.tremendocdoctor.utils.UI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import static com.tremendoc.tremendocdoctor.utils.IO.REQUEST_GALLERY;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PushTokenRegistrationCallback,
+        CallService.StartFailedListener, DoctorScheduleListener {
 
     public static final String DASHBOARD = "Dashboard";
-    public static final String NOTES     = "Doctors Notes";
-    public static final String TIPS      = "Health Tips";
+    public static final String NOTES = "Doctors Notes";
+    public static final String TIPS = "Health Tips";
     public static final String APPOINTMENTS = "APPOINTMENTS";
     public static final String PRESCRIPTIONS = "Prescriptions";
     public static final String CHATROOM = "CHATROOM";
     //public static final String NOTIFICATIONS = "Notifications";
     public static final String CALL_LOGS = "Call Logs";
+    public static final String SCHEDULE_TIMER = "clockIn";
 
     private Fragment currentFragment;
 
     private StatusDialog statusDialog;
+    //    private ClockingDialog clockingDialog;
     private View statusIndicator;
-    private CircleImageView profileImage;
+    private CircleImageView profileImage, clockImage;
+    private DoctorClocking doctorClocking;
+//    private ClockingDialog clockingDialog;
+
+
     private TextView titleView;
+    private String mTimer;
+    private TextView nextClockIn;
+
+
+    private Boolean mPushTokenIsRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (!API.isLoggedIn(this)) {
-            Intent intent = new Intent(this,  AuthActivity.class);
+            Intent intent = new Intent(this, AuthActivity.class);
             startActivity(intent);
             finish();
         }
@@ -100,6 +129,8 @@ public class MainActivity extends BaseActivity
 
         titleView = findViewById(R.id.title);
 
+        doctorClocking = new DoctorClocking(this);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("fragment")) {
             changeView(bundle.getString("fragment"));
@@ -112,6 +143,8 @@ public class MainActivity extends BaseActivity
         statusIndicator = findViewById(R.id.online_status_indicator);
         boolean isSetOnline = IO.getData(this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
         statusIndicator.setBackgroundResource(isSetOnline ? R.drawable.circle_green : R.drawable.circle_red);
+
+        profileImage.setEnabled(false);
         profileImage.setOnClickListener(v -> statusDialog.show());
         Map<String, String> data = API.getCredentials(this);
         Picasso.get()
@@ -123,6 +156,14 @@ public class MainActivity extends BaseActivity
         API.setPushToken(this);
         startWorker();
         resetStatus();
+
+
+        mPushTokenIsRegistered = false;
+
+        clockImage = findViewById(R.id.clock_image);
+        clockImage.setOnClickListener(view -> checkClockIn());
+
+
     }
 
     @Override
@@ -170,11 +211,11 @@ public class MainActivity extends BaseActivity
         /*else if (id == R.id.nav_chatroom) {
             this.changeView(Chatroom.newInstance());
             this.setTitle("Chatroom");
-        }*/ else if(id == R.id.nav_call_logs){
+        }*/
+        else if (id == R.id.nav_call_logs) {
             this.changeView(CallLogs.newInstance());
             this.setTitle(CALL_LOGS);
-        }
-        else if (id == R.id.nav_notifications) {
+        } else if (id == R.id.nav_notifications) {
             this.changeView(Notifications.newInstance());
             this.setTitle("Notifications");
         } else if (id == R.id.nav_signout) {
@@ -220,7 +261,8 @@ public class MainActivity extends BaseActivity
                 fragment = AppointmentSchedule.newInstance();
                 setTitle("Appointments");
                 break;
-            case CHATROOM: fragment = Chatroom.newInstance();
+            case CHATROOM:
+                fragment = Chatroom.newInstance();
                 break;
             /*case NOTIFICATIONS:
                 fragment = Notifications.newInstance();
@@ -231,7 +273,8 @@ public class MainActivity extends BaseActivity
                 fragment = CallLogs.newInstance();
                 setTitle("Call Logs");
                 break;
-            default: fragment = Dashboard.newInstance();
+            default:
+                fragment = Dashboard.newInstance();
         }
         changeView(fragment);
     }
@@ -244,7 +287,7 @@ public class MainActivity extends BaseActivity
             if (requestCode == IO.REQUEST_CAMERA) {
                 log("Request Camera");
                 //newTipDialog.onCameraResult(data);
-            } else if (requestCode == REQUEST_GALLERY){
+            } else if (requestCode == REQUEST_GALLERY) {
                 if (currentFragment instanceof Tips) {
                     Tips.newTipDialog.onGalleryResult(data);
                 } else if (currentFragment instanceof Dashboard) {
@@ -265,13 +308,20 @@ public class MainActivity extends BaseActivity
     public void setOnline() {
         getSinchServiceInterface().startClient();
         //getChatServiceInterface().connect();
+        if (!mPushTokenIsRegistered) {
+            getSinchServiceInterface().registerPushToken(this);
+        }
         statusIndicator.setBackgroundResource(R.drawable.circle_green);
     }
 
     public void setOffline() {
-        getSinchServiceInterface().stopClient();
+
+        if (getSinchServiceInterface() != null) {
+            getSinchServiceInterface().stopClient();
+            getSinchServiceInterface().unregisterPushToken();
+        }
         //getChatServiceInterface().disconnect();
-        statusIndicator.setBackgroundResource( R.drawable.circle_red);
+        statusIndicator.setBackgroundResource(R.drawable.circle_red);
         UI.clearOnlineNotification(this);
     }
 
@@ -279,11 +329,13 @@ public class MainActivity extends BaseActivity
         StringCall call = new StringCall(this);
         Map<String, String> params = new HashMap<>();
         boolean isSetOnline = IO.getData(this, CallConstants.ONLINE_STATUS).equals(CallConstants.ONLINE);
-        params.put("mode", isSetOnline ?  "ONLINE" : "OFFLINE");
-        call.get(URLS.ONLINE_STATUS, params, false, response -> {}, error -> {});
+        params.put("mode", isSetOnline ? "ONLINE" : "OFFLINE");
+        call.get(URLS.ONLINE_STATUS, params, false, response -> {
+        }, error -> {
+        });
     }
 
-    public  void galleryIntent() {
+    public void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -291,8 +343,116 @@ public class MainActivity extends BaseActivity
         Log.d("IO __--_-_--", "galleryIntent: ");
     }
 
+    @Override
+    public void tokenRegistered() {
+        mPushTokenIsRegistered = true;
+
+    }
+
+    @Override
+    public void tokenRegistrationFailed(SinchError sinchError) {
+
+        mPushTokenIsRegistered = false;
+        Toast.makeText(this, "Push token registration failed - incoming calls can't be received!", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    protected void onServiceConnected() {
+        super.onServiceConnected();
+        profileImage.setEnabled(true);
+        getSinchServiceInterface().setStartListener(this);
+    }
+
+    @Override
+    public void onStartFailed(SinchError error) {
+        Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onStarted() {
+        if (!getSinchServiceInterface().isStarted()) {
+            ToastUtil.showModal(this, "Please Toggle Off and No for call to come in");
+        }
+        log("Sinch have started");
+//        startWorker();
+    }
+
+    private void openScheduleDialog() {
+        DoctorScheduleDialog scheduleDialog = new DoctorScheduleDialog();
+        scheduleDialog.show(getSupportFragmentManager(), "openDoctorSchedule");
+    }
+
     private void log(String log) {
         Log.d("MainActivity", "---_--_---_---__---_----------__--__" + log);
     }
+
+    public void checkClockIn() {
+
+        StringCall stringCall = new StringCall(this);
+        Map<String, String> params = new HashMap<>();
+
+        stringCall.get(URLS.DOCTOR_CHECK_SCHEDULE, params,
+                response -> {
+                    log(response);
+
+                    try {
+                        JSONObject obj = new JSONObject(response);
+                        if (obj.getInt("code") == 0) {
+
+                            openScheduleDialog();
+
+                        } else if (obj.has("code") && obj.getInt("code") == 10) {
+                            IO.setData(this, DoctorScheduleContants.NEXTCLOCKIN, obj.getString("minuteToNextClockIn"));
+                            ToastUtil.showModal(this, obj.getString("description"));
+
+                            if(!obj.getString("minuteToNextClockIn") .equals("0")){
+                                Thread.sleep(1000);
+                                Intent intent = getIntent();
+                                startActivity(intent);
+                            }
+
+
+                        } else {
+
+                            log(obj.getString("description"));
+
+                        }
+                    } catch (JSONException e) {
+
+                        log("error:" + e.getMessage());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }, error -> {
+
+                });
+
+    }
+
+    @Override
+    public void getClockIntime(String mTime) {
+
+        if (IO.getData(this, DoctorScheduleContants.NEXTCLOCKIN) != null) {
+            IO.deleteData(this, DoctorScheduleContants.NEXTCLOCKIN);
+        }
+
+        IO.setData(this, DoctorScheduleContants.NEXTCLOCKIN, mTime);
+//        nextClockIn.setText(mTime);
+        try {
+
+            Thread.sleep(1000);
+            Intent intent = getIntent();
+            startActivity(intent);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 }

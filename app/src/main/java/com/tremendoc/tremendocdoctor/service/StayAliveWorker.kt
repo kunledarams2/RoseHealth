@@ -50,6 +50,7 @@ class StayAliveWorker(context: Context, workerParams: WorkerParameters) : Worker
                     log("Worker request is successful")
                     if (params["mode"] == "ONLINE") {
                         UI.notifyOnline(applicationContext)
+//                        MainActivity().startSinch()
 
                     } else {
                         UI.clearOnlineNotification(applicationContext)

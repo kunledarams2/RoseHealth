@@ -52,7 +52,10 @@ public class API {
     public static final String SERVER_KEY = "SERVER_KEY";
     public static final String PUSH_TOKEN_SET = "PUSH_TOKEN_SET";
 
+    public static final String NEXT_CLOCK_IN_TIME ="nextClockInTime";
+
     private static final String MY_UUID = "MY_UUID";
+
 
     private API(Context context) {
         this.context = context;

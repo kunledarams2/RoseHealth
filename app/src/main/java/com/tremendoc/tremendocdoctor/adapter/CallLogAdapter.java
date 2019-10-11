@@ -93,8 +93,9 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.LogHolde
             callLog= new CallLog(Conext);
 
 
+//            time.setText(log.getTime());
             try {
-                time.setText(Formatter.formatDate(log.getTime()));
+                time.setText(Formatter.formatTime(log.getTime()));
 
             }catch (ParseException e){
                 Log.d("callLog.time error", e.getMessage());
