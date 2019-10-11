@@ -346,7 +346,7 @@ public class Dashboard extends Fragment {
 
                     IO.deleteData(getActivity(), DoctorScheduleContants.NEXTCLOCKIN);
 //                    IO.setData(getActivity(),DoctorScheduleContants.NEXTCLOCKIN, null);
-                    nextClockInCounter.setText("Finish");
+                    nextClockInCounter.setText("00:00");
                 }
             }.start();
         }

@@ -13,13 +13,15 @@ import java.util.Locale;
 
 public class Formatter {
     private static SimpleDateFormat formatter;
+    private static  DateTimeFormatter timeFormatter;
 
     public static String formatTime(String str) throws ParseException{
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault());
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
         Date date = format.parse(str);
         format = new SimpleDateFormat("HH:mm EEE, d MMM Y", Locale.getDefault());
         return format.format(date);
     }
+
 
     public static String formatDate(Date date) {
         formatter = new SimpleDateFormat("EEE, d MMM Y", Locale.getDefault());
