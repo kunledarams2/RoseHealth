@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity
                 .into(profileImage);
 
         API.setPushToken(this);
-        startWorker();
+//        startWorker();
         resetStatus();
 
 
