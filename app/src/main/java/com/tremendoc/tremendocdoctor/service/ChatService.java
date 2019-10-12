@@ -52,6 +52,7 @@ public class ChatService extends Service {
         private void handleIncomingRequest(Map<String, String> payload) {
             log("HANDLE INCOMING REQUEST");
             if (IncomingCallActivity.Tracker.getCallStatus(ChatService.this)) {
+                log("Still on call");
                 return;
             }
             String serverKey = payload.get("serverKey");

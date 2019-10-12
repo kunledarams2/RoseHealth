@@ -20,6 +20,7 @@ import com.tremendoc.tremendocdoctor.dialog.StatusDialog;
 import com.tremendoc.tremendocdoctor.fragment.CallLogs;
 import com.tremendoc.tremendocdoctor.fragment.Prescriptions;
 import com.tremendoc.tremendocdoctor.fragment.appointments.AppointmentSchedule;
+import com.tremendoc.tremendocdoctor.service.ChatService;
 import com.tremendoc.tremendocdoctor.service.StayAliveWorker;
 import com.tremendoc.tremendocdoctor.utils.CallConstants;
 import com.tremendoc.tremendocdoctor.utils.IO;
@@ -84,6 +85,7 @@ public class MainActivity extends BaseActivity
             startActivity(intent);
             finish();
         }
+        IncomingCallActivity.Tracker.setOnCall(this, false);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
