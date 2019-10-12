@@ -275,20 +275,5 @@ class IncomingCallActivity : BaseActivity() {
 
     }
 
-    private fun writeNote(){
-
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setMessage("Please drop your note")
-        alertDialog.setPositiveButton("Write"){
-            dialogInterface, i ->
-
-            val intent= Intent(this@IncomingCallActivity, NoteDialog::class.java)
-            startActivity(intent)
-            finish()
-        }
-        alertDialog.create().show()
-
-
-    }
 
 }
