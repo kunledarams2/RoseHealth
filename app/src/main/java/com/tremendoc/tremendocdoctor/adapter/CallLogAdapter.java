@@ -30,9 +30,6 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.LogHolde
     private List<NewCallLog>callLogs = new ArrayList<>();
     private Context context;
 
-//    public CallLogAdapter() {
-//        callLogs = new ArrayList<>();
-//    }
 
     public CallLogAdapter( Context context) {
         this.context = context;
@@ -93,9 +90,10 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.LogHolde
             callLog= new CallLog(Conext);
 
 
+//            time.setText(log.getTime());
             try {
-                time.setText(Formatter.formatDate(log.getTime()));
-
+                time.setText(Formatter.formatTime(log.getTime()));
+                Log.d("timeChecker", Formatter.formatTime(log.getTime()));
             }catch (ParseException e){
                 Log.d("callLog.time error", e.getMessage());
             }

@@ -47,4 +47,8 @@ public class URLS {
 
     public static String CALL_LOG_STATUS= SERVER + "doctor/consultation-call-log/";
 
+    public static String DOCTOR_CHECK_SCHEDULE = SERVER + "doctor-schedule/check-clock-in";
+    public static String DOCTOR_SCHEDULE_CLOCKIN= SERVER + "doctor-schedule/clock-in";
+    public static String DOCTOR_SCHEDULE_GET_TIME= SERVER + "doctor/get-clock-in";
+
 }

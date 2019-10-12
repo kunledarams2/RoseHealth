@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 
+import com.tremendoc.tremendocdoctor.EndPointAPI.DoctorSchedule;
 import com.tremendoc.tremendocdoctor.api.API;
 import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.Permission;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class SplashActivity extends AppCompatActivity {
     private boolean askedBefore = false;
     private static final int INTERNET_PERMISSION = 100;
+    DoctorSchedule doctorSchedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         } else {
             gotoNext();
+            checkClockIn();
         }
     }
 
@@ -74,6 +77,10 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
+    private void checkClockIn(){
+        doctorSchedule = new DoctorSchedule(this);
+        doctorSchedule.checkClockIn();
 
+    }
 
 }

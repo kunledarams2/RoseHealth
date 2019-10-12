@@ -171,9 +171,6 @@ class AudioCallActivity : BaseActivity() {
         //super.onBackPressed()
     }
 
-
-
-
     private fun endCall (closeScreen:Boolean) {
         IncomingCallActivity.setOnCall(this@AudioCallActivity, false)
         mAudioPlayer?.stopProgressTone()
@@ -286,6 +283,10 @@ class AudioCallActivity : BaseActivity() {
 //                endCall(call, !showCallbackModal)
 //                endCall(true)
 
+            }
+            // when doctor call patient back
+            if(cause==CallEndCause.NO_ANSWER){
+                closeScreen()
             }
 
 

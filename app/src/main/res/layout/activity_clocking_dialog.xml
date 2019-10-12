@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".dialog.ClockingDialog"
+    android:padding="@dimen/font_16"
+    android:orientation="vertical">
+
+    <Switch
+        android:id="@+id/switchClockIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:textStyle="bold"
+        android:fontFamily="serif"
+        android:text="Clocking Status"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:theme="@style/StatusSwitch"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#ccc"
+        app:layout_constraintTop_toBottomOf="@+id/switchClockIn"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:padding="@dimen/size_10"
+        app:layout_constraintBottom_toTopOf="@+id/bottomDivider"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--android:id="@+id/layoutClockin"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:padding="@dimen/size_10"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/bottomDivider"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/view">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="60dp"-->
+            <!--android:layout_marginTop="23dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginBottom="21dp"-->
+            <!--android:text="Clocking Time "-->
+
+            <!--app:layout_constraintEnd_toStartOf="@+id/initTime"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/initTime"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_marginStart="3dp"-->
+            <!--android:layout_marginTop="23dp"-->
+            <!--android:text="12:00am"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/textView3"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView"-->
+           <!--/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView3"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="10dp"-->
+            <!--android:layout_marginTop="23dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:text="to"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/textView4"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/initTime"-->
+            <!--/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView4"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="23dp"-->
+            <!--android:layout_marginEnd="60dp"-->
+            <!--android:text="1:00pm"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView3"-->
+           <!--/>-->
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+    <View
+        android:id="@+id/bottomDivider"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="0dp"
+
+        android:background="#ccc"
+        app:layout_constraintTop_toBottomOf="@+id/layoutClockin"
+        tools:layout_editor_absoluteX="-3dp" />
+
+    <Button
+        android:id="@+id/closeDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Close"
+        android:layout_gravity="end"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomDivider" />
+
+</LinearLayout>

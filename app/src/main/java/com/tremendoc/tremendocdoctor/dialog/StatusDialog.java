@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.activity.MainActivity;
@@ -75,16 +76,20 @@ public class StatusDialog extends Dialog {
             try {
                 JSONObject object = new JSONObject(response);
                 if (object.has("code") && object.getInt("code") == 0) {
-                    ToastUtil.showLong(getContext(), "You are now online");
+//                    ToastUtil.showLong(getContext(), "You are now online");
                     if (status) {
                         setOnline();
+                        Toast.makeText(getContext(),"You are now online",Toast.LENGTH_LONG).show();
+                        log("STATUS DIALOG -> " + "You are now online");
+
                     } else {
                         setOffline();
                     }
                 } else {
-                    ToastUtil.showLong(getContext(), object.getString("description"));
+//                    ToastUtil.showLong(getContext(), object.getString("description"));
+                    Toast.makeText(getContext(),object.getString("description"),Toast.LENGTH_LONG).show();
                 }
-                log("STATUS DIALOG -> " + object.getString("description"));
+//                log("STATUS DIALOG -> " + object.getString("description"));
             }catch (JSONException e) {
                 log(e.getLocalizedMessage());
             }

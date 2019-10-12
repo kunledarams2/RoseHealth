@@ -56,6 +56,31 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="10dp"
                         />
+                    <LinearLayout
+                        android:id="@+id/timerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ClockIn Count Down"
+                            android:textSize="@dimen/font_14"
+                            android:layout_marginStart="@dimen/size_10"
+                            android:textColor="@color/colorWhite"/>
+
+                        <TextView
+                            android:id="@+id/timerCounter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textSize="20dp"
+                            android:layout_marginStart="40dp"
+                            android:textColor="#F10E27"/>
+
+                    </LinearLayout>
+
 
 
                 </LinearLayout>
