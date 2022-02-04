@@ -17,7 +17,8 @@
     <item
         android:id="@+id/nav_appointments"
         android:icon="@drawable/icon_appointments"
-        android:title="@string/ic_appointments" />
+        android:title="@string/ic_appointments"
+        android:visible="false"/>
     <item
         android:id="@+id/nav_prescriptions"
         android:icon="@drawable/icon_appointments"
@@ -29,7 +30,8 @@
     <item
         android:id="@+id/nav_call_logs"
         android:icon="@drawable/ic_call"
-        android:title="@string/ic_call_logs" />
+        android:title="@string/ic_call_logs"
+        android:visible="false"/>
     <item
         android:id="@+id/nav_notifications"
         android:visible="false"

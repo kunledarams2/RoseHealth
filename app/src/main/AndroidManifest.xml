@@ -81,8 +81,8 @@
         </activity>
         <activity android:name=".activity.DoctorsChatActivity" />
         <activity
-            android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:name=".activity.SplashActivity">
+<!--            android:theme="@style/SplashTheme">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

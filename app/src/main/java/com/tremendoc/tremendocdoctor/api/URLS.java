@@ -5,7 +5,7 @@ import com.tremendoc.tremendocdoctor.BuildConfig;
 public class URLS {
 //    private static final String IP = BuildConfig.DEBUG ? "178.128.8.26" : "178.128.8.26";
 
-    private static final String IP = BuildConfig.DEBUG ? "188.166.14.154" : "178.128.8.26";
+    private static final String IP = BuildConfig.DEBUG ? "161.35.87.69" : "178.128.8.26";
 //    private static final String IP = BuildConfig.DEBUG ? "192.168.88.23" : "192.168.88.23";
 //private static final String IP = BuildConfig.DEBUG ? "192.168.88.28" : "192.168.88.28";
 

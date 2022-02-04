@@ -31,8 +31,22 @@
             android:layout_height="match_parent"
             tools:context=".fragment.auth.Login">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:text="RoseHealth"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/font_40"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView android:id="@+id/logo"
                 android:layout_marginTop="@dimen/size_40"
+                android:visibility="invisible"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

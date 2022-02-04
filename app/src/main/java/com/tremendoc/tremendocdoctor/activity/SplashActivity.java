@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 
 import com.tremendoc.tremendocdoctor.EndPointAPI.DoctorSchedule;
+import com.tremendoc.tremendocdoctor.R;
 import com.tremendoc.tremendocdoctor.api.API;
 import com.tremendoc.tremendocdoctor.utils.IO;
 import com.tremendoc.tremendocdoctor.utils.Permission;
@@ -29,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_screen_e_health);
         try {
             Thread.sleep(1000);
 
@@ -48,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
                         INTERNET_PERMISSION);
                 askedBefore = true;
             } else {
-                Permission.showModal(this,"Tremendoc needs to access phone state and internet to continue",
+                Permission.showModal(this,"RoseHealth needs to access phone state and internet to continue",
                         (dialog, i) -> {
                             askedBefore = false;
                             tryNext();
